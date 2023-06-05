@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'index.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -57,7 +55,8 @@ class FFChatWidget extends StatelessWidget {
         child: Container(
           color: backgroundColor,
           child: Stack(
-            children: [/*
+            children: [
+              /*
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12.0),
                 child: Theme(
@@ -205,7 +204,7 @@ class _FFChatMessageState extends State<FFChatMessage> {
           ))
       .copyWith(height: 1.5);
 
-  bool get hasImage => !(widget.chatMessage.medias ?? '').isNull;
+  bool get hasImage => (widget.chatMessage.medias == null);
 
   @override
   Widget build(BuildContext context) => Align(

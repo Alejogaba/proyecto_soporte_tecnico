@@ -11,7 +11,7 @@ import '/backend/backend.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'anonymous_auth.dart';
-import 'apple_auth.dart';
+
 import 'email_auth.dart';
 import 'firebase_user_provider.dart';
 import 'google_auth.dart';
@@ -129,10 +129,6 @@ class FirebaseAuthManager extends AuthManager
     BuildContext context,
   ) =>
       _signInOrCreateAccount(context, anonymousSignInFunc, 'ANONYMOUS');
-
-  @override
-  Future<BaseAuthUser?> signInWithApple(BuildContext context) =>
-      _signInOrCreateAccount(context, appleSignIn, 'APPLE');
 
   @override
   Future<BaseAuthUser?> signInWithGoogle(BuildContext context) =>
@@ -268,5 +264,11 @@ class FirebaseAuthManager extends AuthManager
       );
       return null;
     }
+  }
+  
+  @override
+  Future<BaseAuthUser?> signInWithApple(BuildContext context) {
+    // TODO: implement signInWithApple
+    throw UnimplementedError();
   }
 }

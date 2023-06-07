@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
 import 'package:login2/lista_funcionarios/funcionarioForm.dart';
 import 'package:login2/model/usuario.dart';
@@ -236,13 +238,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                   children: [
                     FFButtonWidget(
                       onPressed: () async {
-                        await Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FuncionarioFormWidget(),
-                      ),
-                      (r) => false,
-                    );
+                       Get.toNamed('/gestionfuncio');
                       },
                       text: 'ADD Fun',
                       options: FFButtonOptions(

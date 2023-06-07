@@ -325,14 +325,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                         }
                                         if (user != null) {
                                           print("Ingreso Exitoso");
-                                          await Navigator.pushAndRemoveUntil(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  FuncionarioFormWidget(),
-                                            ),
-                                            (r) => false,
-                                          );
+                                          Get.toNamed('/principal');
                                         }
                                       } catch (e) {
                                         print(e);
@@ -389,14 +382,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                     _passwordController.text);
                                         if (user != null) {
                                           print("Ingreso Exitoso");
-                                          await Navigator.pushAndRemoveUntil(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  FuncionarioFormWidget(),
-                                            ),
-                                            (r) => false,
-                                          );
+                                         Get.toNamed('/principal');
                                         }
                                       } on FirebaseException catch (e) {
                                         Logger().e(e.message);

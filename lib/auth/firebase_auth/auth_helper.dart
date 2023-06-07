@@ -94,12 +94,11 @@ class AuthHelper {
     }
   }
 **/
-   static signInWithEmail(
+  static signInWithEmail(
       {String email = '',
       String password = '',
       bool estaCreado = false}) async {
     try {
-      
       late UserCredential? res;
       if (estaCreado) {
         res = await signupWithEmail(
@@ -112,6 +111,7 @@ class AuthHelper {
       log('El uid es:' + res!.user!.uid);
       final Usuario? usuario =
           await AuthHelper().cargarUsuarioDeFirebase(res.user!.uid);
+      Get.toNamed('/principal');
       Future.delayed(
         Duration(seconds: 2),
         () {},
@@ -128,13 +128,13 @@ class AuthHelper {
             email: email, password: password, estaRegistrado: true);
         if (user != null) {
           log(user);
+          Get.toNamed('/principal');
         }
       } else {}
     } catch (e) {
       log(e.toString());
     }
-   }
-   
+  }
 
   static signupWithEmail({
     String email = '',

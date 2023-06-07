@@ -1,4 +1,8 @@
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:login2/lista_funcionarios/funcionarioForm.dart';
+import 'package:login2/routes/my_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -81,7 +85,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'login2',
       localizationsDelegates: [
         FFLocalizationsDelegate(),
@@ -107,6 +111,8 @@ class _MyAppState extends State<MyApp> {
           : currentUser!.loggedIn
               ? NavBarPage()
               : LoginWidget(),
+              navigatorKey: Get.key,
+              getPages: routes(),
     );
   }
 }

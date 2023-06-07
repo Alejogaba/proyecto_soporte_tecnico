@@ -112,8 +112,8 @@ flutter:
     - assets/lottie_animations/
     - assets/rive_animations/
     - assets/pdfs/
-
-
+    - assets/diseño_interfaz/user.png
+    - assets/diseño_interfaz/User2.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

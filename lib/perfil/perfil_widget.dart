@@ -1,3 +1,5 @@
+import 'package:login2/index.dart';
+
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/cambiar_password/cambiar_password_widget.dart';
@@ -660,17 +662,50 @@ class _PerfilWidgetState extends State<PerfilWidget>
                   children: [
                     FFButtonWidget(
                       onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.bottomToTop,
-                            duration: Duration(milliseconds: 250),
-                            reverseDuration: Duration(milliseconds: 250),
-                            child: RegistrarEquipoWidget(),
-                          ),
-                        );
+                        await Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ListaFuncionariosWidget(),
+                      ),
+                      (r) => false,
+                    );
                       },
                       text: 'Agregar reporte',
+                      options: FFButtonOptions(
+                        width: 240.0,
+                        height: 60.0,
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        iconPadding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        color: FlutterFlowTheme.of(context).primary,
+                        textStyle:
+                            FlutterFlowTheme.of(context).titleSmall.override(
+                                  fontFamily: 'Urbanist',
+                                  color: Colors.white,
+                                ),
+                        elevation: 2.0,
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(40.0),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 24.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FFButtonWidget(
+                      onPressed: () async {
+                      
+                      },
+                      text: 'Gestionar funcionarios',
                       options: FFButtonOptions(
                         width: 240.0,
                         height: 60.0,

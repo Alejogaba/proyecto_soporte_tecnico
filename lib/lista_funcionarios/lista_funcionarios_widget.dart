@@ -85,10 +85,10 @@ class _ListaFuncionariosWidgetState extends State<ListaFuncionariosWidget>
     context.watch<FFAppState>();
 
     return StreamBuilder<List<ReviewsRecord>>(
-      stream: queryReviewsRecord(
-        queryBuilder: (reviewsRecord) => reviewsRecord.where('propertyRef',
-            isEqualTo: widget.propertyRef!.reference),
-      ),
+     // stream: queryReviewsRecord(
+       // queryBuilder: (reviewsRecord) => reviewsRecord.where('propertyRef',
+         //   isEqualTo: widget.propertyRef!.reference),
+      //),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {

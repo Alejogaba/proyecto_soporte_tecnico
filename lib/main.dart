@@ -138,6 +138,7 @@ class _NavBarPageState extends State<NavBarPage> {
       'Conversaciones': ConversacionesWidget(),
       'interfazPrincipal': InterfazPrincipalWidget(),
       'Perfil': PerfilWidget(),
+      
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 

@@ -65,6 +65,19 @@ abstract class FlutterFlowTheme {
   late Color gray600;
   late Color lineGray;
 
+
+  late Color primaryBtnText;
+  late Color lineColor;
+  late Color gray200;
+  late Color black600;
+  late Color tertiary400;
+  late Color textColor;
+  late Color maximumBlueGreen;
+  late Color plumpPurple;
+  late Color platinum;
+  late Color ashGray;
+  late Color darkSeaGreen;
+
   @Deprecated('Use displaySmallFamily instead')
   String get title1Family => displaySmallFamily;
   @Deprecated('Use displaySmall instead')
@@ -135,7 +148,7 @@ class LightModeTheme extends FlutterFlowTheme {
   Color get secondaryColor => secondary;
   @Deprecated('Use tertiary instead')
   Color get tertiaryColor => tertiary;
-
+  Color primaryBtnText = Color(0xFFFFFFFF);
   late Color primary = Color.fromARGB(255,19, 103, 54);
   late Color secondary = const Color(0xFFEE8B60);
   late Color tertiary = const Color(0xFFFFFFFF);
@@ -317,7 +330,7 @@ class DarkModeTheme extends FlutterFlowTheme {
   Color get secondaryColor => secondary;
   @Deprecated('Use tertiary instead')
   Color get tertiaryColor => tertiary;
-
+  Color primaryBtnText = Color(0xFFFFFFFF);
   late Color primary = Color.fromARGB(255,19, 103, 54);
   late Color secondary = const Color(0xFFEE8B60);
   late Color tertiary = const Color(0xFFFFFFFF);

@@ -1,5 +1,8 @@
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
+import 'package:login2/lista_funcionarios/funcionarioForm.dart';
+import 'package:login2/model/usuario.dart';
 
+import '../lista_funcionarios/lista_funcionarios_widget.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -223,6 +226,48 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                               ),
                             ),
                           ),
+                           Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 24.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FFButtonWidget(
+                      onPressed: () async {
+                        await Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FuncionarioFormWidget(),
+                      ),
+                      (r) => false,
+                    );
+                      },
+                      text: 'ADD Fun',
+                      options: FFButtonOptions(
+                                width: 100.0,
+                                height: 40.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: FlutterFlowTheme.of(context).primary,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Urbanist',
+                                      color: Colors.white,
+                                    ),
+                                elevation: 2.0,
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                    ),
+                  ],
+                ),
+              ),
                         ],
                       ),
                     ),

@@ -1,3 +1,8 @@
+import 'dart:developer';
+
+import 'package:login2/auth/firebase_auth/auth_helper.dart';
+import 'package:login2/model/usuario.dart';
+
 import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -88,17 +93,17 @@ class _LoginWidgetState extends State<LoginWidget> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 30.0, 0.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                                Image.asset(
-                                  'assets/images/chimichagua-removebg-preview-transformed.png',
-                                  width: 78.0,
-                                  height: 85.0,
-                                  fit: BoxFit.fitHeight,
-                                ),
+                              Image.asset(
+                                'assets/images/chimichagua-removebg-preview-transformed.png',
+                                width: 78.0,
+                                height: 85.0,
+                                fit: BoxFit.fitHeight,
+                              ),
                               Text(
                                 'Alcaldia de Chimichagua',
                                 style: FlutterFlowTheme.of(context)
@@ -115,22 +120,23 @@ class _LoginWidgetState extends State<LoginWidget> {
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 4.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 16.0, 0.0, 4.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
                                 'Iniciar sesión',
-                                style: FlutterFlowTheme.of(context).displaySmall,
+                                style:
+                                    FlutterFlowTheme.of(context).displaySmall,
                               ),
                             ],
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 16.0, 0.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -143,13 +149,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     labelText: 'Correo electró',
                                     labelStyle:
                                         FlutterFlowTheme.of(context).bodyMedium,
-                                    hintText: 'Ingrese su correo electrónico....',
+                                    hintText:
+                                        'Ingrese su correo electrónico....',
                                     hintStyle:
                                         FlutterFlowTheme.of(context).bodyMedium,
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color:
-                                            FlutterFlowTheme.of(context).lineGray,
+                                        color: FlutterFlowTheme.of(context)
+                                            .lineGray,
                                         width: 2.0,
                                       ),
                                       borderRadius: BorderRadius.circular(8.0),
@@ -182,7 +189,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                                         EdgeInsetsDirectional.fromSTEB(
                                             16.0, 24.0, 0.0, 24.0),
                                   ),
-                                  style: FlutterFlowTheme.of(context).titleSmall,
+                                  style:
+                                      FlutterFlowTheme.of(context).titleSmall,
                                   validator: _model
                                       .emailAddressControllerValidator
                                       .asValidator(context),
@@ -192,8 +200,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 16.0, 0.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -211,8 +219,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                                         FlutterFlowTheme.of(context).bodyMedium,
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color:
-                                            FlutterFlowTheme.of(context).lineGray,
+                                        color: FlutterFlowTheme.of(context)
+                                            .lineGray,
                                         width: 2.0,
                                       ),
                                       borderRadius: BorderRadius.circular(8.0),
@@ -259,7 +267,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       ),
                                     ),
                                   ),
-                                  style: FlutterFlowTheme.of(context).titleSmall,
+                                  style:
+                                      FlutterFlowTheme.of(context).titleSmall,
                                   validator: _model.passwordControllerValidator
                                       .asValidator(context),
                                 ),
@@ -268,8 +277,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 24.0, 0.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -302,16 +311,16 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     0.0, 0.0, 4.0, 0.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    final user =
-                                        await authManager.signInWithEmail(
-                                      context,
-                                      _model.emailAddressController.text,
-                                      _model.passwordController.text,
+                                    final Usuario? user =
+                                        await AuthHelper.signInWithEmail(
+                                      email: _model.emailAddressController.text,
+                                      password: _model.passwordController.text,
                                     );
-                                    if (user == null) {
+                                    if (user==null) {
                                       return;
                                     }
-    
+                                    log('Usario logeado exitosamente: $user');
+                                    log('El usuario tiene el rol de: ${user.role}');
                                     await Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -365,8 +374,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       .bodyMedium
                                       .override(
                                         fontFamily: 'Lexend Deca',
-                                        color:
-                                            FlutterFlowTheme.of(context).grayIcon,
+                                        color: FlutterFlowTheme.of(context)
+                                            .grayIcon,
                                         fontSize: 14.0,
                                         fontWeight: FontWeight.normal,
                                       ),

@@ -1,0 +1,57 @@
+class Usuario {
+  String? funcionarioImage;
+  String? fechaNacimiento;
+  String? area;
+  String? telefono;
+  String? cargo;
+  String? password;
+  String? identificacion;
+  String? nombre;
+  String? email;
+  String? role;
+  String? uid;
+
+  Usuario({
+    this.funcionarioImage = "",
+    this.fechaNacimiento = "",
+    this.area = "",
+    this.telefono = "",
+    this.cargo = "",
+    this.password = "",
+    this.identificacion = "",
+    this.nombre = "",
+    this.email = "",
+    this.role = "",
+    this.uid = "",
+  });
+
+  Usuario.fromMap(Map<String, dynamic> map) {
+    funcionarioImage = map['FuncionarioImage'] ?? "";
+    fechaNacimiento = map['fechanacimiento'] ?? "";
+    area = map['area'] ?? "";
+    telefono = map['telefono'] ?? "";
+    cargo = map['cargo'] ?? "";
+    password = map['password'] ?? "";
+    identificacion = map['identificacion'] ?? "";
+    nombre = map['nombre'] ?? "";
+    email = map['email'] ?? "";
+    role = map['role'] ?? "";
+    role = map['uid'] ?? "";
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'FuncionarioImage': funcionarioImage,
+      'fechanacimiento': fechaNacimiento,
+      'area': area,
+      'telefono': telefono,
+      'cargo': cargo,
+      'password': password,
+      'identificacion': identificacion,
+      'nombre': nombre,
+      'email': email,
+      'role': role,
+      'uid': uid
+    };
+  }
+}

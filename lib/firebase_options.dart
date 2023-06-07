@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCxr5NbPwQHpg1Ph-ulcOvV59aC-P8AlJA',
-    appId: '1:918645421686:android:7ffb406183be617bfd9157',
+    appId: '1:918645421686:android:acca94e759b4df57fd9157',
     messagingSenderId: '918645421686',
     projectId: 'soportealcaldia-f23c4',
     databaseURL: 'https://soportealcaldia-f23c4-default-rtdb.firebaseio.com',

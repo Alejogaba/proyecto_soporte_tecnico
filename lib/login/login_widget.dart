@@ -316,10 +316,11 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       email: _model.emailAddressController.text,
                                       password: _model.passwordController.text,
                                     );
-                                    if (user==null) {
+                                    log('El usuario es: $user');
+                                    if (user == null) {
                                       return;
                                     }
-                                    log('Usario logeado exitosamente: $user');
+                                    log('Usario logeado exitosamente:'+user.toString());
                                     log('El usuario tiene el rol de: ${user.role}');
                                     await Navigator.push(
                                       context,

@@ -9,16 +9,29 @@ import '../../model/usuario.dart';
 class AuthHelper {
   static FirebaseAuth _auth = FirebaseAuth.instance;
 
+  String? getCurrentUserUid() {
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    String uid = user.uid;
+    print('UID del usuario actual: $uid');
+    // Realiza las acciones necesarias con el UID del usuario
+    return uid;
+  } else {
+    print('No se ha iniciado sesión');
+    return null;
+  }
+}
+
   Future<Usuario?> cargarUsuarioDeFirebase(String? uid) async {
     if (uid != null && uid.isNotEmpty) {
       final querySnapshot = await FirebaseFirestore.instance
-          .collection('usuarios')
+          .collection('users')
           .where('uid', isEqualTo: uid)
           .limit(1)
           .get();
       if (querySnapshot.docs.isNotEmpty) {
         final data = querySnapshot.docs.first.data();
-        return Usuario.fromMap(data);
+        return Usuario.mapeo(data);
       } else {
         return null;
       }
@@ -32,19 +45,18 @@ class AuthHelper {
       String password = '',
       bool estaCreado = false}) async {
     try {
-      var res;
+      late UserCredential? res;
       if (estaCreado) {
         res = await signupWithEmail(
             email: email, password: password, estaRegistrado: estaCreado);
       } else {
         res = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
-        log('Respuesta Firebase:' + res);
+        log('Respuesta Firebase:' + res.user.toString());
       }
-      final User firebaseUser = res;
-
+      log('El uid es:' + res!.user!.uid);
       final Usuario? usuario =
-          await AuthHelper().cargarUsuarioDeFirebase(firebaseUser.uid);
+          await AuthHelper().cargarUsuarioDeFirebase(res!.user!.uid);
       Future.delayed(
         Duration(seconds: 2),
         () {},

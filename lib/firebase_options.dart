@@ -53,11 +53,10 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCxr5NbPwQHpg1Ph-ulcOvV59aC-P8AlJA',
-    appId: '1:918645421686:android:acca94e759b4df57fd9157',
-    messagingSenderId: '918645421686',
-    projectId: 'soportealcaldia-f23c4',
-    databaseURL: 'https://soportealcaldia-f23c4-default-rtdb.firebaseio.com',
-    storageBucket: 'soportealcaldia-f23c4.appspot.com',
+    apiKey: 'AIzaSyDGGgJ1XVka7knYUP_dZbo6xGMwbfR7rf8',
+    appId: '1:159057478156:android:b9b0f5a2ae34236786e429',
+    messagingSenderId: '159057478156',
+    projectId: 'proyecto-soporte-tecnico',
+    storageBucket: 'proyecto-soporte-tecnico.appspot.com',
   );
 }

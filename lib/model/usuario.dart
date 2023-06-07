@@ -25,7 +25,7 @@ class Usuario {
     this.uid = "",
   });
 
-  Usuario.fromMap(Map<String, dynamic> map) {
+  Usuario.mapeo(Map<String, dynamic> map) {
     funcionarioImage = map['FuncionarioImage'] ?? "";
     fechaNacimiento = map['fechanacimiento'] ?? "";
     area = map['area'] ?? "";
@@ -36,7 +36,7 @@ class Usuario {
     nombre = map['nombre'] ?? "";
     email = map['email'] ?? "";
     role = map['role'] ?? "";
-    role = map['uid'] ?? "";
+    uid = map['uid'] ?? "";
   }
 
   Map<String, dynamic> toMap() {

@@ -1,3 +1,4 @@
+import 'package:login2/lista_funcionarios/funcionarioForm.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -138,6 +139,7 @@ class _NavBarPageState extends State<NavBarPage> {
       'Conversaciones': ConversacionesWidget(),
       'interfazPrincipal': InterfazPrincipalWidget(),
       'Perfil': PerfilWidget(),
+      'gestionfuncionario': FuncionarioFormWidget(),
       
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);

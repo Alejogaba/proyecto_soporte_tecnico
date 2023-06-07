@@ -1,8 +1,14 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:logger/logger.dart';
+import 'package:translator/translator.dart';
 
 import '../../model/usuario.dart';
 
@@ -10,17 +16,17 @@ class AuthHelper {
   static FirebaseAuth _auth = FirebaseAuth.instance;
 
   String? getCurrentUserUid() {
-  User? user = FirebaseAuth.instance.currentUser;
-  if (user != null) {
-    String uid = user.uid;
-    print('UID del usuario actual: $uid');
-    // Realiza las acciones necesarias con el UID del usuario
-    return uid;
-  } else {
-    print('No se ha iniciado sesión');
-    return null;
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String uid = user.uid;
+      print('UID del usuario actual: $uid');
+      // Realiza las acciones necesarias con el UID del usuario
+      return uid;
+    } else {
+      print('No se ha iniciado sesión');
+      return null;
+    }
   }
-}
 
   Future<Usuario?> cargarUsuarioDeFirebase(String? uid) async {
     if (uid != null && uid.isNotEmpty) {
@@ -40,11 +46,60 @@ class AuthHelper {
     }
   }
 
-  static signInWithEmail(
+  /*static signInWithEmail(
+      {required String email,
+      required String password,
+      bool estaCreado = false}) async {
+    try {
+      var res = null;
+      if (estaCreado) {
+        res = await signupWithEmail(
+            email: email, password: password, estaRegistrado: estaCreado);
+      } else {
+        res = await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
+      }
+      final User user = res.user;
+      Get.snackbar('Bienvenido', ' ${user.email} Su ingreso ha sido exitoso');
+      print('Ingreso Exitoso');
+      Future.delayed(
+        Duration(seconds: 4),
+        () {},
+      );
+      return user;
+    } on FirebaseAuthException catch (e) {
+      var user = null;
+      FirebaseFirestore _db = FirebaseFirestore.instance;
+      var existe = await _db.collection("users").doc(email.toLowerCase()).get();
+      Logger().e('Error: ' + e.message.toString() + ' - Codigo: ' + e.code);
+      if (e.code == 'user-not-found' && existe.exists) {
+        Logger().v(existe.exists);
+        user = await signupWithEmail(
+            email: email, password: password, estaRegistrado: true);
+        if (user != null) {
+          Logger().v(user);
+          Get.toNamed('/home');
+        }
+      } else {
+        var errorTraducido = await traducir(e.message.toString());
+        Get.snackbar('Error', errorTraducido,
+            icon: Icon(
+              Icons.error_outline,
+              color: Colors.red,
+            ),
+            colorText: Color.fromARGB(255, 114, 14, 7));
+      }
+    } catch (e) {
+      Logger().e(e);
+    }
+  }
+**/
+   static signInWithEmail(
       {String email = '',
       String password = '',
       bool estaCreado = false}) async {
     try {
+      
       late UserCredential? res;
       if (estaCreado) {
         res = await signupWithEmail(
@@ -56,7 +111,7 @@ class AuthHelper {
       }
       log('El uid es:' + res!.user!.uid);
       final Usuario? usuario =
-          await AuthHelper().cargarUsuarioDeFirebase(res!.user!.uid);
+          await AuthHelper().cargarUsuarioDeFirebase(res.user!.uid);
       Future.delayed(
         Duration(seconds: 2),
         () {},
@@ -78,7 +133,8 @@ class AuthHelper {
     } catch (e) {
       log(e.toString());
     }
-  }
+   }
+   
 
   static signupWithEmail({
     String email = '',
@@ -193,5 +249,16 @@ class UserHelper {
     } else {
       await _db.collection("users").doc(user.uid).set(userData);
     }
+  }
+}
+
+Future<String> traducir(String input) async {
+  try {
+    final translator = GoogleTranslator();
+    var translation = await translator.translate(input, from: 'en', to: 'es');
+    return translation.toString();
+  } on FirebaseAuthException catch (e) {
+    Logger().e('Error en el traductor: ' + e.message.toString());
+    return "Ha ocurrido un error inesperado, revise su conexión a internet";
   }
 }

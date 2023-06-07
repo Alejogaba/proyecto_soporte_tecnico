@@ -1,8 +1,13 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
+import 'package:login2/lista_funcionarios/funcionarioForm.dart';
 import 'package:login2/model/usuario.dart';
-
+import 'package:translator/translator.dart';
+import '../backend/backend.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -23,16 +28,18 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   late LoginModel _model;
-
+  final _formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => LoginModel());
 
-    _model.emailAddressController ??= TextEditingController();
-    _model.passwordController ??= TextEditingController();
+    _emailController = TextEditingController(text: "");
+    _passwordController = TextEditingController(text: "");
   }
 
   @override
@@ -143,7 +150,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                             children: [
                               Expanded(
                                 child: TextFormField(
-                                  controller: _model.emailAddressController,
+                                  controller: _emailController,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Correo electró',
@@ -191,9 +198,17 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   ),
                                   style:
                                       FlutterFlowTheme.of(context).titleSmall,
-                                  validator: _model
-                                      .emailAddressControllerValidator
-                                      .asValidator(context),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Por favor ingrese un correo eléctronico';
+                                    }
+                                    if (!RegExp(
+                                            r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                                        .hasMatch(value)) {
+                                      return 'Por favor ingrese un correo válido';
+                                    }
+                                    return null;
+                                  },
                                 ),
                               ),
                             ],
@@ -208,70 +223,121 @@ class _LoginWidgetState extends State<LoginWidget> {
                             children: [
                               Expanded(
                                 child: TextFormField(
-                                  controller: _model.passwordController,
-                                  obscureText: !_model.passwordVisibility,
-                                  decoration: InputDecoration(
-                                    labelText: 'Contraseña',
-                                    labelStyle:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                    hintText: 'Ingrese su contraseña',
-                                    hintStyle:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .lineGray,
-                                        width: 2.0,
+                                    controller: _passwordController,
+                                    obscureText: !_model.passwordVisibility,
+                                    decoration: InputDecoration(
+                                      labelText: 'Contraseña',
+                                      labelStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                      hintText: 'Ingrese su contraseña',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .lineGray,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
                                       ),
-                                      borderRadius: BorderRadius.circular(8.0),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      filled: true,
+                                      fillColor: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      contentPadding:
+                                          EdgeInsetsDirectional.fromSTEB(
+                                              16.0, 24.0, 24.0, 24.0),
+                                      suffixIcon: InkWell(
+                                        onTap: () => setState(
+                                          () => _model.passwordVisibility =
+                                              !_model.passwordVisibility,
+                                        ),
+                                        focusNode:
+                                            FocusNode(skipTraversal: true),
+                                        child: Icon(
+                                          _model.passwordVisibility
+                                              ? Icons.visibility_outlined
+                                              : Icons.visibility_off_outlined,
+                                          color: Color(0xFF95A1AC),
+                                          size: 22.0,
+                                        ),
+                                      ),
                                     ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 2.0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 2.0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    focusedErrorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 2.0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    filled: true,
-                                    fillColor: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    contentPadding:
-                                        EdgeInsetsDirectional.fromSTEB(
-                                            16.0, 24.0, 24.0, 24.0),
-                                    suffixIcon: InkWell(
-                                      onTap: () => setState(
-                                        () => _model.passwordVisibility =
-                                            !_model.passwordVisibility,
-                                      ),
-                                      focusNode: FocusNode(skipTraversal: true),
-                                      child: Icon(
-                                        _model.passwordVisibility
-                                            ? Icons.visibility_outlined
-                                            : Icons.visibility_off_outlined,
-                                        color: Color(0xFF95A1AC),
-                                        size: 22.0,
-                                      ),
-                                    ),
-                                  ),
-                                  style:
-                                      FlutterFlowTheme.of(context).titleSmall,
-                                  validator: _model.passwordControllerValidator
-                                      .asValidator(context),
-                                ),
+                                    style:
+                                        FlutterFlowTheme.of(context).titleSmall,
+                                         validator: ( value) { 
+                                    if (value!.isEmpty)
+                                      return 'Por favor ingrese una contraseña';
+                                    if (value.length < 6)
+                                      return 'Mínimo 6 digítos';
+                                    return null;
+                                  },
+                                    onFieldSubmitted: (value) async {
+                                      try {
+                                        var user = null;
+                                        FirebaseFirestore _db =
+                                            FirebaseFirestore.instance;
+                                        var existe = await _db
+                                            .collection("users")
+                                            .doc(_emailController.text
+                                                .toLowerCase())
+                                            .get();
+                                        Logger().v(existe.exists);
+                                        if (existe.exists) {
+                                          user =
+                                              await AuthHelper.signInWithEmail(
+                                                  email: _emailController.text
+                                                      .toLowerCase(),
+                                                  password:
+                                                      _passwordController.text,
+                                                  estaCreado: true);
+                                        } else {
+                                          user =
+                                              await AuthHelper.signInWithEmail(
+                                                  email: _emailController.text
+                                                      .toLowerCase(),
+                                                  password:
+                                                      _passwordController.text);
+                                        }
+                                        if (user != null) {
+                                          print("Ingreso Exitoso");
+                                          await Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  FuncionarioFormWidget(),
+                                            ),
+                                            (r) => false,
+                                          );
+                                        }
+                                      } catch (e) {
+                                        print(e);
+                                      }
+                                    }),
                               ),
                             ],
                           ),
@@ -311,24 +377,42 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     0.0, 0.0, 4.0, 0.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    final Usuario? user =
-                                        await AuthHelper.signInWithEmail(
-                                      email: _model.emailAddressController.text,
-                                      password: _model.passwordController.text,
-                                    );
-                                    log('El usuario es: $user');
-                                    if (user == null) {
-                                      return;
-                                    }
-                                    log('Usario logeado exitosamente:'+user.toString());
-                                    log('El usuario tiene el rol de: ${user.role}');
-                                    await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => NavBarPage(
-                                            initialPage: 'interfazPrincipal'),
-                                      ),
-                                    );
+                                   
+                                      try {
+                                        var user =
+                                            await AuthHelper.signInWithEmail(
+                                                email:
+                                                    _emailController
+                                                        .text
+                                                        .toLowerCase(),
+                                                password:
+                                                    _passwordController.text);
+                                        if (user != null) {
+                                          print("Ingreso Exitoso");
+                                          await Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  FuncionarioFormWidget(),
+                                            ),
+                                            (r) => false,
+                                          );
+                                        }
+                                      } on FirebaseException catch (e) {
+                                        Logger().e(e.message);
+                                        var errorTraducido = await traducir(
+                                            e.message.toString());
+                                        Get.snackbar('Error', errorTraducido,
+                                            icon: Icon(
+                                              Icons.error_outline,
+                                              color: Colors.red,
+                                            ),
+                                            colorText: Color.fromARGB(
+                                                255, 114, 14, 7));
+                                      } catch (e) {
+                                        Logger().e(e);
+                                      }
+                                    
                                   },
                                   text: 'Iniciar Sesión',
                                   options: FFButtonOptions(
@@ -424,5 +508,16 @@ class _LoginWidgetState extends State<LoginWidget> {
         ),
       ),
     );
+  }
+
+  Future<String> traducir(String input) async {
+    try {
+      final translator = GoogleTranslator();
+      var translation = await translator.translate(input, from: 'en', to: 'es');
+      return translation.toString();
+    } on FirebaseAuthException catch (e) {
+      Logger().e('Error en el traductor: ' + e.message.toString());
+      return "Ha ocurrido un error inesperado, revise su conexión a internet";
+    }
   }
 }

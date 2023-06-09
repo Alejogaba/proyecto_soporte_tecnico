@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
+import 'package:login2/index.dart';
 import 'package:login2/lista_funcionarios/funcionarioForm.dart';
 import 'package:login2/model/usuario.dart';
 import 'package:translator/translator.dart';
@@ -303,14 +304,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                                             FirebaseFirestore.instance;
                                         var existe = await _db
                                             .collection("users")
-                                            .doc(_emailController.text
+                                            .doc(_emailController.text.trim()
                                                 .toLowerCase())
                                             .get();
                                         Logger().v(existe.exists);
                                         if (existe.exists) {
                                           user =
                                               await AuthHelper.signInWithEmail(
-                                                  email: _emailController.text
+                                                  email: _emailController.text.trim()
                                                       .toLowerCase(),
                                                   password:
                                                       _passwordController.text,
@@ -318,15 +319,26 @@ class _LoginWidgetState extends State<LoginWidget> {
                                         } else {
                                           user =
                                               await AuthHelper.signInWithEmail(
-                                                  email: _emailController.text
+                                                  email: _emailController.text.trim()
                                                       .toLowerCase(),
                                                   password:
                                                       _passwordController.text);
                                         }
                                         if (user != null) {
                                           print("Ingreso Exitoso");
-                                          Get.toNamed('/principal');
-                                        }
+                                         if(user.role=='admin'){
+                                             Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const FuncionarioFormWidget()));  
+                                          }else{
+                                             Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const InterfazPrincipalWidget()));  
+                                          }                                }
                                       } catch (e) {
                                         print(e);
                                       }
@@ -372,17 +384,30 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   onPressed: () async {
                                    
                                       try {
-                                        var user =
+                                        Usuario? user =
                                             await AuthHelper.signInWithEmail(
                                                 email:
                                                     _emailController
-                                                        .text
+                                                        .text.trim()
                                                         .toLowerCase(),
                                                 password:
                                                     _passwordController.text);
                                         if (user != null) {
                                           print("Ingreso Exitoso");
-                                         Get.toNamed('/principal');
+                                          if(user.role=='admin'){
+                                             Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const FuncionarioFormWidget()));  
+                                          }else{
+                                             Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const InterfazPrincipalWidget()));  
+                                          }
+                                          
                                         }
                                       } on FirebaseException catch (e) {
                                         Logger().e(e.message);

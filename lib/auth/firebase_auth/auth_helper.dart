@@ -111,7 +111,7 @@ class AuthHelper {
       log('El uid es:' + res!.user!.uid);
       final Usuario? usuario =
           await AuthHelper().cargarUsuarioDeFirebase(res.user!.uid);
-      
+      log('Ya se cargo usuario de firebase: ' + usuario.toString());
       Future.delayed(
         Duration(seconds: 2),
         () {},
@@ -124,13 +124,10 @@ class AuthHelper {
       log('Error: ' + e.message! + ' - Codigo: ' + e.code);
       if (e.code == 'user-not-found' && existe.exists) {
         log(existe.exists.toString());
-        user = await signupWithEmail(
+        Usuario? user = await signupWithEmail(
             email: email, password: password, estaRegistrado: true);
-        if (user != null) {
-          log(user);
-          
-        }
-      } else {}
+            return user;
+      }
     } catch (e) {
       log(e.toString());
     }
@@ -173,10 +170,13 @@ class AuthHelper {
         Duration(seconds: 2),
         () {},
       );
-      return res.user;
+      final Usuario? usuario =
+          await AuthHelper().cargarUsuarioDeFirebase(res.user!.uid);
+      return usuario;
     } on FirebaseAuthException {
     } catch (e) {
       log(e.toString());
+      return null;
     }
   }
 

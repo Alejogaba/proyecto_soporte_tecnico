@@ -77,17 +77,19 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            24.0, 40.0, 0.0, 0.0),
-                        child: Image.asset(
-                          'assets/images/chimichagua-removebg-preview-transformed.png',
-                          width: 71.1,
-                          height: 75.0,
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
-                      Padding(
+                      Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                24.0, 40.0, 0.0, 0.0),
+                            child: Image.asset(
+                              'assets/images/chimichagua-removebg-preview-transformed.png',
+                              width: 71.1,
+                              height: 75.0,
+                              fit: BoxFit.fitHeight,
+                            ),
+                          ),
+                          Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(
                             10.0, 40.0, 0.0, 0.0),
                         child: Text(
@@ -102,6 +104,9 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                               ),
                         ),
                       ),
+                        ],
+                      ),
+                      
                     ],
                   ),
                   Padding(

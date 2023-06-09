@@ -28,16 +28,14 @@ class AuthHelper {
     }
   }
 
-  Future<Usuario?> cargarUsuarioDeFirebase(String? uid) async {
-    if (uid != null && uid.isNotEmpty) {
+  Future<Usuario?> cargarUsuarioDeFirebase(String? email) async {
+    if (email != null && email.isNotEmpty) {
       final querySnapshot = await FirebaseFirestore.instance
           .collection('users')
-          .where('uid', isEqualTo: uid)
-          .limit(1)
+          .doc(email)
           .get();
-      if (querySnapshot.docs.isNotEmpty) {
-        final data = querySnapshot.docs.first.data();
-        return Usuario.mapeo(data);
+      if (querySnapshot.data()!=null && querySnapshot.data()!.isNotEmpty) {
+        return Usuario.mapeo(querySnapshot.data()!);
       } else {
         return null;
       }
@@ -100,17 +98,19 @@ class AuthHelper {
       bool estaCreado = false}) async {
     try {
       late UserCredential? res;
+      late Usuario? usuario;
       if (estaCreado) {
-        res = await signupWithEmail(
+        usuario = await signupWithEmail(
             email: email, password: password, estaRegistrado: estaCreado);
       } else {
         res = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
         log('Respuesta Firebase:' + res.user.toString());
+        usuario =
+          await AuthHelper().cargarUsuarioDeFirebase(res.user!.email);
       }
       log('El uid es:' + res!.user!.uid);
-      final Usuario? usuario =
-          await AuthHelper().cargarUsuarioDeFirebase(res.user!.uid);
+      
       log('Ya se cargo usuario de firebase: ' + usuario.toString());
       Future.delayed(
         Duration(seconds: 2),
@@ -124,21 +124,23 @@ class AuthHelper {
       log('Error: ' + e.message! + ' - Codigo: ' + e.code);
       if (e.code == 'user-not-found' && existe.exists) {
         log(existe.exists.toString());
+        log('Registrando usuario en authenciator');
         Usuario? user = await signupWithEmail(
             email: email, password: password, estaRegistrado: true);
-            return user;
+        return user;
       }
     } catch (e) {
       log(e.toString());
     }
   }
 
-  static signupWithEmail({
+  static Future<Usuario?> signupWithEmail({
     String email = '',
     String password = '',
     String rol = 'user',
     bool estaRegistrado = false,
   }) async {
+    late Usuario? usuario;
     try {
       FirebaseFirestore _db = FirebaseFirestore.instance;
 
@@ -166,16 +168,12 @@ class AuthHelper {
           UserHelper.saveUser(res.user!, rol: rol);
         }
       }
-      Future.delayed(
-        Duration(seconds: 2),
-        () {},
-      );
-      final Usuario? usuario =
-          await AuthHelper().cargarUsuarioDeFirebase(res.user!.uid);
+      usuario = await AuthHelper().cargarUsuarioDeFirebase(res.user!.email);
       return usuario;
     } on FirebaseAuthException {
     } catch (e) {
       log(e.toString());
+      usuario = null;
       return null;
     }
   }

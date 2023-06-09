@@ -187,7 +187,7 @@ class _PerfilWidgetState extends State<PerfilWidget>
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        setDarkModeSetting(context, ThemeMode.dark);
+                      
                         if (animationsMap[
                                 'containerOnActionTriggerAnimation'] !=
                             null) {
@@ -220,7 +220,7 @@ class _PerfilWidgetState extends State<PerfilWidget>
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        setDarkModeSetting(context, ThemeMode.light);
+                        
                         if (animationsMap[
                                 'containerOnActionTriggerAnimation'] !=
                             null) {

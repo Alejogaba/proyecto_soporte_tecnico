@@ -111,7 +111,7 @@ class AuthHelper {
       log('El uid es:' + res!.user!.uid);
       final Usuario? usuario =
           await AuthHelper().cargarUsuarioDeFirebase(res.user!.uid);
-      Get.toNamed('/principal');
+      
       Future.delayed(
         Duration(seconds: 2),
         () {},
@@ -128,7 +128,7 @@ class AuthHelper {
             email: email, password: password, estaRegistrado: true);
         if (user != null) {
           log(user);
-          Get.toNamed('/principal');
+          
         }
       } else {}
     } catch (e) {

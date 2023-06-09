@@ -34,21 +34,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-   final appState = FFAppState(); // Initialize FFAppState
+  final appState = FFAppState(); // Initialize FFAppState
   await appState.initializePersistedState();
   runApp(ChangeNotifierProvider(
     create: (context) => appState,
     child: MyApp(),
-    
   ));
 }
 
-
 class MyApp extends StatelessWidget {
- 
   @override
   Widget build(BuildContext csontext) {
-    
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
@@ -74,8 +70,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData(brightness: Brightness.dark),
       initialRoute: '/home',
       navigatorKey: Get.key,
-       getPages: routes(),
-      
+      getPages: routes(),
     );
   }
 }
@@ -97,13 +92,12 @@ class PrincipalPagina extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-       ChangeNotifierProvider(create: (_) => HomePageStateProvider())
+        ChangeNotifierProvider(create: (_) => HomePageStateProvider())
       ],
       child: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data != null) {
-           
               return StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection("users")
@@ -114,19 +108,22 @@ class PrincipalPagina extends StatelessWidget {
                   if (snapshot.hasData && snapshot.data != null) {
                     final userDoc = snapshot.data;
                     final user = userDoc?.data();
-                    Usuario usuario = Usuario.mapeo(user as Map<String, dynamic>);
-                     if (usuario.role == 'admin') {
-                    return FuncionarioFormWidget();
+                    Usuario usuario =
+                        Usuario.mapeo(user as Map<String, dynamic>);
+                    if (usuario.role == 'admin') {
+                      return FuncionarioFormWidget();
+                    } else if (usuario.role == 'funcionario') {
+                      return InterfazPrincipalWidget();
+                    } else {
+                      return LoginWidget();
+                    }
                   } else {
-                    return InterfazPrincipalWidget();
-                  }
-                } else {
-                  return Material(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    return Material(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     );
-                  } 
+                  }
                 },
               );
             }
@@ -135,9 +132,6 @@ class PrincipalPagina extends StatelessWidget {
     );
   }
 }
-
-
-
 
 class NavBarPage extends StatefulWidget {
   NavBarPage({Key? key, this.initialPage, this.page}) : super(key: key);

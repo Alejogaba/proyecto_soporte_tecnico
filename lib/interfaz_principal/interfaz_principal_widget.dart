@@ -7,6 +7,7 @@ import 'package:login2/model/usuario.dart';
 import '../auth/firebase_auth/auth_util.dart';
 import '../lista_funcionarios/lista_funcionarios_widget.dart';
 import '../login/login_widget.dart';
+import '../model/dependencias.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -76,6 +77,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                 children: [
                   Row(
                     mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
@@ -90,23 +92,49 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                             ),
                           ),
                           Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 40.0, 0.0, 0.0),
-                        child: Text(
-                          'Alcaldia de Chimichagua',
-                          style: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .override(
-                                fontFamily: 'Urbanist',
-                                color: FlutterFlowTheme.of(context).tertiary,
-                                fontSize: 25.0,
-                                fontWeight: FontWeight.w800,
-                              ),
-                        ),
-                      ),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                10.0, 40.0, 0.0, 0.0),
+                            child: Text(
+                              'Alcaldia de Chimichagua',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Urbanist',
+                                    color:
+                                        FlutterFlowTheme.of(context).tertiary,
+                                    fontSize: 25.0,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                            ),
+                          ),
                         ],
                       ),
-                      
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.person_add,
+                                color: FlutterFlowTheme.of(context).tertiary,
+                              )),
+                          IconButton(
+                              onPressed: () async {
+                                await authManager.signOut();
+                                await Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LoginWidget(),
+                                  ),
+                                  (r) => false,
+                                );
+                              },
+                              icon: Icon(
+                                Icons.logout,
+                                color: FlutterFlowTheme.of(context).tertiary,
+                              )),
+                        ],
+                      )
                     ],
                   ),
                   Padding(
@@ -235,78 +263,6 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                               ),
                             ),
                           ),
-                           Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 24.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FFButtonWidget(
-                      onPressed: () async {
-                       Get.toNamed('/gestionfuncio');
-                      },
-                      text: 'ADD Fun',
-                      options: FFButtonOptions(
-                                width: 100.0,
-                                height: 40.0,
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                color: FlutterFlowTheme.of(context).primary,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .override(
-                                      fontFamily: 'Urbanist',
-                                      color: Colors.white,
-                                    ),
-                                elevation: 2.0,
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 20.0),
-                child: FFButtonWidget(
-                  onPressed: () async {
-                    await authManager.signOut();
-                    await Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginWidget(),
-                      ),
-                      (r) => false,
-                    );
-                  },
-                  text: 'Log Out',
-                  options: FFButtonOptions(
-                    width: 110.0,
-                    height: 50.0,
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    iconPadding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    color: Color(0xFF4B835E),
-                    textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                          fontFamily: 'Lexend Deca',
-                          color: FlutterFlowTheme.of(context).cultured,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w500,
-                        ),
-                    elevation: 0.0,
-                    borderSide: BorderSide(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(40.0),
-                  ),
-                ),
-              ),
                         ],
                       ),
                     ),
@@ -316,11 +272,16 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
             ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
-              child: StreamBuilder<List<PropertiesRecord>>(
-                stream: queryPropertiesRecord(
-                  queryBuilder: (propertiesRecord) =>
-                      propertiesRecord.orderBy('lastUpdated', descending: true),
-                ),
+              child: StreamBuilder<List<Dependencia>>(
+                stream: FirebaseFirestore.instance
+                    .collection('dependencias')
+                    .snapshots()
+                    .map((QuerySnapshot querySnapshot) {
+                  List<Dependencia> dependencias = [];
+                  querySnapshot.docs.forEach((doc) =>
+                      dependencias.add(Dependencia.fromMap(doc.data() as Map<String, dynamic>)));
+                  return dependencias;
+                }),
                 builder: (context, snapshot) {
                   // Customize what your widget looks like when it's loading.
                   if (!snapshot.hasData) {
@@ -334,7 +295,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                       ),
                     );
                   }
-                  List<PropertiesRecord> listViewPropertiesRecordList =
+                  List<Dependencia> listViewPropertiesRecordList =
                       snapshot.data!;
                   return ListView.builder(
                     padding: EdgeInsets.zero,
@@ -369,7 +330,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                               children: [
                                 Hero(
                                   tag: valueOrDefault<String>(
-                                    listViewPropertiesRecord.mainImage,
+                                    listViewPropertiesRecord.urlImagen,
                                     'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg' +
                                         '$listViewIndex',
                                   ),
@@ -383,7 +344,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                     ),
                                     child: CachedNetworkImage(
                                       imageUrl: valueOrDefault<String>(
-                                        listViewPropertiesRecord.mainImage,
+                                        listViewPropertiesRecord.urlImagen,
                                         'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
                                       ),
                                       width: double.infinity,
@@ -400,7 +361,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          listViewPropertiesRecord.propertyName
+                                          listViewPropertiesRecord.nombre
                                               .maybeHandleOverflow(
                                             maxChars: 36,
                                             replacement: '…',
@@ -421,7 +382,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                       Expanded(
                                         child: Text(
                                           listViewPropertiesRecord
-                                              .propertyNeighborhood
+                                              .nombre
                                               .maybeHandleOverflow(
                                             maxChars: 90,
                                             replacement: '…',
@@ -438,7 +399,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                     queryBuilder: (reviewsRecord) =>
                                         reviewsRecord.where('propertyRef',
                                             isEqualTo: listViewPropertiesRecord
-                                                .reference),
+                                                .nombre),
                                   ),
                                   builder: (context, snapshot) {
                                     // Customize what your widget looks like when it's loading.
@@ -471,7 +432,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                     'propertyRef',
                                                     isEqualTo:
                                                         listViewPropertiesRecord
-                                                            .reference),
+                                                            .nombre),
                                             singleRecord: true,
                                           ),
                                           builder: (context, snapshot) {

@@ -30,11 +30,9 @@ class AuthHelper {
 
   Future<Usuario?> cargarUsuarioDeFirebase(String? email) async {
     if (email != null && email.isNotEmpty) {
-      final querySnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(email)
-          .get();
-      if (querySnapshot.data()!=null && querySnapshot.data()!.isNotEmpty) {
+      final querySnapshot =
+          await FirebaseFirestore.instance.collection('users').doc(email).get();
+      if (querySnapshot.data() != null && querySnapshot.data()!.isNotEmpty) {
         return Usuario.mapeo(querySnapshot.data()!);
       } else {
         return null;
@@ -106,11 +104,10 @@ class AuthHelper {
         res = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
         log('Respuesta Firebase:' + res.user.toString());
-        usuario =
-          await AuthHelper().cargarUsuarioDeFirebase(res.user!.email);
+        usuario = await AuthHelper().cargarUsuarioDeFirebase(res.user!.email);
       }
       log('El uid es:' + res!.user!.uid);
-      
+
       log('Ya se cargo usuario de firebase: ' + usuario.toString());
       Future.delayed(
         Duration(seconds: 2),
@@ -128,6 +125,30 @@ class AuthHelper {
         Usuario? user = await signupWithEmail(
             email: email, password: password, estaRegistrado: true);
         return user;
+      } else {
+        late String mensajeError;
+        switch (e.code) {
+          case 'user-not-found':
+            mensajeError = 'Este correo eléctronico no se encuentra registrado';
+            break;
+          case 'wrong-password':
+            mensajeError = 'Contraseña incorrecta';
+            break;
+          default:
+            mensajeError = await traducir(e.message.toString());
+            break;
+        }
+        Get.snackbar(
+            'Error', mensajeError,
+            duration: Duration(seconds: 5),
+            margin: EdgeInsets.fromLTRB(4, 8, 4, 0),
+            snackStyle: SnackStyle.FLOATING,
+            backgroundColor: Color.fromARGB(213, 211, 31, 31),
+            icon: Icon(
+              Icons.error_outline,
+              color: Colors.white,
+            ),
+            colorText: Color.fromARGB(255, 228, 219, 218));
       }
     } catch (e) {
       log(e.toString());

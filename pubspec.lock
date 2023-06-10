@@ -185,14 +185,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  dash_chat_2:
-    dependency: "direct main"
-    description:
-      name: dash_chat_2
-      sha256: e9e08b2a030d340d60f7adbeb977d3d6481db1f172b51440bfa02488b92fa19c
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.17"
   fake_async:
     dependency: transitive
     description:
@@ -363,14 +355,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_parsed_text:
-    dependency: transitive
-    description:
-      name: flutter_parsed_text
-      sha256: "529cf5793b7acdf16ee0f97b158d0d4ba0bf06e7121ef180abe1a5b59e32c1e2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.1"
   flutter_plugin_android_lifecycle:
     dependency: "direct main"
     description:

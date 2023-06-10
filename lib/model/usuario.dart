@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:login2/auth/firebase_auth/firebase_user_provider.dart';
 import 'package:login2/backend/backend.dart';
 

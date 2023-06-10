@@ -1,3 +1,5 @@
+import 'package:login2/model/chat_mensajes.dart';
+
 import '../../model/usuario.dart';
 import 'index.dart';
 
@@ -13,13 +15,12 @@ enum TimeDisplaySetting {
 }
 
 class FFChatWidget extends StatelessWidget {
-  const FFChatWidget({
+   FFChatWidget({
     Key? key,
     required this.currentUser,
     required this.scrollController,
     required this.focusNode,
     required this.messages,
-    required this.onSend,
     this.uploadMediaAction,
     // Theme settings
     this.backgroundColor,
@@ -36,8 +37,7 @@ class FFChatWidget extends StatelessWidget {
   final Usuario currentUser;
   final ScrollController scrollController;
   final FocusNode focusNode;
-  final List<ChatMessage> messages;
-  final Function(ChatMessage) onSend;
+  final List<ChatMensajes> messages;
   final Function()? uploadMediaAction;
 
   final Color? backgroundColor;
@@ -151,7 +151,7 @@ class FFChatMessage extends StatefulWidget {
     this.otherUsersTextStyle,
   }) : super(key: key);
 
-  final ChatMessage chatMessage;
+  final ChatMensajes chatMessage;
   final TimeDisplaySetting? timeDisplaySetting;
   final BoxDecoration? currentUserBoxDecoration;
   final BoxDecoration? otherUsersBoxDecoration;
@@ -205,7 +205,7 @@ class _FFChatMessageState extends State<FFChatMessage> {
           ))
       .copyWith(height: 1.5);
 
-  bool get hasImage => (widget.chatMessage.medias == null);
+  bool get hasImage => (widget.chatMessage.tipo == null);
 
   @override
   Widget build(BuildContext context) => Align(
@@ -229,7 +229,7 @@ class _FFChatMessageState extends State<FFChatMessage> {
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(16),
                         child: CachedNetworkImage(
-                          imageUrl: widget.chatMessage.user.profileImage!,
+                          imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png',
                           fit: BoxFit.fitWidth,
                         ),
                       )
@@ -239,7 +239,7 @@ class _FFChatMessageState extends State<FFChatMessage> {
                           vertical: 6,
                         ),
                         child: Text(
-                          widget.chatMessage.text!,
+                          widget.chatMessage.mensaje,
                           style: textStyle,
                         ),
                       ),
@@ -249,10 +249,10 @@ class _FFChatMessageState extends State<FFChatMessage> {
               Padding(
                 padding: const EdgeInsetsDirectional.only(top: 5.0, start: 5.0),
                 child: Text(
-                  widget.chatMessage.createdAt.isBefore(
+                  widget.chatMessage.fechaHora.isBefore(
                           DateTime.now().subtract(const Duration(minutes: 3)))
-                      ? timeago.format(widget.chatMessage.createdAt)
-                      : DateFormat.jm().format(widget.chatMessage.createdAt),
+                      ? timeago.format(widget.chatMessage.fechaHora)
+                      : DateFormat.jm().format(widget.chatMessage.fechaHora),
                   style: TextStyle(
                     color: Colors.grey[500],
                     fontSize: 12,

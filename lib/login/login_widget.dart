@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,13 +9,10 @@ import 'package:login2/lista_funcionarios/funcionarioForm.dart';
 import 'package:login2/model/usuario.dart';
 import 'package:translator/translator.dart';
 import '../backend/backend.dart';
-import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/main.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'login_model.dart';
 export 'login_model.dart';
@@ -321,7 +317,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   },
                                     onFieldSubmitted: (value) async {
                                       try {
-                                        var user = null;
+                                        var user;
                                         FirebaseFirestore _db =
                                             FirebaseFirestore.instance;
                                         var existe = await _db

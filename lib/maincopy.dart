@@ -1,3 +1,4 @@
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,22 +6,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:login2/lista_funcionarios/funcionarioForm.dart';
-import 'package:login2/perfil/PerfilMOD/home.dart';
 import 'package:login2/routes/my_routes.dart';
 import 'package:login2/state/homepageStateProvider.dart';
 import 'package:provider/provider.dart';
+
 import 'package:flutter/material.dart';
 
-import 'package:line_icons/line_icons.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 
 
+
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
+
 import 'index.dart';
 import 'model/usuario.dart';
 
@@ -29,17 +32,21 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  final appState = FFAppState(); // Initialize FFAppState
+   final appState = FFAppState(); // Initialize FFAppState
   await appState.initializePersistedState();
   runApp(ChangeNotifierProvider(
     create: (context) => appState,
     child: MyApp(),
+    
   ));
 }
 
+
 class MyApp extends StatelessWidget {
+ 
   @override
   Widget build(BuildContext csontext) {
+    
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
@@ -51,13 +58,22 @@ class MyApp extends StatelessWidget {
     ));
 
     return GetMaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('es', 'CO'),
+      ],
+      locale: const Locale('es', 'CO'),
       title: 'Alcaldia de todos',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
-      home: Example(),
+      initialRoute: '/home',
       navigatorKey: Get.key,
-      getPages: routes(),
+       getPages: routes(),
+      
     );
   }
 }
@@ -79,12 +95,13 @@ class PrincipalPagina extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => HomePageStateProvider())
+       ChangeNotifierProvider(create: (_) => HomePageStateProvider())
       ],
       child: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data != null) {
+           
               return StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection("users")
@@ -95,22 +112,19 @@ class PrincipalPagina extends StatelessWidget {
                   if (snapshot.hasData && snapshot.data != null) {
                     final userDoc = snapshot.data;
                     final user = userDoc?.data();
-                    Usuario usuario =
-                        Usuario.mapeo(user as Map<String, dynamic>);
-                    if (usuario.role == 'admin') {
-                      return HomeView();
-                    } else if (usuario.role == 'funcionario') {
-                      return InterfazPrincipalWidget();
-                    } else {
-                      return LoginWidget();
-                    }
+                    Usuario usuario = Usuario.mapeo(user as Map<String, dynamic>);
+                     if (usuario.role == 'admin') {
+                    return FuncionarioFormWidget();
                   } else {
-                    return Material(
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
+                    return InterfazPrincipalWidget();
                   }
+                } else {
+                  return Material(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    );
+                  } 
                 },
               );
             }
@@ -119,6 +133,9 @@ class PrincipalPagina extends StatelessWidget {
     );
   }
 }
+
+
+
 
 class NavBarPage extends StatefulWidget {
   NavBarPage({Key? key, this.initialPage, this.page}) : super(key: key);
@@ -147,7 +164,7 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'Conversaciones': ConversacionesWidget(),
       'interfazPrincipal': InterfazPrincipalWidget(),
-      'Perfil': HomeView(),
+      'Perfil': PerfilWidget(),
       'gestionfuncionario': FuncionarioFormWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
@@ -204,84 +221,6 @@ class _NavBarPageState extends State<NavBarPage> {
             tooltip: '',
           )
         ],
-      ),
-    );
-  }
-}
-
-class Example extends StatefulWidget {
-  @override
-  _ExampleState createState() => _ExampleState();
-}
-
-class _ExampleState extends State<Example> {
-  int _selectedIndex = 0;
-  
-  static const List<Widget> _widgetOptions = <Widget>[
-    ConversacionesWidget(),
-    InterfazPrincipalWidget(),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: FlutterFlowTheme.of(context).primary,
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 20,
-              color: Colors.black.withOpacity(.1),
-            )
-          ],
-        ),
-        child: GNav(
-          haptic: true, // haptic feedback
-          tabBorderRadius: 16,
-          tabActiveBorder: Border.all(
-              color: FlutterFlowTheme.of(context).primary,
-              width: 1), // tab button border
-          backgroundColor: FlutterFlowTheme.of(context).primary,
-          tabShadow: [
-            BoxShadow(
-                color: FlutterFlowTheme.of(context).primary.withOpacity(0.5),
-                blurRadius: 8)
-          ], // tab button shadow
-          curve: Curves.easeOutExpo, // tab animation curves
-          duration: Duration(milliseconds: 900), // tab animation duration
-          gap: 8, // the tab button gap between icon and text
-          color: FlutterFlowTheme.of(context)
-              .tertiary
-              .withOpacity(0.7), // unselected icon color
-          activeColor: FlutterFlowTheme.of(context)
-              .tertiary, // selected icon and text color
-          iconSize: 30, // tab button icon size
-          tabBackgroundColor: FlutterFlowTheme.of(context)
-              .tertiary
-              .withOpacity(0.1), // selected tab background color
-          padding: EdgeInsets.symmetric(
-              horizontal: 140, vertical: 10), // navigation bar padding
-          tabs: [
-            GButton(
-              icon: LineIcons.home,
-              text: 'Home',
-            ),
-            GButton(
-              icon: LineIcons.heart,
-              text: 'Likes',
-            ),
-          ],
-          selectedIndex: _selectedIndex,
-          onTabChange: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-        ),
       ),
     );
   }

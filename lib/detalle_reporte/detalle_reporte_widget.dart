@@ -1,6 +1,5 @@
-import '/auth/firebase_auth/auth_util.dart';
+
 import '/backend/backend.dart';
-import '/chat/chat_widget.dart';
 import '/components/cancel_trip_h_o_s_t_widget.dart';
 import '/flutter_flow/flutter_flow_expanded_image_view.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -8,10 +7,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'detalle_reporte_model.dart';
 export 'detalle_reporte_model.dart';
@@ -497,15 +493,16 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                           Align(
                             alignment: AlignmentDirectional(0.0, 0.0),
                             child: FFButtonWidget(
-                              onPressed: () async {
+                              onPressed: () async {/*
+                                Usuario? usuarioActual = await AuthHelper().cargarUsuarioDeFirebase(getCurrentUser()!.email);
                                 await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => ChatWidget(
-                                      chatUser: bottomButtonAreaUsersRecord,
+                                      chatUser: bottomButtonAreaUsersRecord, usuarioActual: usuarioActual!,
                                     ),
                                   ),
-                                );
+                                );*/
                               },
                               text: 'Chat',
                               icon: Icon(

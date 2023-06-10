@@ -1,4 +1,4 @@
-import 'package:dash_chat_2/dash_chat_2.dart';
+import 'package:login2/model/chat_mensajes.dart';
 import 'package:login2/model/usuario.dart';
 
 import 'index.dart';
@@ -10,11 +10,12 @@ import 'package:flutter/scheduler.dart';
 
 class FFChatPage extends StatefulWidget {
   final Usuario currentUsuario;
+  final List<ChatMensajes> chatMensajes;
 
   FFChatPage({
     Key? key,
     required this.currentUsuario,
-    required this.chatInfo,
+
     this.allowImages = false,
     // Theme settings
     this.backgroundColor,
@@ -25,10 +26,10 @@ class FFChatPage extends StatefulWidget {
     this.otherUsersTextStyle,
     this.inputHintTextStyle,
     this.inputTextStyle,
-    this.emptyChatWidget,
+    this.emptyChatWidget, required this.chatMensajes,
   }) : super(key: key);
 
-  final FFChatInfo chatInfo;
+
   final bool allowImages;
 
   final Color? backgroundColor;
@@ -49,21 +50,18 @@ class _FFChatPageState extends State<FFChatPage> {
   final scrollController = ScrollController();
   final focusNode = FocusNode();
 
-  DocumentReference get chatReference => widget.chatInfo.chatRecord.reference;
-  Usuario get currentUser => widget.currentUsuario;
-  
 
-  Map<String, ChatMessagesRecord> allMessages = {};
-  List<ChatMessagesRecord> messages = [];
-  late StreamSubscription<List<ChatMessagesRecord>> messagesStream;
+  Usuario get currentUser => widget.currentUsuario;
+
+  Map<String, ChatMensajes> allMessages = {};
+  List<ChatMensajes> messages = [];
+  late StreamSubscription<List<ChatMensajes>> messagesStream;
   bool _initialized = false;
 
   DateTime? latestMessageTime() =>
-      messages.isNotEmpty ? messages.last.timestamp : null;
+      messages.isNotEmpty ? messages.last.fechaHora : null;
 
-  Future updateSeenBy() => chatReference.update({
-        'last_message_seen_by': FieldValue.arrayUnion([currentUserReference])
-      });
+
 
   void onNewMessage(DateTime? lastBefore, DateTime? lastAfter) {
     if (!mounted ||
@@ -75,48 +73,39 @@ class _FFChatPageState extends State<FFChatPage> {
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       Future.delayed(Duration(milliseconds: 100))
           .then((_) => scrollController.jumpTo(0));
-      updateSeenBy();
+    
     });
   }
 
-  void updateMessages(List<ChatMessagesRecord> chatMessages) {
+  void updateMessages(List<ChatMensajes> chatMessages) {
     final oldLatestTime = latestMessageTime();
-    chatMessages.forEach((m) => allMessages[m.reference.id] = m);
+    chatMessages.forEach((m) => allMessages[m.mensaje] = m);
     messages = allMessages.values.toList();
-    messages.sort((a, b) => a.timestamp!.compareTo(b.timestamp!));
+    messages.sort((a, b) => a.fechaHora.compareTo(b.fechaHora));
     onNewMessage(oldLatestTime, latestMessageTime());
     setState(() {});
   }
 
-  StreamSubscription<List<ChatMessagesRecord>> getMessagesStream(
-          DocumentReference chatReference) =>
-      FFChatManager.instance.getChatMessages(chatReference).listen((m) {
-        if (mounted) {
-          updateMessages(m);
-          FFChatManager.instance.setLatestMessages(chatReference, messages);
-        }
-      });
+
 
   @override
   void initState() {
     super.initState();
-    updateMessages(FFChatManager.instance.getLatestMessages(chatReference));
-    messagesStream = getMessagesStream(chatReference);
+   
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      updateSeenBy();
       setState(() => _initialized = true);
     });
   }
-
+/*
   Future sendMessage({String? text, String? imageUrl}) async {
-    final chatMessagesRecordData = createChatMessagesRecordData(
+    final ChatMensajesData = createChatMensajesData(
       user: currentUserReference,
       chat: chatReference,
       text: text,
       image: imageUrl,
       timestamp: getCurrentTimestamp,
     );
-    await ChatMessagesRecord.collection.doc().set(chatMessagesRecordData);
+    await ChatMensajes.collection.doc().set(ChatMensajesData);
     final lastMessage = (text ?? '').isNotEmpty
         ? text
         : (imageUrl ?? '').isNotEmpty
@@ -133,7 +122,7 @@ class _FFChatPageState extends State<FFChatPage> {
       ...chatsRecordData,
     });
   }
-
+*/
   @override
   void dispose() {
     messagesStream.cancel();
@@ -147,19 +136,9 @@ class _FFChatPageState extends State<FFChatPage> {
             currentUser: currentUser,
             scrollController: scrollController,
             focusNode: focusNode,
-            messages: messages
-                .map(
-                  (message) => ChatMessage(
-        
-                    user: currentUser
-                      ,
-                    text: message.text,
-                    createdAt: message.timestamp!,
-                  ),
-                )
-                .toList(),
-            onSend: (message) =>
-                sendMessage(text: message.text, imageUrl: message.user.profileImage),
+            messages: widget.chatMensajes
+              ,
+            //onSend: (message) {},// sendMessage( text: message.text, imageUrl: message.user.profileImage),
             uploadMediaAction: widget.allowImages
                 ? () async {
                     final selectedMedia =
@@ -177,10 +156,10 @@ class _FFChatPageState extends State<FFChatPage> {
                       'Sending photo',
                       showLoading: true,
                     );
-                    final downloadUrl = await uploadData(
+                  /*  final downloadUrl = await uploadData(
                         selectedMedia.storagePath, selectedMedia.bytes);
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    await sendMessage(imageUrl: downloadUrl);
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();*/
+                   // await sendMessage(imageUrl: downloadUrl);
                   }
                 : null,
             backgroundColor: widget.backgroundColor,
@@ -196,4 +175,3 @@ class _FFChatPageState extends State<FFChatPage> {
         ],
       );
 }
-

@@ -1,12 +1,10 @@
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:logger/logger.dart';
 import 'package:translator/translator.dart';
 
@@ -115,7 +113,7 @@ class AuthHelper {
       );
       return usuario;
     } on FirebaseAuthException catch (e) {
-      var user;
+    
       FirebaseFirestore _db = FirebaseFirestore.instance;
       var existe = await _db.collection("users").doc(email.toLowerCase()).get();
       log('Error: ' + e.message! + ' - Codigo: ' + e.code);
@@ -197,6 +195,7 @@ class AuthHelper {
       usuario = null;
       return null;
     }
+    return null;
   }
 
   static estaLogeado() {
@@ -216,8 +215,7 @@ class AuthHelper {
 
 class UserHelper {
   static FirebaseFirestore _db = FirebaseFirestore.instance;
-  static var _dbRT = FirebaseDatabase.instance.reference();
-
+ 
   Future<void> eliminarFuncionario(String email) async {
     CollectionReference funcionarios =
         FirebaseFirestore.instance.collection('users');

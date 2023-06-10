@@ -9,7 +9,6 @@ import 'package:json_path/json_path.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
-import '../main.dart';
 
 export 'lat_lng.dart';
 export 'place.dart';
@@ -115,7 +114,7 @@ String formatNumber(
       formattedValue = NumberFormat.compactLong().format(value);
       break;
     case FormatType.custom:
-      final hasLocale = locale != null && locale.isNotEmpty;
+      final hasLocale = locale.isNotEmpty;
       formattedValue =
           NumberFormat(format, hasLocale ? locale : null).format(value);
   }
@@ -124,12 +123,10 @@ String formatNumber(
     return value.toString();
   }
 
-  if (currency != null) {
-    final currencySymbol = currency.isNotEmpty
-        ? currency
-        : NumberFormat.simpleCurrency().format(0.0).substring(0, 1);
-    formattedValue = '$currencySymbol$formattedValue';
-  }
+  final currencySymbol = currency.isNotEmpty
+      ? currency
+      : NumberFormat.simpleCurrency().format(0.0).substring(0, 1);
+  formattedValue = '$currencySymbol$formattedValue';
 
   return formattedValue;
 }
@@ -244,7 +241,7 @@ void showSnackbar(
 
 extension FFStringExt on String {
   String maybeHandleOverflow({required int maxChars, String replacement = ''}) =>
-      maxChars != null && length > maxChars
+      length > maxChars
           ? replaceRange(maxChars, null, replacement)
           : this;
 }

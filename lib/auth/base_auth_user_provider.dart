@@ -37,4 +37,4 @@ User? getCurrentUser() {
   User? user = FirebaseAuth.instance.currentUser;
   return user;
 }
-bool get loggedIn => getCurrentUser()!=null ?? false;
+bool get loggedIn => getCurrentUser()!=null;

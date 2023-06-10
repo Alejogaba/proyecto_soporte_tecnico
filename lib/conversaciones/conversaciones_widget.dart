@@ -1,11 +1,9 @@
+import 'package:login2/auth/firebase_auth/auth_helper.dart';
 import 'package:login2/model/usuario.dart';
 
-import '/auth/firebase_auth/auth_util.dart';
-import '/backend/backend.dart';
 import '/chat/chat_widget.dart';
 import '/flutter_flow/chat/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -100,17 +98,27 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                   final listViewChatsRecord =
                       listViewChatsRecordList[listViewIndex];
                   return StreamBuilder<Usuario>(
-                    stream: Usuario().getUsuarioStream(
-                        listViewChatsRecord),
+                    stream: Usuario().getUsuarioStream(listViewChatsRecord),
                     builder: (context, snapshot) {
                       final Usuario chatInfo = snapshot.data ?? Usuario();
 
                       return FFChatPreview(
-                        onTap: () => print('Boton para mirar chat'),
+                        onTap: () async {
+                          Usuario? usuarioActual = await AuthHelper()
+                              .cargarUsuarioDeFirebase(getCurrentUser()!.email);
+                          if (usuarioActual != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatWidget(usuarioActual: usuarioActual, uid: 'rEzfeft8TxbyObmY4XLb'
+                                ),
+                              ),
+                            );
+                          }
+                        },
                         lastChatText: listViewChatsRecord.lastMessage,
                         lastChatTime: listViewChatsRecord.lastMessageTime,
-                        seen: listViewChatsRecord.lastMessageSeenBy!
-                            .contains(currentUserReference),
+                        seen: listViewChatsRecord.lastMessageSeenBy.contains(currentUserReference),
                         title: '${chatInfo.nombre} - ${chatInfo.area}',
                         userProfilePic: chatInfo.urlImagen,
                         color: FlutterFlowTheme.of(context).secondaryBackground,

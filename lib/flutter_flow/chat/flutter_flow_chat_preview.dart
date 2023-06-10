@@ -1,5 +1,4 @@
 import 'index.dart';
-import '../../model/usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 

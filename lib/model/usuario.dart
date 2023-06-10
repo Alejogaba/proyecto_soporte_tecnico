@@ -11,7 +11,7 @@ class Usuario {
   String? role;
   String? uid;
 
-  Usuario({
+  Usuario(Usuario usuario, {
     this.funcionarioImage = "",
     this.fechaNacimiento = "",
     this.area = "",

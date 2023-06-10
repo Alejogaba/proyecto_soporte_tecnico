@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:login2/lista_funcionarios/funcionarioForm.dart';
+import 'package:login2/perfil/PerfilMOD/home.dart';
 import 'package:login2/routes/my_routes.dart';
 import 'package:login2/state/homepageStateProvider.dart';
 import 'package:provider/provider.dart';
@@ -111,7 +112,7 @@ class PrincipalPagina extends StatelessWidget {
                     Usuario usuario =
                         Usuario.mapeo(user as Map<String, dynamic>);
                     if (usuario.role == 'admin') {
-                      return FuncionarioFormWidget();
+                      return HomeView();
                     } else if (usuario.role == 'funcionario') {
                       return InterfazPrincipalWidget();
                     } else {
@@ -160,7 +161,7 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'Conversaciones': ConversacionesWidget(),
       'interfazPrincipal': InterfazPrincipalWidget(),
-      'Perfil': PerfilWidget(),
+      'Perfil': HomeView(),
       'gestionfuncionario': FuncionarioFormWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);

@@ -8,12 +8,15 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:login2/lista_funcionarios/funcionarioForm.dart';
 import 'package:login2/routes/my_routes.dart';
 import 'package:login2/state/homepageStateProvider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
+import 'package:line_icons/line_icons.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -68,7 +71,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
-      initialRoute: '/home',
+
+      home: Example(),
       navigatorKey: Get.key,
       getPages: routes(),
     );
@@ -221,3 +225,74 @@ class _NavBarPageState extends State<NavBarPage> {
     );
   }
 }
+
+class Example extends StatefulWidget {
+  @override
+  _ExampleState createState() => _ExampleState();
+}
+
+class _ExampleState extends State<Example> {
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
+  static const List<Widget> _widgetOptions = <Widget>[
+    ConversacionesWidget(),
+  InterfazPrincipalWidget(),
+    
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: FlutterFlowTheme.of(context).primary,
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black.withOpacity(.1),
+            )
+          ],
+        ),
+        child: GNav(
+
+  haptic: true, // haptic feedback
+  tabBorderRadius: 16, 
+  tabActiveBorder: Border.all(color:  FlutterFlowTheme.of(context).primary, width: 1), // tab button border
+  backgroundColor: FlutterFlowTheme.of(context).primary,
+  tabShadow: [BoxShadow(color: FlutterFlowTheme.of(context).primary.withOpacity(0.5), blurRadius: 8)], // tab button shadow
+  curve: Curves.easeOutExpo, // tab animation curves
+  duration: Duration(milliseconds: 900), // tab animation duration
+  gap: 8, // the tab button gap between icon and text 
+  color: FlutterFlowTheme.of(context).tertiary.withOpacity(0.7), // unselected icon color
+  activeColor: FlutterFlowTheme.of(context).tertiary, // selected icon and text color
+  iconSize: 30, // tab button icon size
+  tabBackgroundColor: FlutterFlowTheme.of(context).tertiary.withOpacity(0.1), // selected tab background color
+  padding: EdgeInsets.symmetric(horizontal: 140, vertical: 10), // navigation bar padding
+          tabs: [
+            GButton(
+              icon: LineIcons.home,
+              text: 'Home',
+            ),
+            GButton(
+              icon: LineIcons.heart,
+              text: 'Likes',
+            ),
+          
+          ],
+          selectedIndex: _selectedIndex,
+          onTabChange: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+        ),
+      ),
+    );
+  }
+}
+

@@ -43,7 +43,7 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).dark600,
+        backgroundColor: FlutterFlowTheme.of(context).primary,
         automaticallyImplyLeading: false,
         title: Text(
           'Todas las conversaciones',

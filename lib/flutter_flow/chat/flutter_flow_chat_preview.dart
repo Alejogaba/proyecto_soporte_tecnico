@@ -1,5 +1,5 @@
 import 'index.dart';
-
+import '../../model/usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -65,10 +65,11 @@ class FFChatPreview extends StatelessWidget {
                     ),
                   ),
                   Container(
+                    child: ClipRRect(child: Image.network(userProfilePic)),
                    
                     constraints: BoxConstraints(
-                      maxHeight: 420.0,
-                      maxWidth: 420.0,
+                      maxHeight: 400.0,
+                      maxWidth: 400.0,
                     ),
                   ),
                 ],

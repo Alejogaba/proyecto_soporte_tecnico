@@ -14,10 +14,10 @@ class UsersRecord extends FirestoreRecord {
     _initializeFields();
   }
 
-  // "userCity" field.
-  String? _userCity;
-  String get userCity => _userCity ?? '';
-  bool hasUserCity() => _userCity != null;
+  // "area" field.
+  String? _area;
+  String get area => _area ?? '';
+  bool hasarea() => _area != null;
 
   // "email" field.
   String? _email;
@@ -59,10 +59,7 @@ class UsersRecord extends FirestoreRecord {
   bool get isHost => _isHost ?? false;
   bool hasIsHost() => _isHost != null;
 
-  // "numberProperties" field.
-  int? _numberProperties;
-  int get numberProperties => _numberProperties ?? 0;
-  bool hasNumberProperties() => _numberProperties != null;
+
 
   // "numberActiveBookings" field.
   int? _numberActiveBookings;
@@ -70,17 +67,16 @@ class UsersRecord extends FirestoreRecord {
   bool hasNumberActiveBookings() => _numberActiveBookings != null;
 
   void _initializeFields() {
-    _userCity = snapshotData['userCity'] as String?;
+    _area = snapshotData['area'] as String?;
     _email = snapshotData['email'] as String?;
-    _displayName = snapshotData['display_name'] as String?;
+    _displayName = snapshotData['nombre'] as String?;
     _photoUrl = snapshotData['photo_url'] as String?;
     _uid = snapshotData['uid'] as String?;
     _createdTime = snapshotData['created_time'] as DateTime?;
-    _phoneNumber = snapshotData['phone_number'] as String?;
+    _phoneNumber = snapshotData['telefono'] as String?;
     _bio = snapshotData['bio'] as String?;
     _isHost = snapshotData['isHost'] as bool?;
-    _numberProperties = snapshotData['numberProperties'] as int?;
-    _numberActiveBookings = snapshotData['numberActiveBookings'] as int?;
+
   }
 
   static CollectionReference get collection =>
@@ -111,7 +107,7 @@ class UsersRecord extends FirestoreRecord {
 }
 
 Map<String, dynamic> createUsersRecordData({
-  String? userCity,
+  String? area,
   String? email,
   String? displayName,
   String? photoUrl,
@@ -120,22 +116,20 @@ Map<String, dynamic> createUsersRecordData({
   String? phoneNumber,
   String? bio,
   bool? isHost,
-  int? numberProperties,
-  int? numberActiveBookings,
+
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
-      'userCity': userCity,
+      'area': area,
       'email': email,
-      'display_name': displayName,
+      'nombre': displayName,
       'photo_url': photoUrl,
       'uid': uid,
       'created_time': createdTime,
-      'phone_number': phoneNumber,
+      'telefono': phoneNumber,
       'bio': bio,
       'isHost': isHost,
-      'numberProperties': numberProperties,
-      'numberActiveBookings': numberActiveBookings,
+
     }.withoutNulls,
   );
 

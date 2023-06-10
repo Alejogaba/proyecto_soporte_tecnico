@@ -1,4 +1,5 @@
 import 'package:dash_chat_2/dash_chat_2.dart';
+import 'package:login2/model/usuario.dart';
 
 import 'index.dart';
 
@@ -8,8 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 class FFChatPage extends StatefulWidget {
+  final Usuario currentUsuario;
+
   FFChatPage({
     Key? key,
+    required this.currentUsuario,
     required this.chatInfo,
     this.allowImages = false,
     // Theme settings
@@ -46,10 +50,8 @@ class _FFChatPageState extends State<FFChatPage> {
   final focusNode = FocusNode();
 
   DocumentReference get chatReference => widget.chatInfo.chatRecord.reference;
-  ChatUser get currentUser => widget.chatInfo.currentUser.toChatUser(true);
-  Map<String, ChatUser> get otherUsers => widget.chatInfo.otherUsers.map(
-        (k, u) => MapEntry(k, u.toChatUser(false)),
-      );
+  Usuario get currentUser => widget.currentUsuario;
+  
 
   Map<String, ChatMessagesRecord> allMessages = {};
   List<ChatMessagesRecord> messages = [];
@@ -149,9 +151,8 @@ class _FFChatPageState extends State<FFChatPage> {
                 .map(
                   (message) => ChatMessage(
         
-                    user: message.user?.id == currentUser
-                        ? currentUser
-                        : otherUsers[message.user?.id]!,
+                    user: currentUser
+                      ,
                     text: message.text,
                     createdAt: message.timestamp!,
                   ),

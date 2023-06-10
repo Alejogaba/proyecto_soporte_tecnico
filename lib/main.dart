@@ -24,7 +24,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
 
-import 'backend/firebase/firebase_config.dart';
+
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/internationalization.dart';
@@ -59,19 +59,10 @@ class MyApp extends StatelessWidget {
     ));
 
     return GetMaterialApp(
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('es', 'CO'),
-      ],
-      locale: const Locale('es', 'CO'),
       title: 'Alcaldia de todos',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
-
       home: Example(),
       navigatorKey: Get.key,
       getPages: routes(),
@@ -237,8 +228,7 @@ class _ExampleState extends State<Example> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
   static const List<Widget> _widgetOptions = <Widget>[
     ConversacionesWidget(),
-  InterfazPrincipalWidget(),
-    
+    InterfazPrincipalWidget(),
   ];
 
   @override
@@ -259,20 +249,31 @@ class _ExampleState extends State<Example> {
           ],
         ),
         child: GNav(
-
-  haptic: true, // haptic feedback
-  tabBorderRadius: 16, 
-  tabActiveBorder: Border.all(color:  FlutterFlowTheme.of(context).primary, width: 1), // tab button border
-  backgroundColor: FlutterFlowTheme.of(context).primary,
-  tabShadow: [BoxShadow(color: FlutterFlowTheme.of(context).primary.withOpacity(0.5), blurRadius: 8)], // tab button shadow
-  curve: Curves.easeOutExpo, // tab animation curves
-  duration: Duration(milliseconds: 900), // tab animation duration
-  gap: 8, // the tab button gap between icon and text 
-  color: FlutterFlowTheme.of(context).tertiary.withOpacity(0.7), // unselected icon color
-  activeColor: FlutterFlowTheme.of(context).tertiary, // selected icon and text color
-  iconSize: 30, // tab button icon size
-  tabBackgroundColor: FlutterFlowTheme.of(context).tertiary.withOpacity(0.1), // selected tab background color
-  padding: EdgeInsets.symmetric(horizontal: 140, vertical: 10), // navigation bar padding
+          haptic: true, // haptic feedback
+          tabBorderRadius: 16,
+          tabActiveBorder: Border.all(
+              color: FlutterFlowTheme.of(context).primary,
+              width: 1), // tab button border
+          backgroundColor: FlutterFlowTheme.of(context).primary,
+          tabShadow: [
+            BoxShadow(
+                color: FlutterFlowTheme.of(context).primary.withOpacity(0.5),
+                blurRadius: 8)
+          ], // tab button shadow
+          curve: Curves.easeOutExpo, // tab animation curves
+          duration: Duration(milliseconds: 900), // tab animation duration
+          gap: 8, // the tab button gap between icon and text
+          color: FlutterFlowTheme.of(context)
+              .tertiary
+              .withOpacity(0.7), // unselected icon color
+          activeColor: FlutterFlowTheme.of(context)
+              .tertiary, // selected icon and text color
+          iconSize: 30, // tab button icon size
+          tabBackgroundColor: FlutterFlowTheme.of(context)
+              .tertiary
+              .withOpacity(0.1), // selected tab background color
+          padding: EdgeInsets.symmetric(
+              horizontal: 140, vertical: 10), // navigation bar padding
           tabs: [
             GButton(
               icon: LineIcons.home,
@@ -282,7 +283,6 @@ class _ExampleState extends State<Example> {
               icon: LineIcons.heart,
               text: 'Likes',
             ),
-          
           ],
           selectedIndex: _selectedIndex,
           onTabChange: (index) {
@@ -295,4 +295,3 @@ class _ExampleState extends State<Example> {
     );
   }
 }
-

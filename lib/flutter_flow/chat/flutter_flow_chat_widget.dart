@@ -1,3 +1,4 @@
+import '../../model/usuario.dart';
 import 'index.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -32,7 +33,7 @@ class FFChatWidget extends StatelessWidget {
     this.emptyChatWidget,
   }) : super(key: key);
 
-  final ChatUser currentUser;
+  final Usuario currentUser;
   final ScrollController scrollController;
   final FocusNode focusNode;
   final List<ChatMessage> messages;

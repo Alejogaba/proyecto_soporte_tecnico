@@ -20,13 +20,13 @@ FirebaseAuthManager get authManager => _authManager;
 String get currentUserEmail =>
     currentUserDocument?.email ?? currentUser?.email ?? '';
 
-String get currentUserUid => currentUser?.uid ?? '';
+String get currentUserUid => currentUser?.email ?? '';
 
 String get currentUserDisplayName =>
     currentUserDocument?.displayName ?? currentUser?.displayName ?? '';
 
 String get currentUserPhoto =>
-    currentUserDocument?.photoUrl ?? currentUser?.photoUrl ?? '';
+    currentUserDocument?.photoUrl ?? currentUser?.photoURL ?? '';
 
 String get currentPhoneNumber =>
     currentUserDocument?.phoneNumber ?? currentUser?.phoneNumber ?? '';
@@ -43,17 +43,23 @@ final jwtTokenStream = FirebaseAuth.instance
     .map((user) async => _currentJwtToken = await user?.getIdToken())
     .asBroadcastStream();
 
-DocumentReference? get currentUserReference =>
-    loggedIn ? UsersRecord.collection.doc(currentUser!.uid) : null;
+// ignore: body_might_complete_normally_nullable
+DocumentReference? get currentUserReference {
+   User? user = FirebaseAuth.instance.currentUser;
+  print('loggedIn: $loggedIn');
+  print('usuario actual logged:'+(user!=null).toString());
+  // ignore: unnecessary_statements
+  loggedIn ? UsersRecord.collection.doc(currentUser!.email) : null;
+}
 
 UsersRecord? currentUserDocument;
 final authenticatedUserStream = FirebaseAuth.instance
     .authStateChanges()
-    .map<String>((user) => user?.uid ?? '')
+    .map<String>((user) => user?.email ?? '')
     .switchMap(
-      (uid) => uid.isEmpty
+      (email) => email.isEmpty
           ? Stream.value(null)
-          : UsersRecord.getDocument(UsersRecord.collection.doc(uid))
+          : UsersRecord.getDocument(UsersRecord.collection.doc(email))
               .handleError((_) {}),
     )
     .map((user) => currentUserDocument = user)

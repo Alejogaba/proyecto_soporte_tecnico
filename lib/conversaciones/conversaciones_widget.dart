@@ -1,3 +1,5 @@
+import 'package:login2/model/usuario.dart';
+
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/chat/chat_widget.dart';
@@ -67,9 +69,9 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                   .where('users', arrayContains: currentUserReference)
                   .orderBy('last_message_time', descending: true),
             ),
-            builder: (context, snapshot) {
+            builder: (context, snapshot1) {
               // Customize what your widget looks like when it's loading.
-              if (!snapshot.hasData) {
+              if (!snapshot1.hasData) {
                 return Center(
                   child: SizedBox(
                     width: 50.0,
@@ -80,7 +82,8 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                   ),
                 );
               }
-              List<ChatsRecord> listViewChatsRecordList = snapshot.data!;
+              List<ChatsRecord> listViewChatsRecordList = snapshot1.data!;
+
               if (listViewChatsRecordList.isEmpty) {
                 return Center(
                   child: Image.asset(
@@ -96,30 +99,20 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                 itemBuilder: (context, listViewIndex) {
                   final listViewChatsRecord =
                       listViewChatsRecordList[listViewIndex];
-                  return StreamBuilder<FFChatInfo>(
-                    stream: FFChatManager.instance
-                        .getChatInfo(chatRecord: listViewChatsRecord),
+                  return StreamBuilder<Usuario>(
+                    stream: Usuario().getUsuarioStream(
+                        listViewChatsRecord),
                     builder: (context, snapshot) {
-                      final chatInfo =
-                          snapshot.data ?? FFChatInfo(listViewChatsRecord);
+                      final Usuario chatInfo = snapshot.data ?? Usuario();
+
                       return FFChatPreview(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChatWidget(
-                              chatUser: chatInfo.otherUsers.length == 1
-                                  ? chatInfo.otherUsersList.first
-                                  : null,
-                              chatRef: chatInfo.chatRecord.reference,
-                            ),
-                          ),
-                        ),
-                        lastChatText: chatInfo.chatPreviewMessage(),
+                        onTap: () => print('Boton para mirar chat'),
+                        lastChatText: listViewChatsRecord.lastMessage,
                         lastChatTime: listViewChatsRecord.lastMessageTime,
                         seen: listViewChatsRecord.lastMessageSeenBy!
                             .contains(currentUserReference),
-                        title: chatInfo.chatPreviewTitle(),
-                        userProfilePic: chatInfo.chatPreviewPic(),
+                        title: '${chatInfo.nombre} - ${chatInfo.area}',
+                        userProfilePic: chatInfo.urlImagen,
                         color: FlutterFlowTheme.of(context).secondaryBackground,
                         unreadColor: FlutterFlowTheme.of(context).primary,
                         titleTextStyle: GoogleFonts.getFont(

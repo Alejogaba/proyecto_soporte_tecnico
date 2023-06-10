@@ -47,17 +47,21 @@ class FFChatInfo {
   }
 
   String chatPreviewPic() {
+    print('groupmebers pic: ' + groupMembers.toString());
     if (groupMembers == null || otherUsersList.length == 0) {
       return '';
     }
+    print(chatRecord.lastMessageSentBy);
     final userSentLastMessage =
         chatRecord.lastMessageSentBy == currentUserReference;
+    print('userlastMessage' + userSentLastMessage.toString());
     final chatUser = userSentLastMessage
         ? otherUsersList.first
         : otherUsersList.firstWhere(
             (m) => m.reference == chatRecord.lastMessageSentBy,
             orElse: () => otherUsersList.first,
           );
+    print('userlastMessage' + chatUser.email.toString());
     return chatUser.photoUrl!;
   }
 }

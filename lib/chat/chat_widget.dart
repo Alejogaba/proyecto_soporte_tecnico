@@ -1,3 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:login2/auth/firebase_auth/auth_helper.dart';
+
+import '../model/usuario.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/chat/index.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -14,9 +18,9 @@ class ChatWidget extends StatefulWidget {
   const ChatWidget({
     Key? key,
     this.chatUser,
-    this.chatRef,
+    this.chatRef, required this.usuarioActual,
   }) : super(key: key);
-
+  final Usuario usuarioActual;
   final UsersRecord? chatUser;
   final DocumentReference? chatRef;
 
@@ -107,6 +111,7 @@ class _ChatWidgetState extends State<ChatWidget> {
           ),
           builder: (context, snapshot) => snapshot.hasData
               ? FFChatPage(
+                  currentUsuario: widget.usuarioActual,
                   chatInfo: snapshot.data!,
                   allowImages: true,
                   backgroundColor:

@@ -494,7 +494,7 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                             alignment: AlignmentDirectional(0.0, 0.0),
                             child: FFButtonWidget(
                               onPressed: () async {/*
-                                Usuario? usuarioActual = await AuthHelper().cargarUsuarioDeFirebase(getCurrentUser()!.email);
+                                Usuario? usuarioActual = await AuthHelper().cargarUsuarioDeFirebase(getCurrentUser()!.uid);
                                 await Navigator.push(
                                   context,
                                   MaterialPageRoute(

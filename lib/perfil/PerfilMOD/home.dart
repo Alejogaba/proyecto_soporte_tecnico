@@ -99,7 +99,7 @@ class _PerfilAdminState extends State<PerfilGeneral> {
                   ),
                   FutureBuilder<Usuario?>(
                     future: AuthHelper().cargarUsuarioDeFirebase(
-                        FirebaseAuth.instance.currentUser?.email!),
+                        FirebaseAuth.instance.currentUser?.uid),
                     builder: (BuildContext context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done &&
                           snapshot.hasData) {
@@ -123,15 +123,15 @@ class _PerfilAdminState extends State<PerfilGeneral> {
                                                 255, 13, 107, 16),
                                             spreadRadius: 4)
                                       ]),
-                                  child: (snapshot.data!.funcionarioImage !=
+                                  child: (snapshot.data!.urlImagen !=
                                               null ||
                                           FirebaseAuth.instance.currentUser!
                                                   .photoURL !=
                                               null)
                                       ? Image.network(
-                                          (snapshot.data!.funcionarioImage!
+                                          (snapshot.data!.urlImagen
                                                   .isNotEmpty)
-                                              ? snapshot.data!.funcionarioImage!
+                                              ? snapshot.data!.urlImagen
                                               : (FirebaseAuth
                                                           .instance
                                                           .currentUser!

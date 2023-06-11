@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:login2/auth/firebase_auth/auth_helper.dart';
 
 import 'package:login2/index.dart';
 import 'package:login2/model/usuario.dart';
@@ -618,10 +619,10 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                     onPressed: () async {
                       //nuevo imagen
                       if (_formKey.currentState!.validate()) {
-                        final funcionarioReference = FirebaseFirestore
-                            .instance
+                        final funcionarioReference = FirebaseFirestore.instance
                             .collection('users')
                             .doc(_emailController.text.toLowerCase());
+
                         _registrarFuncionario(funcionarioReference);
                       }
                     },
@@ -653,7 +654,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
     );
   }
 
-  _registrarFuncionario(DocumentReference funcionarioReference) {
+  _registrarFuncionario(DocumentReference funcionarioReference) async {
     var fullPathImage;
     try {
       var fullImageName = '${_identificacionController.text}' + '.jpg';
@@ -672,18 +673,16 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
     }
 
     if (_emailController.text.isNotEmpty) {
-      funcionarioReference.set({
-        'nombre': _nombreController.text,
-        'identificacion': _identificacionController.text,
-        'email': _emailController.text.toLowerCase(),
-        'password': _passwordController.text,
-        'cargo': cargoController,
-        'area': areaController,
-        'role': roleController,
-        'telefono': _telefonoController.text,
-        'fechanacimiento': _fechanacimientoController.text,
-        'FuncionarioImage': '$fullPathImage'
-      }).then((_) async {
+      Usuario user = Usuario(
+          urlImagen: fullPathImage,
+          nombre: _nombreController.text,
+          identificacion: _identificacionController.text,
+          email: _emailController.text.toLowerCase(),
+          cargo: cargoController,
+          area: areaController,
+          role: roleController,
+          telefono: _telefonoController.text);
+      await AuthHelper.signupWithEmail(user).then((_) async {
         image = null;
         await Navigator.pushAndRemoveUntil(
           context,

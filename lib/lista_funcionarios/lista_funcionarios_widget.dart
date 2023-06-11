@@ -304,7 +304,7 @@ class _ListaFuncionariosWidgetState extends State<ListaFuncionariosWidget>
                                       ),
                                       child: FutureBuilder<List<Usuario>>(
                                         future: UserHelper()
-                                            .loadUser(_textBusqueda.text),
+                                            .obtenerUsuarios(),
                                         builder:
                                             (BuildContext context, snapshot) {
                                           if (snapshot.connectionState ==
@@ -378,13 +378,13 @@ class _ListaFuncionariosWidgetState extends State<ListaFuncionariosWidget>
                                                                     BorderRadius
                                                                         .circular(
                                                                             8),
-                                                                child: '${snapshot.data![index].funcionarioImage}' ==
+                                                                child: '${snapshot.data![index].urlImagen}' ==
                                                                         ''
                                                                     ? Text(
                                                                         'No image')
                                                                     : Image
                                                                         .network(
-                                                                        '${snapshot.data![index].funcionarioImage}' +
+                                                                        '${snapshot.data![index].urlImagen}' +
                                                                             '?alt=media',
                                                                         width:
                                                                             70,
@@ -514,7 +514,7 @@ class _ListaFuncionariosWidgetState extends State<ListaFuncionariosWidget>
                                               },
                                             );
                                           } else {
-                                            return Container();
+                                            return Center(child: Container(child: CircularProgressIndicator(),));
                                           }
                                         },
                                       )),

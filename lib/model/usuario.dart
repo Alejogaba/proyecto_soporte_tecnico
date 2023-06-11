@@ -4,7 +4,6 @@ import 'package:login2/auth/firebase_auth/firebase_user_provider.dart';
 import 'package:login2/backend/backend.dart';
 
 class Usuario {
-  String? funcionarioImage;
   String? fechaNacimiento;
   String? area;
   String? telefono;
@@ -19,7 +18,7 @@ class Usuario {
       "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Empty_set_symbol.svg/640px-Empty_set_symbol.svg.png";
   String? fcmToken;
   Usuario(
-      {this.funcionarioImage = "",
+      {
       this.fechaNacimiento = "",
       this.area = "",
       this.telefono = "",
@@ -34,7 +33,6 @@ class Usuario {
           "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Empty_set_symbol.svg/640px-Empty_set_symbol.svg.png"});
 
   Usuario.mapeo(Map<String, dynamic> map) {
-    funcionarioImage = map['FuncionarioImage'] ?? "";
     fechaNacimiento = map['fechanacimiento'] ?? "";
     area = map['area'] ?? "";
     telefono = map['telefono'] ?? "";
@@ -45,14 +43,12 @@ class Usuario {
     email = map['email'] ?? "";
     role = map['role'] ?? "";
     uid = map['uid'] ?? "";
-    fcmToken = map['fcmToken'] ?? "";
     urlImagen = map['imageUrl'] ??
         "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Empty_set_symbol.svg/640px-Empty_set_symbol.svg.png";
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'FuncionarioImage': funcionarioImage,
       'fechanacimiento': fechaNacimiento,
       'area': area,
       'telefono': telefono,

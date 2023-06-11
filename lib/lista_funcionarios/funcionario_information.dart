@@ -111,7 +111,7 @@ class _FuncionarioInformationState extends State<FuncionarioInformation> {
                                 ),
                                 child: InkWell(
                                   child: Image.network(
-                                    "${widget.usuario.funcionarioImage}",
+                                    "${widget.usuario.urlImagen}",
                                     width: 135,
                                     height: 135,
                                     fit: BoxFit.cover,
@@ -133,7 +133,7 @@ class _FuncionarioInformationState extends State<FuncionarioInformation> {
                         ),
                         Divider(
                           thickness: 1,
-                          color: FlutterFlowTheme.of(context).lineColor,
+                          color: FlutterFlowTheme.of(context).secondaryText,
                         ),
                         Row(
                           mainAxisSize: MainAxisSize.max,
@@ -163,7 +163,7 @@ class _FuncionarioInformationState extends State<FuncionarioInformation> {
                         ),
                         Divider(
                           thickness: 1,
-                          color: FlutterFlowTheme.of(context).lineColor,
+                          color: FlutterFlowTheme.of(context).secondaryText,
                         ),
                         Row(
                           mainAxisSize: MainAxisSize.max,
@@ -193,7 +193,7 @@ class _FuncionarioInformationState extends State<FuncionarioInformation> {
                         ),
                         Divider(
                           thickness: 1,
-                          color: FlutterFlowTheme.of(context).lineColor,
+                          color: FlutterFlowTheme.of(context).secondaryText,
                         ),
                         Row(
                           mainAxisSize: MainAxisSize.max,
@@ -223,7 +223,7 @@ class _FuncionarioInformationState extends State<FuncionarioInformation> {
                         ),
                         Divider(
                           thickness: 1,
-                          color: FlutterFlowTheme.of(context).lineColor,
+                          color: FlutterFlowTheme.of(context).secondaryText,
                         ),
                         Row(
                           mainAxisSize: MainAxisSize.max,
@@ -253,7 +253,7 @@ class _FuncionarioInformationState extends State<FuncionarioInformation> {
                         ),
                         Divider(
                           thickness: 1,
-                          color: FlutterFlowTheme.of(context).lineColor,
+                          color: FlutterFlowTheme.of(context).secondaryText,
                         ),
                         Row(
                           mainAxisSize: MainAxisSize.max,
@@ -283,7 +283,7 @@ class _FuncionarioInformationState extends State<FuncionarioInformation> {
                         ),
                         Divider(
                           thickness: 1,
-                          color: FlutterFlowTheme.of(context).lineColor,
+                          color: FlutterFlowTheme.of(context).secondaryText,
                         ),
                       ],
                     ),

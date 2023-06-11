@@ -140,8 +140,7 @@ class AuthHelper {
             mensajeError = await traducir(e.message.toString());
             break;
         }
-        Get.snackbar(
-            'Error', mensajeError,
+        Get.snackbar('Error', mensajeError,
             duration: Duration(seconds: 5),
             margin: EdgeInsets.fromLTRB(4, 8, 4, 0),
             snackStyle: SnackStyle.FLOATING,
@@ -218,6 +217,46 @@ class AuthHelper {
 }
 
 class UserHelper {
+  Future<List<Usuario>> loadUser([String text = '']) async {
+    CollectionReference productos =
+        FirebaseFirestore.instance.collection('users');
+    QuerySnapshot querySnapshot;
+
+    querySnapshot = await productos.get();
+
+    var documents = querySnapshot.docs;
+    List<Usuario> funcionarioList = [];
+    documents.forEach(
+      (element) {
+        log('message');
+
+        Usuario usuario = Usuario.mapeo(element as Map<String, dynamic>);
+        if (!(usuario.role!.contains('user'))) {
+          funcionarioList.add(usuario);
+        }
+      },
+    );
+
+    if (text.length > 0 && funcionarioList.length > 0) {
+      List<Usuario> funcionarioListcopy = [];
+      funcionarioList.forEach((element) {
+        if (element.nombre
+                .toString()
+                .toLowerCase()
+                .contains(text.toLowerCase()) ||
+            element.identificacion.toString().contains(text)) {
+          if (element != null) {
+            Logger().v(element.uid);
+            funcionarioListcopy.add(element);
+          }
+        }
+      });
+      return funcionarioListcopy;
+    } else {
+      return funcionarioList;
+    }
+  }
+
   static FirebaseFirestore _db = FirebaseFirestore.instance;
  
   Future<void> eliminarFuncionario(String email) async {

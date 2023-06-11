@@ -167,6 +167,27 @@ class AuthHelper {
   static handleSignOut() async {
     return await FirebaseAuth.instance.signOut();
   }
+
+  Future<bool> checkPasswordMatch(String uid, String contrasena) async {
+  try {
+    final userSnapshot = await FirebaseFirestore.instance
+        .collection('users')  // Reemplaza 'users' por el nombre de tu colección de usuarios
+        .doc(uid)
+        .get();
+
+    if (userSnapshot.exists) {
+      final userData = userSnapshot.data() as Map<String, dynamic>;
+      final password = userData['identificacion'] as String;  // Reemplaza 'password' por el nombre del campo de contraseña en tu documento de usuario
+
+      return password == contrasena;
+    }
+
+    return false;
+  } catch (e) {
+    print('Error checking password match: $e');
+    return false;
+  }
+}
 }
 
 class UserHelper {
@@ -235,6 +256,9 @@ class UserHelper {
       await _db.collection("users").doc(user.uid).set(userData);
     }
   }
+
+  
+
 }
 
 Future<String> traducir(String input) async {
@@ -247,3 +271,5 @@ Future<String> traducir(String input) async {
     return "Ha ocurrido un error inesperado, revise su conexión a internet";
   }
 }
+
+

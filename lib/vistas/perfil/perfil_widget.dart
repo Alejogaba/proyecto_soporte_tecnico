@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:login2/index.dart';
 import 'package:login2/model/usuario.dart';
 
-import '../auth/firebase_auth/auth_helper.dart';
+import '../../auth/firebase_auth/auth_helper.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';

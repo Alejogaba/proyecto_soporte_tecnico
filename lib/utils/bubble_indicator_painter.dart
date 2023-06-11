@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../login/theme.dart';
+import '../vistas/login/theme.dart';
 
 
 class BubbleIndicatorPainter extends CustomPainter {

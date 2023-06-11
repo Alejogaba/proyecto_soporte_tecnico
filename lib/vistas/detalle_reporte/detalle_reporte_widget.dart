@@ -1,6 +1,6 @@
 
 import '/backend/backend.dart';
-import '/components/cancel_trip_h_o_s_t_widget.dart';
+import '../components/cancel_trip_h_o_s_t_widget.dart';
 import '/flutter_flow/flutter_flow_expanded_image_view.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';

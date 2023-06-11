@@ -9,7 +9,7 @@ import 'package:login2/model/chat_mensajes.dart';
 import 'package:login2/model/usuario.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '/chat/chat_widget.dart';
+import '../chat/chat_widget.dart';
 import '/flutter_flow/chat/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';

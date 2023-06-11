@@ -4,11 +4,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../flutter_flow/flutter_flow_drop_down.dart';
-import '../../../flutter_flow/flutter_flow_widgets.dart';
+import '../../../../flutter_flow/flutter_flow_drop_down.dart';
+import '../../../../flutter_flow/flutter_flow_widgets.dart';
 
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../model/usuario.dart';
+import '../../flutter_flow/flutter_flow_theme.dart';
+import '../../model/usuario.dart';
 
 class FuncionarioInformation extends StatefulWidget {
   const FuncionarioInformation({Key? key, required this.usuario}) : super(key: key);

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:login2/Widgets/snackbar.dart';
 
-import '../login/theme.dart';
+import '../vistas/login/theme.dart';
 
 
 class SignIn extends StatefulWidget {

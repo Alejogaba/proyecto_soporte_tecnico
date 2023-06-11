@@ -1,7 +1,7 @@
 import 'package:login2/model/chat_mensajes.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import '../flutter_flow/chat/chat_page_firebase.dart';
-import '../model/usuario.dart';
+import '../../flutter_flow/chat/chat_page_firebase.dart';
+import '../../model/usuario.dart';
 import '/flutter_flow/chat/index.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';

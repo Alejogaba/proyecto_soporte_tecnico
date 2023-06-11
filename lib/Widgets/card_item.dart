@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../auth/firebase_auth/auth_util.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
-import '../login/login_widget.dart';
+import '../vistas/login/login_widget.dart';
 
 class CardItem extends StatelessWidget {
   const CardItem({Key? key}) : super(key: key);

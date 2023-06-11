@@ -2,8 +2,8 @@
 
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:login2/index.dart';
-import 'package:login2/lista_funcionarios/funcionarioForm.dart';
-import 'package:login2/login/LoginMOD.dart';
+import 'package:login2/vistas/lista_funcionarios/funcionarioForm.dart';
+import 'package:login2/vistas/login/LoginMOD.dart';
 import 'package:login2/main.dart';
 
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../Widgets/sign_in.dart';
-import '../Widgets/sign_up.dart';
-import '../flutter_flow/flutter_flow_model.dart';
+import '../../Widgets/sign_in.dart';
+import '../../Widgets/sign_up.dart';
+import '../../flutter_flow/flutter_flow_model.dart';
 import '../login/theme.dart';
-import '../utils/bubble_indicator_painter.dart';
+import '../../utils/bubble_indicator_painter.dart';
 import 'login_model.dart';
 
 

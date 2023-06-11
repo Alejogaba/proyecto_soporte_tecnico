@@ -1,9 +1,9 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 
-import '../auth/firebase_auth/auth_util.dart';
+import '../../auth/firebase_auth/auth_util.dart';
 import '../login/login_widget.dart';
-import '../model/dependencias.dart';
+import '../../model/dependencias.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';

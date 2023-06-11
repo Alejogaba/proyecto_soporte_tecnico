@@ -1,15 +1,14 @@
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
 import 'package:login2/index.dart';
-import 'package:login2/lista_funcionarios/funcionarioForm.dart';
+import 'package:login2/vistas/lista_funcionarios/funcionarioForm.dart';
 import 'package:login2/model/usuario.dart';
-import 'package:login2/perfil/PerfilMOD/home.dart';
+import 'package:login2/vistas/perfil/PerfilMOD/home.dart';
 import 'package:translator/translator.dart';
-import '../backend/backend.dart';
+import '../../backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -91,7 +90,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                   ),
                 ),
                 child: Padding(
-                  
                   padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
                   child: SingleChildScrollView(
                     child: Column(
@@ -310,28 +308,30 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     ),
                                     style:
                                         FlutterFlowTheme.of(context).titleSmall,
-                                         validator: ( value) { 
-                                    if (value!.isEmpty)
-                                      return 'Por favor ingrese una contraseña';
-                                    if (value.length < 6)
-                                      return 'Mínimo 6 digítos';
-                                    return null;
-                                  },
+                                    validator: (value) {
+                                      if (value!.isEmpty)
+                                        return 'Por favor ingrese una contraseña';
+                                      if (value.length < 6)
+                                        return 'Mínimo 6 digítos';
+                                      return null;
+                                    },
                                     onFieldSubmitted: (value) async {
                                       try {
-                                        var user;
+                                        Usuario? user;
                                         FirebaseFirestore _db =
                                             FirebaseFirestore.instance;
                                         var existe = await _db
                                             .collection("users")
-                                            .doc(_emailController.text.trim()
+                                            .doc(_emailController.text
+                                                .trim()
                                                 .toLowerCase())
                                             .get();
                                         Logger().v(existe.exists);
                                         if (existe.exists) {
                                           user =
                                               await AuthHelper.signInWithEmail(
-                                                  email: _emailController.text.trim()
+                                                  email: _emailController.text
+                                                      .trim()
                                                       .toLowerCase(),
                                                   password:
                                                       _passwordController.text,
@@ -339,26 +339,40 @@ class _LoginWidgetState extends State<LoginWidget> {
                                         } else {
                                           user =
                                               await AuthHelper.signInWithEmail(
-                                                  email: _emailController.text.trim()
+                                                  email: _emailController.text
+                                                      .trim()
                                                       .toLowerCase(),
                                                   password:
                                                       _passwordController.text);
                                         }
                                         if (user != null) {
                                           print("Ingreso Exitoso");
-                                         if(user.role=='admin'){
+                                          bool esNuevoUsuario =
+                                              await AuthHelper()
+                                                  .checkPasswordMatch(user.uid!,
+                                                      _passwordController.text);
+                                          if (esNuevoUsuario) {
                                              Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PerfilGeneral()));  
-                                          }else{
-                                             Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                       PerfilGeneral()));  
-                                          }                                }
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CambiarPasswordWidget()));
+                                          } else {
+                                            if (user.role == 'admin') {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PerfilGeneral()));
+                                          } else {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PerfilGeneral()));
+                                          }
+                                          }
+                                        }
                                       } catch (e) {
                                         print(e);
                                       }
@@ -402,48 +416,44 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     0.0, 0.0, 4.0, 0.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                   
-                                      try {
-                                        Usuario? user =
-                                            await AuthHelper.signInWithEmail(
-                                                email:
-                                                    _emailController
-                                                        .text.trim()
-                                                        .toLowerCase(),
-                                                password:
-                                                    _passwordController.text);
-                                        if (user != null) {
-                                          print("Ingreso Exitoso");
-                                          if(user.role=='admin'){
-                                             Navigator.push(
+                                    try {
+                                      Usuario? user =
+                                          await AuthHelper.signInWithEmail(
+                                              email: _emailController.text
+                                                  .trim()
+                                                  .toLowerCase(),
+                                              password:
+                                                  _passwordController.text);
+                                      if (user != null) {
+                                        print("Ingreso Exitoso");
+                                        if (user.role == 'admin') {
+                                          Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                       PerfilGeneral()));  
-                                          }else{
-                                             Navigator.push(
+                                                      PerfilGeneral()));
+                                        } else {
+                                          Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                       PerfilGeneral()));  
-                                          }
-                                          
+                                                      PerfilGeneral()));
                                         }
-                                      } on FirebaseException catch (e) {
-                                        Logger().e(e.message);
-                                        var errorTraducido = await traducir(
-                                            e.message.toString());
-                                        Get.snackbar('Error', errorTraducido,
-                                            icon: Icon(
-                                              Icons.error_outline,
-                                              color: Colors.red,
-                                            ),
-                                            colorText: Color.fromARGB(
-                                                255, 114, 14, 7));
-                                      } catch (e) {
-                                        Logger().e(e);
                                       }
-                                    
+                                    } on FirebaseException catch (e) {
+                                      Logger().e(e.message);
+                                      var errorTraducido =
+                                          await traducir(e.message.toString());
+                                      Get.snackbar('Error', errorTraducido,
+                                          icon: Icon(
+                                            Icons.error_outline,
+                                            color: Colors.red,
+                                          ),
+                                          colorText:
+                                              Color.fromARGB(255, 114, 14, 7));
+                                    } catch (e) {
+                                      Logger().e(e);
+                                    }
                                   },
                                   text: 'Iniciar Sesión',
                                   options: FFButtonOptions(
@@ -474,7 +484,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                             ],
                           ),
                         ),
-                        
                       ],
                     ),
                   ),

@@ -7,12 +7,12 @@ import 'package:login2/auth/firebase_auth/auth_helper.dart';
 
 import 'package:login2/index.dart';
 import 'package:login2/model/usuario.dart';
-import 'package:login2/perfil/PerfilMOD/home.dart';
+import 'package:login2/vistas/perfil/PerfilMOD/home.dart';
 
-import '../../../flutter_flow/flutter_flow_drop_down.dart';
-import '../../../flutter_flow/flutter_flow_theme.dart';
-import '../../../flutter_flow/flutter_flow_widgets.dart';
-import '../auth/firebase_auth/auth_util.dart';
+import '../../../../flutter_flow/flutter_flow_drop_down.dart';
+import '../../../../flutter_flow/flutter_flow_theme.dart';
+import '../../../../flutter_flow/flutter_flow_widgets.dart';
+import '../../auth/firebase_auth/auth_util.dart';
 import 'package:image_picker/image_picker.dart';
 
 File? image;

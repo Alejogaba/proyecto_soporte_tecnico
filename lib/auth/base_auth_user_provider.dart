@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 class AuthUserInfo {
   const AuthUserInfo({
     this.uid,
@@ -30,5 +32,9 @@ abstract class BaseAuthUser {
   String? get phoneNumber => authUserInfo.phoneNumber;
 }
 
-BaseAuthUser? currentUser;
-bool get loggedIn => currentUser?.loggedIn ?? false;
+User? currentUser = getCurrentUser();
+User? getCurrentUser() {
+  User? user = FirebaseAuth.instance.currentUser;
+  return user;
+}
+bool get loggedIn => getCurrentUser()!=null;

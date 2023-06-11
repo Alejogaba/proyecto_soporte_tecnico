@@ -1,9 +1,9 @@
-import '/backend/backend.dart';
+import 'package:login2/model/chat_mensajes.dart';
+
+import '../model/usuario.dart';
 import '/flutter_flow/chat/index.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -13,13 +13,13 @@ export 'chat_model.dart';
 class ChatWidget extends StatefulWidget {
   const ChatWidget({
     Key? key,
-    this.chatUser,
-    this.chatRef,
+    this.chatRef, required this.usuarioActual, required this.uid,
+    
   }) : super(key: key);
+  final Usuario usuarioActual;
 
-  final UsersRecord? chatUser;
   final DocumentReference? chatRef;
-
+  final String uid;
   @override
   _ChatWidgetState createState() => _ChatWidgetState();
 }
@@ -28,32 +28,14 @@ class _ChatWidgetState extends State<ChatWidget> {
   late ChatModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  FFChatInfo? _chatInfo;
-  bool isGroupChat() {
-    if (widget.chatUser == null) {
-      return true;
-    }
-    if (widget.chatRef == null) {
-      return false;
-    }
-    return _chatInfo?.isGroupChat ?? false;
-  }
+ 
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => ChatModel());
 
-    FFChatManager.instance
-        .getChatInfo(
-      otherUserRecord: widget.chatUser,
-      chatReference: widget.chatRef,
-    )
-        .listen((info) {
-      if (mounted) {
-        setState(() => _chatInfo = info);
-      }
-    });
+   
   }
 
   @override
@@ -88,7 +70,7 @@ class _ChatWidgetState extends State<ChatWidget> {
           },
         ),
         title: Text(
-          widget.chatUser!.displayName,
+          widget.usuarioActual.nombre!,
           style: FlutterFlowTheme.of(context).titleMedium.override(
                 fontFamily: 'Urbanist',
                 color: FlutterFlowTheme.of(context).tertiary,
@@ -100,14 +82,11 @@ class _ChatWidgetState extends State<ChatWidget> {
       ),
       body: SafeArea(
         top: true,
-        child: StreamBuilder<FFChatInfo>(
-          stream: FFChatManager.instance.getChatInfo(
-            otherUserRecord: widget.chatUser,
-            chatReference: widget.chatRef,
-          ),
+        child: StreamBuilder<List<ChatMensajes>>(
+          stream: ChatMensajes.obtenerChatMensajes(uid: widget.uid),
           builder: (context, snapshot) => snapshot.hasData
               ? FFChatPage(
-                  chatInfo: snapshot.data!,
+                  currentUsuario: widget.usuarioActual,
                   allowImages: true,
                   backgroundColor:
                       FlutterFlowTheme.of(context).primaryBackground,
@@ -156,7 +135,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                       'assets/images/messagesEmpty@2x.png',
                       width: 300.0,
                     ),
-                  ),
+                  ), chatMensajes: snapshot.data!,
                 )
               : Center(
                   child: SizedBox(

@@ -1,13 +1,5 @@
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:login2/auth/firebase_auth/auth_helper.dart';
-import 'package:login2/conversaciones/conversaciones_widget.dart';
-import 'package:login2/lista_funcionarios/funcionarioForm.dart';
-import 'package:login2/main.dart';
-import 'package:login2/model/usuario.dart';
 
 import '../auth/firebase_auth/auth_util.dart';
-import '../lista_funcionarios/lista_funcionarios_widget.dart';
 import '../login/login_widget.dart';
 import '../model/dependencias.dart';
 import '/backend/backend.dart';
@@ -16,11 +8,9 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'interfaz_principal_model.dart';
 export 'interfaz_principal_model.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 
 class InterfazPrincipalWidget extends StatefulWidget {
   const InterfazPrincipalWidget({Key? key}) : super(key: key);

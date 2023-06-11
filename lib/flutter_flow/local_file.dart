@@ -11,7 +11,7 @@ class FFLocalFile {
   final Uint8List bytes;
 
   @override
-  String toString() => 'FFLocalFile(name: $name, bytes: ${bytes?.length ?? 0})';
+  String toString() => 'FFLocalFile(name: $name, bytes: ${bytes.length ?? 0})';
 
   String serialize() => jsonEncode({'name': name, 'bytes': bytes});
 

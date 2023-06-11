@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:login2/auth/firebase_auth/firebase_user_provider.dart';
+import 'package:login2/backend/backend.dart';
 
 class Usuario {
   String? funcionarioImage;
@@ -11,20 +15,23 @@ class Usuario {
   String? email;
   String? role;
   String? uid;
+  String urlImagen =
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Empty_set_symbol.svg/640px-Empty_set_symbol.svg.png";
 
-  Usuario( 
-    {this.funcionarioImage = "",
-    this.fechaNacimiento = "",
-    this.area = "",
-    this.telefono = "",
-    this.cargo = "",
-    this.password = "",
-    this.identificacion = "",
-    this.nombre = "",
-    this.email = "",
-    this.role = "",
-    this.uid = "",
-  });
+  Usuario(
+      {this.funcionarioImage = "",
+      this.fechaNacimiento = "",
+      this.area = "",
+      this.telefono = "",
+      this.cargo = "",
+      this.password = "",
+      this.identificacion = "",
+      this.nombre = "",
+      this.email = "",
+      this.role = "",
+      this.uid = "",
+      this.urlImagen =
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Empty_set_symbol.svg/640px-Empty_set_symbol.svg.png"});
 
   Usuario.mapeo(Map<String, dynamic> map) {
     funcionarioImage = map['FuncionarioImage'] ?? "";
@@ -38,6 +45,8 @@ class Usuario {
     email = map['email'] ?? "";
     role = map['role'] ?? "";
     uid = map['uid'] ?? "";
+    urlImagen = map['photo_url'] ??
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Empty_set_symbol.svg/640px-Empty_set_symbol.svg.png";
   }
 
   Map<String, dynamic> toMap() {
@@ -52,7 +61,34 @@ class Usuario {
       'nombre': nombre,
       'email': email,
       'role': role,
-      'uid': uid
+      'uid': uid,
+      'photo_url': urlImagen
     };
+  }
+
+  Stream<Usuario>? getUsuarioStream(ChatsRecord? chatsrecords) {
+    if (chatsrecords != null) {
+      late DocumentReference? usuarioRef;
+      String url = chatsrecords.userA.toString();
+      List<String> parts = url.split('/');
+      String result = parts.last.trim().replaceAll(')','');
+      log('result' + result); // Imprime: "resource"
+      log('result getcurrent ' + getCurrentUser()!.email.toString());
+      if (getCurrentUser()!.email.toString().trim() == result) {
+        usuarioRef = chatsrecords.userB;
+      } else {
+        usuarioRef = chatsrecords.userA;
+      }
+      log('Referencia de usuario escogida: ' + usuarioRef.toString());
+      return usuarioRef!.snapshots().map((snapshot) {
+        if (!snapshot.exists) {
+          throw Exception('Usuario no encontrado');
+        }
+        final data = snapshot.data();
+        return Usuario.mapeo(data as Map<String, dynamic>);
+      });
+    } else {
+      return null;
+    }
   }
 }

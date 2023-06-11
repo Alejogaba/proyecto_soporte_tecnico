@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:rxdart/rxdart.dart';
 
 import '../base_auth_user_provider.dart';
 
@@ -42,14 +41,3 @@ class Login2FirebaseUser extends BaseAuthUser {
   static BaseAuthUser fromFirebaseUser(User? user) => Login2FirebaseUser(user);
 }
 
-Stream<BaseAuthUser> login2FirebaseUserStream() => FirebaseAuth.instance
-        .authStateChanges()
-        .debounce((user) => user == null && !loggedIn
-            ? TimerStream(true, const Duration(seconds: 1))
-            : Stream.value(user))
-        .map<BaseAuthUser>(
-      (user) {
-        currentUser = Login2FirebaseUser(user);
-        return currentUser!;
-      },
-    );

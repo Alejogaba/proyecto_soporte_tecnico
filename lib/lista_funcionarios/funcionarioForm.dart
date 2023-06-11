@@ -4,9 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-import 'package:google_fonts/google_fonts.dart';
 import 'package:login2/index.dart';
-import 'package:login2/interfaz_principal/interfaz_principal_model.dart';
 import 'package:login2/model/usuario.dart';
 import 'package:login2/perfil/PerfilMOD/home.dart';
 
@@ -14,7 +12,6 @@ import '../../../flutter_flow/flutter_flow_drop_down.dart';
 import '../../../flutter_flow/flutter_flow_theme.dart';
 import '../../../flutter_flow/flutter_flow_widgets.dart';
 import '../auth/firebase_auth/auth_util.dart';
-import '../model/usuario.dart';
 import 'package:image_picker/image_picker.dart';
 
 File? image;
@@ -45,12 +42,10 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
       lastDate: DateTime(2100),
     ))!;
 
-    if (picked != null) {
-      setState(() {
-        _fechanacimientoController.text =
-            '${picked.year} - ${picked.month} - ${picked.day}';
-      });
-    }
+    setState(() {
+      _fechanacimientoController.text =
+          '${picked.year} - ${picked.month} - ${picked.day}';
+    });
   }
 
   late List<Usuario> items;
@@ -623,7 +618,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                     onPressed: () async {
                       //nuevo imagen
                       if (_formKey.currentState!.validate()) {
-                        final funcionarioReference = await FirebaseFirestore
+                        final funcionarioReference = FirebaseFirestore
                             .instance
                             .collection('users')
                             .doc(_emailController.text.toLowerCase());

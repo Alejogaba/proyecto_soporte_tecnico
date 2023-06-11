@@ -14,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:login2/lista_funcionarios/funcionarioForm.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
+import 'package:provider/provider.dart';
+import 'lista_funcionarios_model.dart';
 export 'lista_funcionarios_model.dart';
 import '../model/usuario.dart';
 import '/backend/backend.dart';

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+import 'package:logger/logger.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
 import 'package:login2/backend/controlador_chat.dart';
 import 'package:login2/model/chat_mensajes.dart';
@@ -85,10 +86,11 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
           child: StreamBuilder<List<ChatsRecord>>(
             stream: queryChatsRecord(
               queryBuilder: (chatsRecord) => chatsRecord
-                  .where('userIds', arrayContains: currentUserReference)
+                  .where('userIds', arrayContains: currentUser!.uid)
                   .orderBy('updatedAt', descending: true),
             ),
             builder: (context, snapshot1) {
+              Logger().i('El usuario actual es: $currentUser');
               // Customize what your widget looks like when it's loading.
               if (!snapshot1.hasData) {
                 return Center(
@@ -140,17 +142,17 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                                 Usuario? usuarioActual = await AuthHelper()
                                     .cargarUsuarioDeFirebase(
                                         getCurrentUser()!.uid);
-                               
+
                                 if (usuarioActual != null) {
-                                   try {
-                                  await FlutterLocalNotificationsPlugin()
-                                      .resolvePlatformSpecificImplementation<
-                                          AndroidFlutterLocalNotificationsPlugin>()
-                                      ?.requestPermission();
-                                } catch (e) {
-                                  log('No se pudo pedir permiso de notificacion: ' +
-                                      e.toString());
-                                }
+                                  try {
+                                    await FlutterLocalNotificationsPlugin()
+                                        .resolvePlatformSpecificImplementation<
+                                            AndroidFlutterLocalNotificationsPlugin>()
+                                        ?.requestPermission();
+                                  } catch (e) {
+                                    log('No se pudo pedir permiso de notificacion: ' +
+                                        e.toString());
+                                  }
                                   String? token = await FirebaseMessaging
                                       .instance
                                       .getToken();

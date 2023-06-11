@@ -424,22 +424,34 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                   .toLowerCase(),
                                               password:
                                                   _passwordController.text);
-                                      if (user != null) {
-                                        print("Ingreso Exitoso");
-                                        if (user.role == 'admin') {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PerfilGeneral()));
-                                        } else {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PerfilGeneral()));
+                                     if (user != null) {
+                                          print("Ingreso Exitoso");
+                                          bool esNuevoUsuario =
+                                              await AuthHelper()
+                                                  .checkPasswordMatch(user.uid!,
+                                                      _passwordController.text);
+                                          if (esNuevoUsuario) {
+                                             Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CambiarPasswordWidget()));
+                                          } else {
+                                            if (user.role == 'admin') {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PerfilGeneral()));
+                                          } else {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PerfilGeneral()));
+                                          }
+                                          }
                                         }
-                                      }
                                     } on FirebaseException catch (e) {
                                       Logger().e(e.message);
                                       var errorTraducido =

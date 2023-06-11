@@ -6,11 +6,11 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'cambiar_password_model.dart';
-export 'cambiar_password_model.dart';
+import 'olvido_password_model.dart';
+export 'olvido_password_model.dart';
 
-class CambiarPasswordWidget extends StatefulWidget {
-  const CambiarPasswordWidget({
+class OlvidoContrasenadWidget extends StatefulWidget {
+  const OlvidoContrasenadWidget({
     Key? key,
     this.userProfile,
   }) : super(key: key);
@@ -18,18 +18,19 @@ class CambiarPasswordWidget extends StatefulWidget {
   final UsersRecord? userProfile;
 
   @override
-  _CambiarPasswordWidgetState createState() => _CambiarPasswordWidgetState();
+  _OlvidoContrasenadWidgetState createState() =>
+      _OlvidoContrasenadWidgetState();
 }
 
-class _CambiarPasswordWidgetState extends State<CambiarPasswordWidget> {
-  late CambiarPasswordModel _model;
+class _OlvidoContrasenadWidgetState extends State<OlvidoContrasenadWidget> {
+  late OlvidoContrasenaModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => CambiarPasswordModel());
+    _model = createModel(context, () => OlvidoContrasenaModel());
 
     _model.emailAddressController ??=
         TextEditingController(text: widget.userProfile!.email);

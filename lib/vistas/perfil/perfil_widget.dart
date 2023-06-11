@@ -472,7 +472,6 @@ class _PerfilWidgetState extends State<PerfilWidget>
                             context,
                             MaterialPageRoute(
                               builder: (context) => CambiarPasswordWidget(
-                                userProfile: currentUserDocument,
                               ),
                             ),
                           );

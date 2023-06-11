@@ -169,25 +169,73 @@ class AuthHelper {
   }
 
   Future<bool> checkPasswordMatch(String uid, String contrasena) async {
-  try {
-    final userSnapshot = await FirebaseFirestore.instance
-        .collection('users')  // Reemplaza 'users' por el nombre de tu colección de usuarios
-        .doc(uid)
-        .get();
+    try {
+      final userSnapshot = await FirebaseFirestore.instance
+          .collection(
+              'users') // Reemplaza 'users' por el nombre de tu colección de usuarios
+          .doc(uid)
+          .get();
+      log('validando si es usuario nuevo');
+      if (userSnapshot.exists) {
+        final userData = userSnapshot.data() as Map<String, dynamic>;
+        final password = userData['identificacion']
+            as String; // Reemplaza 'password' por el nombre del campo de contraseña en tu documento de usuario
 
-    if (userSnapshot.exists) {
-      final userData = userSnapshot.data() as Map<String, dynamic>;
-      final password = userData['identificacion'] as String;  // Reemplaza 'password' por el nombre del campo de contraseña en tu documento de usuario
-
-      return password == contrasena;
+        return password == contrasena;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      Logger().e('Error checking password match: $e');
+      return false;
     }
-
-    return false;
-  } catch (e) {
-    print('Error checking password match: $e');
-    return false;
   }
-}
+
+  Future<String> changePassword(String newPassword) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        await user.updatePassword(newPassword);
+        Get.snackbar('Ajuste realizado', 'Contraseña actualizada exitosamente',
+            duration: Duration(seconds: 5),
+            margin: EdgeInsets.fromLTRB(4, 8, 4, 0),
+            snackStyle: SnackStyle.FLOATING,
+            backgroundColor: Color.fromARGB(211, 28, 138, 46),
+            icon: Icon(
+              Icons.check,
+              color: Colors.white,
+            ),
+            colorText: Color.fromARGB(255, 228, 219, 218));
+        return 'ok';
+      } else {
+        Get.snackbar('Error', 'No ha iniciado sesión',
+            duration: Duration(seconds: 5),
+            margin: EdgeInsets.fromLTRB(4, 8, 4, 0),
+            snackStyle: SnackStyle.FLOATING,
+            backgroundColor: Color.fromARGB(213, 211, 31, 31),
+            icon: Icon(
+              Icons.error_outline,
+              color: Colors.white,
+            ),
+            colorText: Color.fromARGB(255, 228, 219, 218));
+      }
+      return 'error';
+    } catch (e) {
+      Get.snackbar('Error', 'Ocurrio un error al cambiar la contraseña',
+          duration: Duration(seconds: 5),
+          margin: EdgeInsets.fromLTRB(4, 8, 4, 0),
+          snackStyle: SnackStyle.FLOATING,
+          backgroundColor: Color.fromARGB(213, 211, 31, 31),
+          icon: Icon(
+            Icons.error_outline,
+            color: Colors.white,
+          ),
+          colorText: Color.fromARGB(255, 228, 219, 218));
+      Logger().e('Error al cambiar la contraseña: $e');
+      return 'error';
+    }
+  }
 }
 
 class UserHelper {
@@ -256,9 +304,6 @@ class UserHelper {
       await _db.collection("users").doc(user.uid).set(userData);
     }
   }
-
-  
-
 }
 
 Future<String> traducir(String input) async {
@@ -271,5 +316,3 @@ Future<String> traducir(String input) async {
     return "Ha ocurrido un error inesperado, revise su conexión a internet";
   }
 }
-
-

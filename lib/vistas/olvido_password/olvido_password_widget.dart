@@ -1,3 +1,5 @@
+import 'package:login2/auth/firebase_auth/auth_helper.dart';
+
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -12,10 +14,10 @@ export 'olvido_password_model.dart';
 class OlvidoContrasenadWidget extends StatefulWidget {
   const OlvidoContrasenadWidget({
     Key? key,
-    this.userProfile,
+    this.email,
   }) : super(key: key);
 
-  final UsersRecord? userProfile;
+  final String? email;
 
   @override
   _OlvidoContrasenadWidgetState createState() =>
@@ -33,7 +35,7 @@ class _OlvidoContrasenadWidgetState extends State<OlvidoContrasenadWidget> {
     _model = createModel(context, () => OlvidoContrasenaModel());
 
     _model.emailAddressController ??=
-        TextEditingController(text: widget.userProfile!.email);
+        TextEditingController(text: widget.email!);
   }
 
   @override
@@ -47,26 +49,7 @@ class _OlvidoContrasenadWidgetState extends State<OlvidoContrasenadWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return StreamBuilder<UsersRecord>(
-      stream: UsersRecord.getDocument(currentUserReference!),
-      builder: (context, snapshot) {
-        // Customize what your widget looks like when it's loading.
-        if (!snapshot.hasData) {
-          return Scaffold(
-            backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-            body: Center(
-              child: SizedBox(
-                width: 50.0,
-                height: 50.0,
-                child: CircularProgressIndicator(
-                  color: FlutterFlowTheme.of(context).primary,
-                ),
-              ),
-            ),
-          );
-        }
-        final cambiarPasswordUsersRecord = snapshot.data!;
-        return Scaffold(
+    return Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
           appBar: AppBar(
@@ -87,7 +70,7 @@ class _OlvidoContrasenadWidgetState extends State<OlvidoContrasenadWidget> {
               },
             ),
             title: Text(
-              'Change Password',
+              'Restablecer Contraseña',
               style: FlutterFlowTheme.of(context).headlineMedium,
             ),
             actions: [],
@@ -106,9 +89,9 @@ class _OlvidoContrasenadWidgetState extends State<OlvidoContrasenadWidget> {
                     controller: _model.emailAddressController,
                     obscureText: false,
                     decoration: InputDecoration(
-                      labelText: 'Email Address',
+                      labelText: 'Correo electrónico',
                       labelStyle: FlutterFlowTheme.of(context).bodyMedium,
-                      hintText: 'Your email..',
+                      hintText: 'Ingrese su Correo electrónico..',
                       hintStyle: FlutterFlowTheme.of(context).bodyMedium,
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -145,8 +128,17 @@ class _OlvidoContrasenadWidgetState extends State<OlvidoContrasenadWidget> {
                           EdgeInsetsDirectional.fromSTEB(20.0, 24.0, 0.0, 24.0),
                     ),
                     style: FlutterFlowTheme.of(context).titleSmall,
-                    validator: _model.emailAddressControllerValidator
-                        .asValidator(context),
+                    validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Por favor ingrese un correo eléctronico';
+                                    }
+                                    if (!RegExp(
+                                            r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                                        .hasMatch(value)) {
+                                      return 'Por favor ingrese un correo válido';
+                                    }
+                                    return null;
+                                  },
                   ),
                 ),
                 Padding(
@@ -156,7 +148,7 @@ class _OlvidoContrasenadWidgetState extends State<OlvidoContrasenadWidget> {
                     children: [
                       Expanded(
                         child: Text(
-                          'We will send you an email with a link to reset your password, please enter the email associated with your account above.',
+                          'Te enviaremos un correo electrónico con un enlace para restablecer tu contraseña. Por favor, ingresa el correo electrónico asociado a tu cuenta arriba.',
                           style: FlutterFlowTheme.of(context).bodyMedium,
                         ),
                       ),
@@ -174,21 +166,19 @@ class _OlvidoContrasenadWidgetState extends State<OlvidoContrasenadWidget> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                'Email required!',
+                                '¡Por favor, ingrese su correo electrónico!',
                               ),
                             ),
                           );
                           return;
                         }
-                        await authManager.resetPassword(
-                          email: _model.emailAddressController.text,
-                          context: context,
-                        );
+                        await AuthHelper()
+                            .resetPassword(_model.emailAddressController.text);
                         Navigator.pop(context);
                       },
-                      text: 'Send Reset Link',
+                      text: 'Enviar enlace de restablecimiento',
                       options: FFButtonOptions(
-                        width: 340.0,
+                        width: 350.0,
                         height: 60.0,
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
@@ -216,7 +206,5 @@ class _OlvidoContrasenadWidgetState extends State<OlvidoContrasenadWidget> {
             ),
           ),
         );
-      },
-    );
   }
 }

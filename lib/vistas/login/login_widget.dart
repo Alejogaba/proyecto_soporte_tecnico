@@ -6,6 +6,7 @@ import 'package:login2/auth/firebase_auth/auth_helper.dart';
 import 'package:login2/index.dart';
 import 'package:login2/vistas/lista_funcionarios/funcionarioForm.dart';
 import 'package:login2/model/usuario.dart';
+import 'package:login2/vistas/olvido_password/olvido_password_widget.dart';
 import 'package:login2/vistas/perfil/PerfilMOD/home.dart';
 import 'package:translator/translator.dart';
 import '../../backend/backend.dart';
@@ -390,7 +391,11 @@ class _LoginWidgetState extends State<LoginWidget> {
                             children: [
                               FFButtonWidget(
                                 onPressed: () {
-                                  print('Button-ForgotPassword pressed ...');
+                                   Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        OlvidoContrasenadWidget(email:_model.emailAddressController.text,)));
                                 },
                                 text: '¿Olvidó su contraseña?',
                                 options: FFButtonOptions(

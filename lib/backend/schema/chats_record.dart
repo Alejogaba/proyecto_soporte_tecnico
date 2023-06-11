@@ -14,54 +14,28 @@ class ChatsRecord extends FirestoreRecord {
   }
 
   // "users" field.
-  List<DocumentReference>? _users;
-  List<DocumentReference> get users => _users ?? const [];
+  List<String>? _users;
+  List<String> get users => _users ?? const [];
   bool hasUsers() => _users != null;
 
-  // "user_a" field.
-  DocumentReference? _userA;
-  DocumentReference? get userA => _userA;
-  bool hasUserA() => _userA != null;
-
-  // "user_b" field.
-  DocumentReference? _userB;
-  DocumentReference? get userB => _userB;
-  bool hasUserB() => _userB != null;
-
-  // "last_message" field.
-  String? _lastMessage;
-  String get lastMessage => _lastMessage ?? '';
-  bool hasLastMessage() => _lastMessage != null;
+  // "roomuid" field.
+  String? _roomUid;
+  String get roomUid => _roomUid ?? '';
+  bool hasuid() => _roomUid != null;
 
   // "last_message_time" field.
   DateTime? _lastMessageTime;
   DateTime? get lastMessageTime => _lastMessageTime;
   bool hasLastMessageTime() => _lastMessageTime != null;
 
-  // "last_message_seen_by" field.
-  List<DocumentReference>? _lastMessageSeenBy;
-  List<DocumentReference> get lastMessageSeenBy =>
-      _lastMessageSeenBy ?? const [];
-  bool hasLastMessageSeenBy() => _lastMessageSeenBy != null;
-
-  // "last_message_sent_by" field.
-  DocumentReference? _lastMessageSentBy;
-  DocumentReference? get lastMessageSentBy => _lastMessageSentBy;
-  bool hasLastMessageSentBy() => _lastMessageSentBy != null;
-
   void _initializeFields() {
-    _users = getDataList(snapshotData['users']);
-    _userA = snapshotData['user_a'] as DocumentReference?;
-    _userB = snapshotData['user_b'] as DocumentReference?;
-    _lastMessage = snapshotData['last_message'] as String?;
-    _lastMessageTime = snapshotData['last_message_time'] as DateTime?;
-    _lastMessageSeenBy = getDataList(snapshotData['last_message_seen_by']);
-    _lastMessageSentBy =
-        snapshotData['last_message_sent_by'] as DocumentReference?;
+    _users = getDataList(snapshotData['userIds']);
+    _roomUid = snapshotData['uid'] as String?;
+    _lastMessageTime = snapshotData['updatedAt'] as DateTime?;
   }
 
   static CollectionReference get collection =>
-      FirebaseFirestore.instance.collection('chats');
+      FirebaseFirestore.instance.collection('rooms');
 
   static Stream<ChatsRecord> getDocument(DocumentReference ref) =>
       ref.snapshots().map((s) => ChatsRecord.fromSnapshot(s));

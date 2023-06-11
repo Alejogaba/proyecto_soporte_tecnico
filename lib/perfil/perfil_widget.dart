@@ -76,7 +76,7 @@ class _PerfilWidgetState extends State<PerfilWidget>
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: FutureBuilder<Usuario?>(
         future: AuthHelper()
-            .cargarUsuarioDeFirebase(FirebaseAuth.instance.currentUser!.email!),
+            .cargarUsuarioDeFirebase(FirebaseAuth.instance.currentUser!.uid!),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData) {

@@ -1,15 +1,19 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ChatMensajes {
-  String usuarioA;
-  String usuarioB;
+  String authorId;
+  DateTime updatedAt;
   String mensaje;
   String tipo;
   DateTime fechaHora;
 
   ChatMensajes({
-    required this.usuarioA,
-    required this.usuarioB,
+    required this.authorId,
+    required this.updatedAt,
     required this.mensaje,
     required this.tipo,
     required this.fechaHora,
@@ -17,34 +21,42 @@ class ChatMensajes {
 
   Map<String, dynamic> toMap() {
     return {
-      'usuario_a': usuarioA,
-      'usuario_b': usuarioB,
-      'mensaje': mensaje,
-      'tipo': tipo,
-      'fecha_hora': Timestamp.fromDate(fechaHora),
+      'authorId': authorId,
+      'updatedAt': Timestamp.fromDate(updatedAt),
+      'text': mensaje,
+      'type': tipo,
+      'createdAt': Timestamp.fromDate(fechaHora),
     };
   }
 
   static ChatMensajes fromMap(Map<String, dynamic> map) {
     return ChatMensajes(
-      usuarioA: map['usuario_a'],
-      usuarioB: map['usuario_b'],
-      mensaje: map['mensaje'],
-      tipo: map['tipo'],
-      fechaHora: (map['fecha_hora'] as Timestamp).toDate(),
+      authorId: map['authorId']??'',
+      updatedAt: (map['updatedAt'] as Timestamp).toDate(),
+      mensaje: map['text']??'',
+      tipo: map['type'],
+      fechaHora: (map['createdAt'] as Timestamp).toDate(),
     );
   }
 
   Future<void> guardarChatMensaje() async {
-    await FirebaseFirestore.instance
-        .collection('chat_mensajes')
-        .add(toMap());
+    await FirebaseFirestore.instance.collection('chat_mensajes').add(toMap());
   }
 
   static Stream<List<ChatMensajes>> obtenerChatMensajes({required String uid}) {
-    return FirebaseFirestore.instance
-        .collection('chats').doc(uid).collection('mensajes')
+    log('Obteniendo chats');
+    dynamic stream = FirebaseFirestore.instance
+        .collection('chats')
+        .doc(uid)
+        .collection('mensajes')
         .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) => fromMap(doc.data())).toList());
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => fromMap(doc.data())).toList())
+        .doOnError((p0, p1) {
+      p0.printError();
+    p1.printError();
+    });
+
+    return stream;
   }
 }

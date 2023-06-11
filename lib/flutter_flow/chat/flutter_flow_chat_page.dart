@@ -133,6 +133,7 @@ class _FFChatPageState extends State<FFChatPage> {
   Widget build(BuildContext context) => Stack(
         children: [
           FFChatWidget(
+            nombre: 'Hola',
             currentUser: currentUser,
             scrollController: scrollController,
             focusNode: focusNode,

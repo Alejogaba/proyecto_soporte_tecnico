@@ -39,33 +39,11 @@ class FFChatInfo {
   }
 
   String chatPreviewMessage() {
-    final userSentLastMessage =
-        chatRecord.lastMessageSentBy == currentUserReference;
-    var lastChatText = chatRecord.lastMessage;
-    if (userSentLastMessage && lastChatText.isNotEmpty) {
-      lastChatText = 'You: $lastChatText';
-    }
-    return lastChatText;
+    
+    return 'ultimo mensaje va aqui';
   }
 
-  String chatPreviewPic() {
-    print('groupmebers pic: ' + groupMembers.toString());
-    if (groupMembers == null || otherUsersList.length == 0) {
-      return '';
-    }
-    print(chatRecord.lastMessageSentBy);
-    final userSentLastMessage =
-        chatRecord.lastMessageSentBy == currentUserReference;
-    print('userlastMessage' + userSentLastMessage.toString());
-    final chatUser = userSentLastMessage
-        ? otherUsersList.first
-        : otherUsersList.firstWhere(
-            (m) => m.reference == chatRecord.lastMessageSentBy,
-            orElse: () => otherUsersList.first,
-          );
-    print('userlastMessage' + chatUser.email.toString());
-    return chatUser.photoUrl;
-  }
+  
 }
 
 class FFChatManager {
@@ -92,12 +70,6 @@ class FFChatManager {
   List<ChatMensajes> getLatestMessages(DocumentReference chatReference) =>
       _chatMessagesCache[chatReference.id] ?? [];
 
-  DocumentReference getChatUserRef(ChatsRecord chat) {
-    final userRef =
-        chat.users.firstWhere((d) => d.path != currentUserReference?.path);
-    _userChats[userRef.id] = chat.reference;
-    return userRef;
-  }
 
 
   Future<DocumentReference> _getChatReference(
@@ -170,13 +142,11 @@ class FFChatManager {
     }
     final newUsers = {...chat.users, ...users}.toList();
     // Cannot add users to a 1:1 chat.
-    if (chat.userA != null || chat.userB != null || users.isEmpty) {
+    if (chat.users.isNotEmpty) {
       return chat;
     }
     await chat.reference.update({'users': newUsers});
-    chat.users
-      ..clear()
-      ..addAll(newUsers);
+ 
     return chat;
   }
 

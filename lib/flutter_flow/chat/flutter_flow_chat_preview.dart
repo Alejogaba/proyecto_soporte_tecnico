@@ -51,18 +51,6 @@ class FFChatPreview extends StatelessWidget {
               leading: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Padding(
-                    padding:
-                        const EdgeInsetsDirectional.only(start: 0.0, end: 8.0),
-                    child: Container(
-                      width: 12.0,
-                      height: 12.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: seen ? Colors.transparent : unreadColor,
-                      ),
-                    ),
-                  ),
                   Container(
                     child: ClipRRect(child: Image.network(userProfilePic)),
                    
@@ -107,20 +95,20 @@ class FFChatPreview extends StatelessWidget {
 
 String formattedDate(DateTime? dateTime) {
   if (dateTime == null) {
-    return 'Unknown';
+    return 'Desconocido';
   }
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
   final yesterday = DateTime(now.year, now.month, now.day - 1);
   final day = DateTime(dateTime.year, dateTime.month, dateTime.day);
   if (dateTime.isAfter(now.subtract(const Duration(minutes: 30)))) {
-    return timeago.format(dateTime);
+    return timeago.format(dateTime,locale:'es');
   }
   if (today == day) {
     return DateFormat.jm().format(dateTime);
   }
   if (yesterday == day) {
-    return 'Yesterday';
+    return 'Ayer';
   }
   return DateFormat.MMMMd().format(dateTime);
 }

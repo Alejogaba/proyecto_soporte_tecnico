@@ -15,7 +15,7 @@ FirebaseAuthManager get authManager => _authManager;
 String get currentUserEmail =>
     currentUserDocument?.email ?? currentUser?.email ?? '';
 
-String get currentUserUid => currentUser?.email ?? '';
+String get currentUserUid => currentUser?.uid ?? '';
 
 String get currentUserDisplayName =>
     currentUserDocument?.displayName ?? currentUser?.displayName ?? '';
@@ -44,17 +44,17 @@ DocumentReference? get currentUserReference {
   print('loggedIn: $loggedIn');
   print('usuario actual logged:'+(user!=null).toString());
   // ignore: unnecessary_statements
-  loggedIn ? UsersRecord.collection.doc(currentUser!.email) : null;
+  loggedIn ? UsersRecord.collection.doc(currentUser!.uid) : null;
 }
 
 UsersRecord? currentUserDocument;
 final authenticatedUserStream = FirebaseAuth.instance
     .authStateChanges()
-    .map<String>((user) => user?.email ?? '')
+    .map<String>((user) => user?.uid ?? '')
     .switchMap(
-      (email) => email.isEmpty
+      (uid) => uid.isEmpty
           ? Stream.value(null)
-          : UsersRecord.getDocument(UsersRecord.collection.doc(email))
+          : UsersRecord.getDocument(UsersRecord.collection.doc(uid))
               .handleError((_) {}),
     )
     .map((user) => currentUserDocument = user)

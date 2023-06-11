@@ -2,10 +2,14 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:login2/auth/base_auth_user_provider.dart';
 import 'package:login2/lista_funcionarios/funcionarioForm.dart';
 import 'package:login2/perfil/PerfilMOD/home.dart';
 import 'package:login2/routes/my_routes.dart';
@@ -15,26 +19,44 @@ import 'package:flutter/material.dart';
 
 import 'package:line_icons/line_icons.dart';
 
-
 import 'package:firebase_core/firebase_core.dart';
-
 
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'index.dart';
 import 'model/usuario.dart';
 
-void main() async {
 
-  WidgetsFlutterBinding.ensureInitialized();
+void main() async {
+  const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('app_icon');
+
+final InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid);
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   final appState = FFAppState(); // Initialize FFAppState
   await appState.initializePersistedState();
+  // Configuración de FirebaseMessaging
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   runApp(ChangeNotifierProvider(
     create: (context) => appState,
     child: MyApp(),
   ));
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+
+  // Obtener el token de registro
+ 
+  // Hacer algo con el token, por ejemplo, guardarlo en Firebase o enviarlo a tu servidor
+
+  // Procesar el mensaje recibido si es necesario
+  if (message.notification != null) {
+    // ...
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -55,7 +77,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
-      home: Example(),
+      
+      home: NuevaNavBar(),
       navigatorKey: Get.key,
       getPages: routes(),
     );
@@ -88,7 +111,7 @@ class PrincipalPagina extends StatelessWidget {
               return StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection("users")
-                    .doc(snapshot.data?.email)
+                    .doc(snapshot.data?.uid)
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -100,7 +123,7 @@ class PrincipalPagina extends StatelessWidget {
                     if (usuario.role == 'admin') {
                       return HomeView();
                     } else if (usuario.role == 'funcionario') {
-                      return InterfazPrincipalWidget();
+                      return NuevaNavBar();
                     } else {
                       return LoginWidget();
                     }
@@ -209,14 +232,14 @@ class _NavBarPageState extends State<NavBarPage> {
   }
 }
 
-class Example extends StatefulWidget {
+class NuevaNavBar extends StatefulWidget {
   @override
-  _ExampleState createState() => _ExampleState();
+  _NuevaNavBarState createState() => _NuevaNavBarState();
 }
 
-class _ExampleState extends State<Example> {
+class _NuevaNavBarState extends State<NuevaNavBar> {
   int _selectedIndex = 0;
-  
+
   static const List<Widget> _widgetOptions = <Widget>[
     ConversacionesWidget(),
     InterfazPrincipalWidget(),
@@ -240,8 +263,8 @@ class _ExampleState extends State<Example> {
           ],
         ),
         child: GNav(
-          haptic: true, // haptic feedback
-          tabBorderRadius: 16,
+          haptic: false, // haptic feedback
+          tabBorderRadius: 6,
           tabActiveBorder: Border.all(
               color: FlutterFlowTheme.of(context).primary,
               width: 1), // tab button border
@@ -252,8 +275,8 @@ class _ExampleState extends State<Example> {
                 blurRadius: 8)
           ], // tab button shadow
           curve: Curves.easeOutExpo, // tab animation curves
-          duration: Duration(milliseconds: 900), // tab animation duration
-          gap: 8, // the tab button gap between icon and text
+          duration: Duration(milliseconds: 600), // tab animation duration
+          gap: 2, // the tab button gap between icon and text
           color: FlutterFlowTheme.of(context)
               .tertiary
               .withOpacity(0.7), // unselected icon color
@@ -264,15 +287,17 @@ class _ExampleState extends State<Example> {
               .tertiary
               .withOpacity(0.1), // selected tab background color
           padding: EdgeInsets.symmetric(
-              horizontal: 140, vertical: 10), // navigation bar padding
+            
+              horizontal: MediaQuery.of(context).size.width * 0.15, vertical: 15), // navigation bar padding
+          mainAxisAlignment: MainAxisAlignment.center,
           tabs: [
             GButton(
-              icon: LineIcons.home,
-              text: 'Home',
+              icon: LineIcons.comment,
+              text: 'Chat',
             ),
             GButton(
-              icon: LineIcons.heart,
-              text: 'Likes',
+              icon: LineIcons.building,
+              text: 'Dependencias',
             ),
           ],
           selectedIndex: _selectedIndex,

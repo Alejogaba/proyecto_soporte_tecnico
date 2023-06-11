@@ -1,3 +1,5 @@
+import 'package:login2/flutter_flow/chat/chat_page.dart';
+import 'package:login2/flutter_flow/chat/chat_page_firebase.dart';
 import 'package:login2/model/chat_mensajes.dart';
 
 import '../../model/usuario.dart';
@@ -7,6 +9,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 
 enum TimeDisplaySetting {
   alwaysVisible,
@@ -15,7 +19,7 @@ enum TimeDisplaySetting {
 }
 
 class FFChatWidget extends StatelessWidget {
-   FFChatWidget({
+  FFChatWidget({
     Key? key,
     required this.currentUser,
     required this.scrollController,
@@ -31,7 +35,7 @@ class FFChatWidget extends StatelessWidget {
     this.otherUsersTextStyle,
     this.inputHintTextStyle,
     this.inputTextStyle,
-    this.emptyChatWidget,
+    this.emptyChatWidget, required this.nombre,
   }) : super(key: key);
 
   final Usuario currentUser;
@@ -39,6 +43,7 @@ class FFChatWidget extends StatelessWidget {
   final FocusNode focusNode;
   final List<ChatMensajes> messages;
   final Function()? uploadMediaAction;
+  final String nombre;
 
   final Color? backgroundColor;
   final TimeDisplaySetting? timeDisplaySetting;
@@ -49,6 +54,10 @@ class FFChatWidget extends StatelessWidget {
   final TextStyle? inputHintTextStyle;
   final TextStyle? inputTextStyle;
   final Widget? emptyChatWidget;
+  final List<types.User> users = [
+    types.User(id: '1', firstName: 'Nombre 1'),
+    types.User(id: '2', firstName: 'Nombre 2')
+  ];
 
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -57,82 +66,20 @@ class FFChatWidget extends StatelessWidget {
           color: backgroundColor,
           child: Stack(
             children: [
-              /*
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12.0),
                 child: Theme(
-                  data: ThemeData(brightness: Brightness.light),
-                  child: DashChat(
-                    scrollController: scrollController,
-                    focusNode: focusNode,
-                    shouldShowLoadEarlier: false,
-                    scrollToBottom: false,
-                    inverted: true,
-                    inputMaxLines: 10,
-                    user: currentUser,
-                    messages: messages.reversed.toList(),
-                    onLoadEarlier: () => {},
-                    onSend: onSend,
-                    leading: const [SizedBox(width: 10.0)],
-                    trailing: [
-                      if (uploadMediaAction != null)
-                        Padding(
-                          padding: const EdgeInsetsDirectional.only(
-                              start: 12.0, end: 6.0),
-                          child: InkWell(
-                            onTap: uploadMediaAction,
-                            child: const Icon(
-                              Icons.camera_alt_outlined,
-                              color: Color(0xA1A1A1A1),
-                              size: 24,
-                            ),
-                          ),
-                        ),
-                    ],
-                    inputDecoration: InputDecoration.collapsed(
-                      hintText: 'Type message here',
-                      hintStyle: inputHintTextStyle ??
-                          GoogleFonts.getFont(
-                            'DM Sans',
-                            color: const Color(0xFF95A1AC),
-                            fontSize: 14,
-                          ),
-                      fillColor: Colors.white,
-                    ),
-                    inputTextStyle: inputTextStyle ??
-                        GoogleFonts.getFont(
-                          'DM Sans',
-                          color: Colors.black,
-                          fontSize: 14,
-                        ),
-                    inputToolbarMargin: const EdgeInsets.only(
-                      left: 20.0,
-                      right: 20.0,
-                      top: 10.0,
-                    ),
-                    inputToolbarPadding:
-                        const EdgeInsets.symmetric(vertical: 6.0),
-                    messageContainerPadding:
-                        const EdgeInsets.fromLTRB(2.0, 2.0, 2.0, 0.0),
-                    inputContainerStyle: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      color: Colors.white,
-                    ),
-                    messageBuilder: (chatMessage) => FFChatMessage(
-                      key: Key('ChatMessage_${chatMessage.id}'),
-                      chatMessage: chatMessage,
-                      isMe: chatMessage.user.uid == currentUser.uid,
-                      timeDisplaySetting: timeDisplaySetting,
-                      currentUserBoxDecoration: currentUserBoxDecoration,
-                      otherUsersBoxDecoration: otherUsersBoxDecoration,
-                      currentUserTextStyle: currentUserTextStyle,
-                      otherUsersTextStyle: otherUsersTextStyle,
-                    ),
-                  ),
-                ),
+                    data: ThemeData(brightness: Brightness.light),
+                    child: ChatPageFirebase(
+                      nombre: 'Hola',
+                        chatUid: 'rEzfeft8TxbyObmY4XLb',
+                        room: types.Room(
+                            id: 'Llk8BwZJpgM3ORkbk66F',
+                            type: types.RoomType.direct,
+                            users: users))),
               ),
               if (messages.isEmpty && emptyChatWidget != null)
-                Center(child: emptyChatWidget),*/
+                Center(child: emptyChatWidget),
             ],
           ),
         ),
@@ -229,7 +176,8 @@ class _FFChatMessageState extends State<FFChatMessage> {
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(16),
                         child: CachedNetworkImage(
-                          imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png',
+                          imageUrl:
+                              'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png',
                           fit: BoxFit.fitWidth,
                         ),
                       )

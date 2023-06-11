@@ -11,6 +11,10 @@ import 'package:translator/translator.dart';
 import '../../model/usuario.dart';
 
 class AuthHelper {
+
+  
+
+
   static FirebaseAuth _auth = FirebaseAuth.instance;
 
   String? getCurrentUserUid() {
@@ -102,7 +106,7 @@ class AuthHelper {
         res = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
         log('Respuesta Firebase:' + res.user.toString());
-        usuario = await AuthHelper().cargarUsuarioDeFirebase(res.user!.email);
+        usuario = await AuthHelper().cargarUsuarioDeFirebase(res.user!.uid);
       }
       log('El uid es:' + res!.user!.uid);
 
@@ -240,7 +244,7 @@ class UserHelper {
       "email": user.email,
       "role": rol,
     };
-    final userRef = _db.collection("users").doc(user.email);
+    final userRef = _db.collection("users").doc(user.uid);
     if ((await userRef.get()).exists) {
       await userRef.update({
         "last_login": user.metadata.lastSignInTime!.millisecondsSinceEpoch,

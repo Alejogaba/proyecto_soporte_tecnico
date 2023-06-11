@@ -17,7 +17,7 @@ class Usuario {
   String? uid;
   String urlImagen =
       "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Empty_set_symbol.svg/640px-Empty_set_symbol.svg.png";
-
+  String? fcmToken;
   Usuario(
       {this.funcionarioImage = "",
       this.fechaNacimiento = "",
@@ -45,7 +45,8 @@ class Usuario {
     email = map['email'] ?? "";
     role = map['role'] ?? "";
     uid = map['uid'] ?? "";
-    urlImagen = map['photo_url'] ??
+    fcmToken = map['fcmToken'] ?? "";
+    urlImagen = map['imageUrl'] ??
         "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Empty_set_symbol.svg/640px-Empty_set_symbol.svg.png";
   }
 
@@ -62,25 +63,24 @@ class Usuario {
       'email': email,
       'role': role,
       'uid': uid,
-      'photo_url': urlImagen
+      'imageUrl': urlImagen
     };
   }
 
   Stream<Usuario>? getUsuarioStream(ChatsRecord? chatsrecords) {
     if (chatsrecords != null) {
       late DocumentReference? usuarioRef;
-      String url = chatsrecords.userA.toString();
-      List<String> parts = url.split('/');
-      String result = parts.last.trim().replaceAll(')','');
-      log('result' + result); // Imprime: "resource"
-      log('result getcurrent ' + getCurrentUser()!.email.toString());
-      if (getCurrentUser()!.email.toString().trim() == result) {
-        usuarioRef = chatsrecords.userB;
+      if (getCurrentUser()!.uid.toString().trim() == chatsrecords.users[0]) {
+        usuarioRef = FirebaseFirestore.instance
+            .collection('users')
+            .doc(chatsrecords.users[1]);
       } else {
-        usuarioRef = chatsrecords.userA;
+        usuarioRef = FirebaseFirestore.instance
+            .collection('users')
+            .doc(chatsrecords.users[0]);
       }
-      log('Referencia de usuario escogida: ' + usuarioRef.toString());
-      return usuarioRef!.snapshots().map((snapshot) {
+      log('Usuario escogido: ' + usuarioRef.toString());
+      return usuarioRef.snapshots().map((snapshot) {
         if (!snapshot.exists) {
           throw Exception('Usuario no encontrado');
         }

@@ -1,5 +1,13 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
+import 'package:login2/backend/controlador_chat.dart';
+import 'package:login2/model/chat_mensajes.dart';
 import 'package:login2/model/usuario.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '/chat/chat_widget.dart';
 import '/flutter_flow/chat/index.dart';
@@ -9,6 +17,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'conversaciones_model.dart';
 export 'conversaciones_model.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class ConversacionesWidget extends StatefulWidget {
   const ConversacionesWidget({Key? key}) : super(key: key);
@@ -40,6 +50,17 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
     context.watch<FFAppState>();
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          types.User otheruser = types.User(id: 'WyFEzjfkFacfhDj07MUoC7jQChq2');
+          types.Room room =
+              await FirebaseChatCore.instance.createRoom(otheruser);
+          final collectionRef =
+              FirebaseFirestore.instance.collection('rooms').doc(room.id);
+          await collectionRef.update({'uid': room.id});
+        },
+        child: Icon(Icons.add),
+      ),
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       appBar: AppBar(
@@ -64,8 +85,8 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
           child: StreamBuilder<List<ChatsRecord>>(
             stream: queryChatsRecord(
               queryBuilder: (chatsRecord) => chatsRecord
-                  .where('users', arrayContains: currentUserReference)
-                  .orderBy('last_message_time', descending: true),
+                  .where('userIds', arrayContains: currentUserReference)
+                  .orderBy('updatedAt', descending: true),
             ),
             builder: (context, snapshot1) {
               // Customize what your widget looks like when it's loading.
@@ -97,53 +118,103 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                 itemBuilder: (context, listViewIndex) {
                   final listViewChatsRecord =
                       listViewChatsRecordList[listViewIndex];
+                  log('$listViewChatsRecord');
                   return StreamBuilder<Usuario>(
                     stream: Usuario().getUsuarioStream(listViewChatsRecord),
                     builder: (context, snapshot) {
                       final Usuario chatInfo = snapshot.data ?? Usuario();
 
-                      return FFChatPreview(
-                        onTap: () async {
-                          Usuario? usuarioActual = await AuthHelper()
-                              .cargarUsuarioDeFirebase(getCurrentUser()!.email);
-                          if (usuarioActual != null) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ChatWidget(usuarioActual: usuarioActual, uid: 'rEzfeft8TxbyObmY4XLb'
-                                ),
+                      return StreamBuilder<ChatMensajes?>(
+                        stream: ControladorChat().ObtenerUltimoMensajeChat(
+                            listViewChatsRecord.roomUid),
+                        builder: (BuildContext context, snapshotUltimoMensaje) {
+                          if (snapshotUltimoMensaje.connectionState ==
+                              ConnectionState.waiting) {
+                            return CircularProgressIndicator();
+                          } else {
+                            final ChatMensajes? lastMessage =
+                                snapshotUltimoMensaje.data;
+
+                            return FFChatPreview(
+                              onTap: () async {
+                                Usuario? usuarioActual = await AuthHelper()
+                                    .cargarUsuarioDeFirebase(
+                                        getCurrentUser()!.uid);
+                               
+                                if (usuarioActual != null) {
+                                   try {
+                                  await FlutterLocalNotificationsPlugin()
+                                      .resolvePlatformSpecificImplementation<
+                                          AndroidFlutterLocalNotificationsPlugin>()
+                                      ?.requestPermission();
+                                } catch (e) {
+                                  log('No se pudo pedir permiso de notificacion: ' +
+                                      e.toString());
+                                }
+                                  String? token = await FirebaseMessaging
+                                      .instance
+                                      .getToken();
+                                  User? user = getCurrentUser();
+                                  if (user != null && token != null) {
+                                    var docRef = FirebaseFirestore.instance
+                                        .collection("users")
+                                        .doc(user.uid);
+                                    await docRef.update({
+                                      'fcmToken': token,
+                                    });
+                                  }
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ChatWidget(
+                                          currentUserToken: token,
+                                          otherUserToken:
+                                              snapshot.data!.fcmToken,
+                                          nombre:
+                                              '${snapshot.data!.nombre} - ${snapshot.data!.cargo} ${snapshot.data!.area}',
+                                          usuarios: listViewChatsRecord.users,
+                                          uid: listViewChatsRecord.roomUid),
+                                    ),
+                                  );
+                                }
+                              },
+                              lastChatText: (lastMessage != null)
+                                  ? definirUltimoMensaje(
+                                      lastMessage.mensaje, lastMessage.tipo)
+                                  : " ",
+                              lastChatTime: listViewChatsRecord.lastMessageTime,
+                              seen: false,
+                              title:
+                                  '${snapshot.data!.nombre} - ${snapshot.data!.cargo} ${snapshot.data!.area}',
+                              userProfilePic: chatInfo.urlImagen,
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              unreadColor: FlutterFlowTheme.of(context).primary,
+                              titleTextStyle: GoogleFonts.getFont(
+                                'Urbanist',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0,
                               ),
+                              dateTextStyle: GoogleFonts.getFont(
+                                'Urbanist',
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 14.0,
+                              ),
+                              previewTextStyle: GoogleFonts.getFont(
+                                'Urbanist',
+                                color: FlutterFlowTheme.of(context).grayIcon,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.0,
+                              ),
+                              contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                  8.0, 3.0, 8.0, 3.0),
+                              borderRadius: BorderRadius.circular(0.0),
                             );
                           }
                         },
-                        lastChatText: listViewChatsRecord.lastMessage,
-                        lastChatTime: listViewChatsRecord.lastMessageTime,
-                        seen: listViewChatsRecord.lastMessageSeenBy.contains(currentUserReference),
-                        title: '${chatInfo.nombre} - ${chatInfo.area}',
-                        userProfilePic: chatInfo.urlImagen,
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        unreadColor: FlutterFlowTheme.of(context).primary,
-                        titleTextStyle: GoogleFonts.getFont(
-                          'Urbanist',
-                          color: FlutterFlowTheme.of(context).primaryText,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0,
-                        ),
-                        dateTextStyle: GoogleFonts.getFont(
-                          'Urbanist',
-                          color: FlutterFlowTheme.of(context).secondaryText,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14.0,
-                        ),
-                        previewTextStyle: GoogleFonts.getFont(
-                          'Urbanist',
-                          color: FlutterFlowTheme.of(context).grayIcon,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14.0,
-                        ),
-                        contentPadding:
-                            EdgeInsetsDirectional.fromSTEB(8.0, 3.0, 8.0, 3.0),
-                        borderRadius: BorderRadius.circular(0.0),
                       );
                     },
                   );
@@ -154,5 +225,20 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
         ),
       ),
     );
+  }
+
+  String definirUltimoMensaje(String? mensaje, String? tipo) {
+    log('Tipo de mensaje es: $tipo');
+    if (tipo == null) {
+      return '';
+    } else if (tipo == 'text') {
+      return mensaje != null ? mensaje : '';
+    } else if (tipo == 'image') {
+      return '🖼 Imagen';
+    } else if (tipo == 'file') {
+      return '📎 Archivo adjunto';
+    } else {
+      return tipo;
+    }
   }
 }

@@ -81,6 +81,13 @@ dependencies:
   google_nav_bar: ^5.0.6
   line_icons: ^2.0.1
 
+  flutter_chat_ui: ^1.6.8
+  open_filex: ^4.3.2
+  mime: ^1.0.4
+  flutter_firebase_chat_core: ^1.6.7
+  firebase_messaging: ^14.6.2
+  flutter_local_notifications: ^14.1.1
+
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1
 

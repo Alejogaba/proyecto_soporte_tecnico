@@ -5,6 +5,8 @@ import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import '../backend/schema/util/custom_clipper.dart';
 import 'top_bar.dart';
 
+
+
 class StackContainer extends StatelessWidget {
   const StackContainer({Key? key}) : super(key: key);
 

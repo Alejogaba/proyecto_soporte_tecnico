@@ -1,3 +1,4 @@
+
 class Usuario {
   String? funcionarioImage;
   String? fechaNacimiento;
@@ -11,8 +12,8 @@ class Usuario {
   String? role;
   String? uid;
 
-  Usuario(Usuario usuario, {
-    this.funcionarioImage = "",
+  Usuario( 
+    {this.funcionarioImage = "",
     this.fechaNacimiento = "",
     this.area = "",
     this.telefono = "",

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../auth/firebase_auth/auth_util.dart';
+import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/flutter_flow_widgets.dart';
+import '../login/login_widget.dart';
+
 class CardItem extends StatelessWidget {
   const CardItem({Key? key}) : super(key: key);
 
@@ -30,20 +35,53 @@ class CardItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text(
-                    "Joined Date",
+                    "Incompleto",
                     style: TextStyle(
                       fontSize: 18.0,
                     ),
                   ),
                   SizedBox(height: 4.0),
                   Text(
-                    "21 August 2020",
+                    "Detalle",
                     style: TextStyle(
                       color: Colors.grey[700],
                       fontSize: 12.0,
                     ),
                   ),
                 ],
+              ),
+              FFButtonWidget(
+                onPressed: () async {
+                  await authManager.signOut();
+                  await Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginWidget(),
+                    ),
+                    (r) => false,
+                  );
+                },
+                text: 'Log Out',
+                options: FFButtonOptions(
+                  width: 110.0,
+                  height: 50.0,
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                  iconPadding:
+                      EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                  color: Color(0xFF4B835E),
+                  textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                        fontFamily: 'Lexend Deca',
+                        color: FlutterFlowTheme.of(context).cultured,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                  elevation: 0.0,
+                  borderSide: BorderSide(
+                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(40.0),
+                ),
               ),
             ],
           ),

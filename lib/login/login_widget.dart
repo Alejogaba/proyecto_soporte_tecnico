@@ -8,6 +8,7 @@ import 'package:login2/auth/firebase_auth/auth_helper.dart';
 import 'package:login2/index.dart';
 import 'package:login2/lista_funcionarios/funcionarioForm.dart';
 import 'package:login2/model/usuario.dart';
+import 'package:login2/perfil/PerfilMOD/home.dart';
 import 'package:translator/translator.dart';
 import '../backend/backend.dart';
 import '/auth/firebase_auth/auth_util.dart';
@@ -353,13 +354,13 @@ class _LoginWidgetState extends State<LoginWidget> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      const FuncionarioFormWidget()));  
+                                                      PerfilGeneral()));  
                                           }else{
                                              Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      const InterfazPrincipalWidget()));  
+                                                       PerfilGeneral()));  
                                           }                                }
                                       } catch (e) {
                                         print(e);
@@ -421,13 +422,13 @@ class _LoginWidgetState extends State<LoginWidget> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      const FuncionarioFormWidget()));  
+                                                       PerfilGeneral()));  
                                           }else{
                                              Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      const InterfazPrincipalWidget()));  
+                                                       PerfilGeneral()));  
                                           }
                                           
                                         }

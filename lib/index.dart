@@ -4,7 +4,7 @@ export '/conversaciones/conversaciones_widget.dart' show ConversacionesWidget;
 export '/interfaz_principal/interfaz_principal_widget.dart'
     show InterfazPrincipalWidget;
 export '/chat/chat_widget.dart' show ChatWidget;
-export '/lista_funcionarios/lista_funcionarios_widget.dart'
+export 'lista_funcionarios/lista_funcionarios_widget.dart'
     show ListaFuncionariosWidget;
 export '/perfil/perfil_widget.dart' show PerfilWidget;
 export '/editar_perfil/editar_perfil_widget.dart' show EditarPerfilWidget;

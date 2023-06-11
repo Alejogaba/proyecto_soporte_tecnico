@@ -73,7 +73,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
 
-      home: Example(),
+      initialRoute: '/loginmod',
       navigatorKey: Get.key,
       getPages: routes(),
     );
@@ -116,9 +116,9 @@ class PrincipalPagina extends StatelessWidget {
                     Usuario usuario =
                         Usuario.mapeo(user as Map<String, dynamic>);
                     if (usuario.role == 'admin') {
-                      return HomeView();
+                      return PerfilGeneral();
                     } else if (usuario.role == 'funcionario') {
-                      return InterfazPrincipalWidget();
+                      return PerfilGeneral();
                     } else {
                       return LoginWidget();
                     }
@@ -165,8 +165,8 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'Conversaciones': ConversacionesWidget(),
       'interfazPrincipal': InterfazPrincipalWidget(),
-      'Perfil': HomeView(),
-      'gestionfuncionario': FuncionarioFormWidget(),
+      'Perfil': PerfilGeneral(),
+      
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 

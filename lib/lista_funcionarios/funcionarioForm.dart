@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:login2/index.dart';
 import 'package:login2/interfaz_principal/interfaz_principal_model.dart';
 import 'package:login2/model/usuario.dart';
+import 'package:login2/perfil/PerfilMOD/home.dart';
 
 import '../../../flutter_flow/flutter_flow_drop_down.dart';
 import '../../../flutter_flow/flutter_flow_theme.dart';
@@ -20,7 +21,7 @@ File? image;
 late String filename;
 
 class FuncionarioFormWidget extends StatefulWidget {
-  const FuncionarioFormWidget({Key? key}) : super(key: key);
+  const FuncionarioFormWidget(Usuario usuario, {Key? key}) : super(key: key);
 
   @override
   _FuncionarioFormState createState() => _FuncionarioFormState();
@@ -190,42 +191,6 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                         ),
                       ),
                     ),
-                     Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 20.0),
-                child: FFButtonWidget(
-                  onPressed: () async {
-                    await authManager.signOut();
-                    await Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginWidget(),
-                      ),
-                      (r) => false,
-                    );
-                  },
-                  text: 'Log Out',
-                  options: FFButtonOptions(
-                    width: 110.0,
-                    height: 50.0,
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    iconPadding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    color: Color(0xFF4B835E),
-                    textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                          fontFamily: 'Lexend Deca',
-                          color: FlutterFlowTheme.of(context).cultured,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w500,
-                        ),
-                    elevation: 0.0,
-                    borderSide: BorderSide(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(40.0),
-                  ),
-                ),
-              ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
                       child: FFButtonWidget(
@@ -728,7 +693,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
         await Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => InterfazPrincipalWidget(),
+            builder: (context) => PerfilGeneral(),
           ),
           (r) => false,
         );

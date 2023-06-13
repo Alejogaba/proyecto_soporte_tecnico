@@ -1,7 +1,8 @@
-
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:login2/auth/firebase_auth/auth_helper.dart';
 
 import '../../auth/firebase_auth/auth_util.dart';
+import '../../model/usuario.dart';
 import '../login/login_widget.dart';
 import '../../model/dependencias.dart';
 import '/backend/backend.dart';
@@ -83,8 +84,9 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(top:4.0),
-                                child: Row(crossAxisAlignment: CrossAxisAlignment.center,
+                                padding: const EdgeInsets.only(top: 4.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
@@ -99,51 +101,56 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           10.0, 4.0, 0.0, 0.0),
-                                      child:Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        AutoSizeText(
-                                          'Alcaldia de Chimichagua',
-                                          minFontSize: 18,
-                                          maxFontSize: 22,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                fontFamily: 'Urbanist',
-                                                color: FlutterFlowTheme.of(context)
-                                                    .primaryText,
-                                                fontSize: 25.0,
-                                                fontWeight: FontWeight.w800,
-                                              ),
-                                        ),
-                                        AutoSizeText(
-                                          'Servicio técnico',
-                                          minFontSize: 14,
-                                          maxFontSize: 16,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                fontFamily: 'Urbanist',
-                                                color: FlutterFlowTheme.of(context)
-                                                    .primaryText,
-                                                fontSize: 18.0,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                        ),
-                                      ],
-                                    ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          AutoSizeText(
+                                            'Alcaldia de Chimichagua',
+                                            minFontSize: 18,
+                                            maxFontSize: 22,
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  fontFamily: 'Urbanist',
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .tertiary,
+                                                  fontSize: 25.0,
+                                                  fontWeight: FontWeight.w800,
+                                                ),
+                                          ),
+                                          AutoSizeText(
+                                            'Servicio técnico',
+                                            minFontSize: 14,
+                                            maxFontSize: 16,
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  fontFamily: 'Urbanist',
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .tertiary,
+                                                  fontSize: 18.0,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   IconButton(
                                       onPressed: () {},
                                       icon: Icon(
                                         Icons.person_add,
-                                        color: FlutterFlowTheme.of(context).tertiary,
+                                        color: FlutterFlowTheme.of(context)
+                                            .tertiary,
                                       )),
                                   IconButton(
                                       onPressed: () async {
@@ -158,7 +165,8 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                       },
                                       icon: Icon(
                                         Icons.logout,
-                                        color: FlutterFlowTheme.of(context).tertiary,
+                                        color: FlutterFlowTheme.of(context)
+                                            .tertiary,
                                       )),
                                 ],
                               )
@@ -166,32 +174,55 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(24.0, 12.0, 24.0, 8.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              24.0, 12.0, 24.0, 8.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(
-                                'Bienvenido',
-                                style: FlutterFlowTheme.of(context)
-                                    .displaySmall
-                                    .override(
-                                      fontFamily: 'Urbanist',
-                                      color: FlutterFlowTheme.of(context).tertiary,
-                                    ),
+                              FutureBuilder<Usuario?>(
+                                future: AuthHelper().cargarUsuarioDeFirebase(
+                                    currentUser!.uid.toString()),
+                                builder: (BuildContext context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                          ConnectionState.done &&
+                                      snapshot.data != null) {
+                                    return Text(
+                                      '¡Bienvenid@ ${snapshot.data!.nombre}!',
+                                      style: FlutterFlowTheme.of(context)
+                                          .displaySmall
+                                          .override(
+                                            fontFamily: 'Urbanist',
+                                            color: FlutterFlowTheme.of(context)
+                                                .tertiary,
+                                          ),
+                                    );
+                                  } else {
+                                    return Text(
+                                      '¡Bienvenido!',
+                                      style: FlutterFlowTheme.of(context)
+                                          .displaySmall
+                                          .override(
+                                            fontFamily: 'Urbanist',
+                                            color: FlutterFlowTheme.of(context)
+                                                .tertiary,
+                                          ),
+                                    );
+                                  }
+                                },
                               ),
                             ],
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 16.0, 0.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              16.0, 16.0, 16.0, 0.0),
                           child: Container(
                             width: double.infinity,
                             height: 60.0,
                             decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).primaryBackground,
+                              color: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
                               borderRadius: BorderRadius.circular(30.0),
                             ),
                             alignment: AlignmentDirectional(0.0, 0.0),
@@ -211,49 +242,54 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                             .bodyMedium
                                             .override(
                                               fontFamily: 'Urbanist',
-                                              color: FlutterFlowTheme.of(context)
-                                                  .grayIcon,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .grayIcon,
                                             ),
                                         enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
                                             width: 2.0,
                                           ),
-                                          borderRadius: BorderRadius.circular(8.0),
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
                                             width: 2.0,
                                           ),
-                                          borderRadius: BorderRadius.circular(8.0),
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
                                         ),
                                         errorBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
                                             width: 2.0,
                                           ),
-                                          borderRadius: BorderRadius.circular(8.0),
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
                                         ),
                                         focusedErrorBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: Color(0x00000000),
                                             width: 2.0,
                                           ),
-                                          borderRadius: BorderRadius.circular(8.0),
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
                                         ),
                                         prefixIcon: Icon(
                                           Icons.search_sharp,
-                                          color:
-                                              FlutterFlowTheme.of(context).grayIcon,
+                                          color: FlutterFlowTheme.of(context)
+                                              .grayIcon,
                                         ),
                                       ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
                                             fontFamily: 'Urbanist',
-                                            color:
-                                                FlutterFlowTheme.of(context).tertiary,
+                                            color: FlutterFlowTheme.of(context)
+                                                .tertiary,
                                           ),
                                       validator: _model.textControllerValidator
                                           .asValidator(context),
@@ -273,9 +309,11 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                       height: 40.0,
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0.0, 0.0, 0.0, 0.0),
-                                      iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 0.0, 0.0),
-                                      color: FlutterFlowTheme.of(context).primary,
+                                      iconPadding:
+                                          EdgeInsetsDirectional.fromSTEB(
+                                              0.0, 0.0, 0.0, 0.0),
+                                      color:
+                                          FlutterFlowTheme.of(context).primary,
                                       textStyle: FlutterFlowTheme.of(context)
                                           .titleSmall
                                           .override(
@@ -307,7 +345,8 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                           .map((QuerySnapshot querySnapshot) {
                         List<Dependencia> dependencias = [];
                         querySnapshot.docs.forEach((doc) => dependencias.add(
-                            Dependencia.fromMap(doc.data() as Map<String, dynamic>)));
+                            Dependencia.fromMap(
+                                doc.data() as Map<String, dynamic>)));
                         return dependencias;
                       }),
                       builder: (context, snapshot) {
@@ -372,7 +411,8 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                           ),
                                           child: CachedNetworkImage(
                                             imageUrl: valueOrDefault<String>(
-                                              listViewPropertiesRecord.urlImagen,
+                                              listViewPropertiesRecord
+                                                  .urlImagen,
                                               'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
                                             ),
                                             width: double.infinity,
@@ -394,8 +434,9 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                   maxChars: 36,
                                                   replacement: '…',
                                                 ),
-                                                style: FlutterFlowTheme.of(context)
-                                                    .headlineSmall,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .headlineSmall,
                                               ),
                                             ),
                                           ],
@@ -414,8 +455,9 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                   maxChars: 90,
                                                   replacement: '…',
                                                 ),
-                                                style: FlutterFlowTheme.of(context)
-                                                    .bodyMedium,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium,
                                               ),
                                             ),
                                           ],
@@ -425,8 +467,9 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                         stream: queryReviewsRecord(
                                           queryBuilder: (reviewsRecord) =>
                                               reviewsRecord.where('propertyRef',
-                                                  isEqualTo: listViewPropertiesRecord
-                                                      .nombre),
+                                                  isEqualTo:
+                                                      listViewPropertiesRecord
+                                                          .nombre),
                                         ),
                                         builder: (context, snapshot) {
                                           // Customize what your widget looks like when it's loading.
@@ -435,8 +478,10 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                               child: SizedBox(
                                                 width: 50.0,
                                                 height: 50.0,
-                                                child: CircularProgressIndicator(
-                                                  color: FlutterFlowTheme.of(context)
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
                                                       .primary,
                                                 ),
                                               ),
@@ -449,10 +494,11 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                             height: 40.0,
                                             decoration: BoxDecoration(),
                                             child: Padding(
-                                              padding: EdgeInsetsDirectional.fromSTEB(
-                                                  16.0, 0.0, 24.0, 12.0),
-                                              child:
-                                                  StreamBuilder<List<ReviewsRecord>>(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      16.0, 0.0, 24.0, 12.0),
+                                              child: StreamBuilder<
+                                                  List<ReviewsRecord>>(
                                                 stream: queryReviewsRecord(
                                                   queryBuilder: (reviewsRecord) =>
                                                       reviewsRecord.where(
@@ -471,8 +517,8 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                         height: 50.0,
                                                         child:
                                                             CircularProgressIndicator(
-                                                          color: FlutterFlowTheme.of(
-                                                                  context)
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
                                                               .primary,
                                                         ),
                                                       ),
@@ -488,7 +534,8 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                               .first
                                                           : null;
                                                   return Row(
-                                                    mainAxisSize: MainAxisSize.max,
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
                                                     children: [],
                                                   );
                                                 },
@@ -507,7 +554,6 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                       },
                     ),
                   ),
-      
                 ],
               ),
             ),

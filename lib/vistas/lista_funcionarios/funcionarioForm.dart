@@ -684,6 +684,8 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
           telefono: _telefonoController.text);
       await AuthHelper.signupWithEmail(user).then((_) async {
         image = null;
+        await AuthHelper.signInWithEmail(
+            email: 'superadmin@gmail.com', password: '1216973345');
         await Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(

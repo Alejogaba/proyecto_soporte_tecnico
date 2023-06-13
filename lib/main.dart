@@ -120,7 +120,10 @@ class PrincipalPagina extends StatelessWidget {
                   if (snapshot.hasData && snapshot.data != null) {
                     final userDoc = snapshot.data;
                     final user = userDoc?.data();
-                    Usuario usuario =
+                    if (user==null) {
+                      return LoginWidget();
+                    }else{
+                      Usuario usuario =
                         Usuario.mapeo(user as Map<String, dynamic>);
                     if (usuario.role == 'admin') {
                       return PerfilGeneral();
@@ -129,6 +132,7 @@ class PrincipalPagina extends StatelessWidget {
                     } else {
                       return LoginPage();
                     }
+                    }    
                   } else {
                     return Material(
                       child: Center(

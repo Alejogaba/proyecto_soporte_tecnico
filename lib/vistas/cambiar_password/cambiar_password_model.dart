@@ -5,18 +5,18 @@ class CambiarPasswordModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for emailAddress widget.
-  TextEditingController emailAddressController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   /// Initialization and disposal methods.
   late bool passwordVisibility;
 
   void initState(BuildContext context) {
-     passwordVisibility = false;
+    passwordVisibility = false;
   }
 
   void dispose() {
-    emailAddressController?.dispose();
+    passwordController?.dispose();
   }
 
   /// Additional helper methods are added here.
-
 }

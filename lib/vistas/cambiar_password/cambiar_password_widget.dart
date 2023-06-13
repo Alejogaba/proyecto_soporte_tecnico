@@ -32,7 +32,7 @@ class _CambiarPasswordWidgetState extends State<CambiarPasswordWidget> {
   String _password = '';
   double fuerzaContrasenia = 0.0;
   FocusNode _focusNode1 = new FocusNode();
-FocusNode _focusNode2 = new FocusNode();
+  FocusNode _focusNode2 = new FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -125,7 +125,7 @@ FocusNode _focusNode2 = new FocusNode();
                             ),
                             focusedErrorBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                               color: FlutterFlowTheme.of(context).error,
+                                color: FlutterFlowTheme.of(context).error,
                                 width: 1.7,
                               ),
                               borderRadius: BorderRadius.circular(8.0),
@@ -151,7 +151,7 @@ FocusNode _focusNode2 = new FocusNode();
                           obscureText: !_model.passwordVisibility,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 10,right: 15.0),
+                          padding: const EdgeInsets.only(top: 10, right: 15.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             mainAxisSize: MainAxisSize.max,
@@ -193,55 +193,53 @@ FocusNode _focusNode2 = new FocusNode();
                           hintText: 'Ingrese de nuevo su nueva contraseña...',
                           hintStyle: FlutterFlowTheme.of(context).bodyMedium,
                           enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).lineGray,
-                                width: 1.7,
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).lineGray,
+                              width: 1.7,
                             ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).primary,
-                                width: 1.7,
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).primary,
+                              width: 1.7,
                             ),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).error,
-                                width: 1.7,
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).error,
+                              width: 1.7,
                             ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                               color: FlutterFlowTheme.of(context).error,
-                                width: 1.7,
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).error,
+                              width: 1.7,
                             ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
                           filled: true,
                           suffixIcon: InkWell(
-                                        onTap: () => setState(
-                                          () => _model.passwordVisibility =
-                                              !_model.passwordVisibility,
-                                        ),
-                                        focusNode:
-                                            FocusNode(skipTraversal: true),
-                                        child: Icon(
-                                          _model.passwordVisibility
-                                              ? Icons.visibility_outlined
-                                              : Icons.visibility_off_outlined,
-                                          color: Color(0xFF95A1AC),
-                                          size: 22.0,
-                                        ),
-                                      ),
+                            onTap: () => setState(
+                              () => _model.passwordVisibility =
+                                  !_model.passwordVisibility,
+                            ),
+                            focusNode: FocusNode(skipTraversal: true),
+                            child: Icon(
+                              _model.passwordVisibility
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                              color: Color(0xFF95A1AC),
+                              size: 22.0,
+                            ),
+                          ),
                           fillColor:
                               FlutterFlowTheme.of(context).secondaryBackground,
                           contentPadding: EdgeInsetsDirectional.fromSTEB(
                               20.0, 24.0, 0.0, 24.0),
                         ),
-                        
                         validator: (String? value) {
                           if (value == null || value.isEmpty)
                             return 'Repita la contraseña';
@@ -250,7 +248,6 @@ FocusNode _focusNode2 = new FocusNode();
                           return null;
                         },
                         obscureText: !_model.passwordVisibility,
-                        
                       ),
                     ),
                   ],
@@ -279,13 +276,13 @@ FocusNode _focusNode2 = new FocusNode();
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       String res = await AuthHelper()
-                        .changePassword(_model.emailAddressController.text);
-                    if (res != 'error') {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PerfilGeneral()));
-                    }
+                          .changePassword(_confirmPasswordController.text);
+                      if (res != 'error') {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PerfilGeneral()));
+                      }
                     }
                   },
                   text: 'Cambiar mi contraseña',

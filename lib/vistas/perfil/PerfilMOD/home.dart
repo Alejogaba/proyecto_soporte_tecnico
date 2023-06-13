@@ -8,6 +8,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:login2/auth/base_auth_user_provider.dart';
 import 'package:login2/flutter_flow/flutter_flow_theme.dart';
+import 'package:login2/vistas/login/LoginMOD.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Widgets/card_item.dart';
@@ -123,14 +124,12 @@ class _PerfilAdminState extends State<PerfilGeneral> {
                                                 255, 13, 107, 16),
                                             spreadRadius: 4)
                                       ]),
-                                  child: (snapshot.data!.urlImagen !=
-                                              null ||
+                                  child: (snapshot.data!.urlImagen != null ||
                                           FirebaseAuth.instance.currentUser!
                                                   .photoURL !=
                                               null)
                                       ? Image.network(
-                                          (snapshot.data!.urlImagen
-                                                  .isNotEmpty)
+                                          (snapshot.data!.urlImagen.isNotEmpty)
                                               ? snapshot.data!.urlImagen
                                               : (FirebaseAuth
                                                           .instance
@@ -180,7 +179,7 @@ class _PerfilAdminState extends State<PerfilGeneral> {
             const SizedBox(height: 20),
             const Divider(),
             const SizedBox(height: 10),
-            
+
             /// -- MENU
             ProfileMenuWidget(
                 title: "Gestión de dependencias",
@@ -223,7 +222,7 @@ class _PerfilAdminState extends State<PerfilGeneral> {
                           await Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => LoginWidget(),
+                              builder: (context) => LoginPage(),
                             ),
                             (r) => false,
                           );

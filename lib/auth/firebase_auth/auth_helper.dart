@@ -40,6 +40,68 @@ class AuthHelper {
     }
   }
 
+  static signUpWithEmail(
+      {String? email,
+      String? password,
+      String rol = 'funcionario',
+      bool estaRegistrado = false,
+      BuildContext? context}) async {
+    try {
+      FirebaseFirestore _db = FirebaseFirestore.instance;
+      UserCredential res = await _auth.createUserWithEmailAndPassword(
+          email: email!.trim().toLowerCase(), password: password!.trim());
+      User? user = res.user;
+      String uid = user!.uid;
+
+      var existe = await _db.collection("users").doc(uid).get();
+
+      if (existe.exists == false && estaRegistrado == false) {
+        Map<String, dynamic> userData = {
+          "FuncionarioImage": "",
+          "fechaNacimiento": "",
+          "area": "",
+          "telefono": "",
+          "cargo": "",
+          "password": "",
+          "identificacion": "",
+          "nombre": "",
+          "name": "",
+          "email": email?.toLowerCase(),
+          "last_login": "",
+          "created_at": "",
+          "role": rol,
+          "build_number": "",
+        };
+        await _db.collection("users").doc(uid).set(userData);
+        // Cierra la sesión del usuario
+        await _auth.signOut();
+        await FirebaseAuth.instance.signOut();
+        Get.toNamed('/loguear');
+      }
+
+      if (res.user != null) {
+        if (!estaRegistrado) {
+          UserHelper.saveUser(res.user!, rol: rol);
+        }
+      }
+      Future.delayed(
+        Duration(seconds: 2),
+        () {},
+      );
+      return res.user;
+    } on FirebaseAuthException catch (e) {
+      var errorTraducido = await traducir(e.message.toString());
+      Get.snackbar('Error', errorTraducido,
+          icon: Icon(
+            Icons.error_outline,
+            color: Colors.red,
+          ),
+          colorText: Color.fromARGB(255, 114, 14, 7));
+    } catch (e) {
+      Logger().e(e);
+    }
+  }
+
   /*static signInWithEmail(
       {required String email,
       required String password,
@@ -141,7 +203,10 @@ class AuthHelper {
       FirebaseFirestore _db = FirebaseFirestore.instance;
       final UserCredential res = await _auth.createUserWithEmailAndPassword(
           email: usuario.email!.trim().toLowerCase(),
-          password: usuario.identificacion!.trim());
+          password: usuario.password!.trim()
+          );
+
+
       log('resultado del registro: ' + res.toString());
       usuario.uid = res.user!.uid;
       await _db.collection("users").doc(res.user!.uid).set(usuario.toMap());
@@ -152,6 +217,43 @@ class AuthHelper {
       return null;
     }
     return null;
+  }
+
+  //Funcion Crear usuario
+
+  static crearUsuarioEnFormulario(Usuario usuario) async {
+    try {
+      FirebaseFirestore _db = FirebaseFirestore.instance;
+
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: usuario.email!.trim().toLowerCase(),
+              password: usuario.identificacion!.trim());
+
+      User? user = userCredential.user;
+      String uid = user!.uid;
+
+      await _db
+          .collection("users")
+          .doc(userCredential.user!.uid)
+          .set(usuario.toMap());
+      print('Usuario creado y guardado en Firestore correctamente');
+    } catch (e) {
+      print('Error al crear el usuario: $e');
+    }
+  }
+
+  //Funcion Guardar Funcionario
+
+  void guardarUsuarioEnFirestore(String uid, String nombre, String email) {
+    FirebaseFirestore.instance.collection('usuarios').doc(uid).set({
+      'nombre': nombre,
+      'email': email,
+    }).then((value) {
+      print('Usuario guardado en Firestore correctamente');
+    }).catchError((error) {
+      print('Error al guardar el usuario en Firestore: $error');
+    });
   }
 
   static estaLogeado() {

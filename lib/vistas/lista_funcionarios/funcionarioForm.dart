@@ -1,11 +1,17 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_password_strength/flutter_password_strength.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
 
 import 'package:login2/index.dart';
+import 'package:login2/main.dart';
 import 'package:login2/model/usuario.dart';
 import 'package:login2/vistas/perfil/PerfilMOD/home.dart';
 
@@ -28,6 +34,13 @@ class FuncionarioFormWidget extends StatefulWidget {
 final FirebaseFirestore _db = FirebaseFirestore.instance;
 
 class _FuncionarioFormState extends State<FuncionarioFormWidget> {
+  String _password = '';
+  double fuerzaContrasenia = 0.0;
+  bool _obscureTextPassword = true;
+  bool _obscureTextConfirmPassword = true;
+  final FocusNode focusNodePassword = FocusNode();
+  final FocusNode focusNodeConfirmPassword = FocusNode();
+  final FocusNode focusNodeEmail = FocusNode();
   late DateTime picked;
   late String cargoController;
   late String areaController;
@@ -58,6 +71,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
   late TextEditingController _fechanacimientoController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+  late TextEditingController _confirmPasswordController;
   late TextEditingController _telefonoController;
 
   double iconSize = 20;
@@ -109,8 +123,15 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
 
     _emailController = new TextEditingController();
     _passwordController = new TextEditingController();
-
+    _confirmPasswordController = TextEditingController(text: "");
     _telefonoController = new TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    focusNodePassword.dispose();
+    focusNodeConfirmPassword.dispose();
+    super.dispose();
   }
 
   @override
@@ -339,6 +360,162 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
                         child: TextFormField(
+                          focusNode: focusNodePassword,
+                          controller: _passwordController,
+                          obscureText: _obscureTextPassword,
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            labelStyle: FlutterFlowTheme.of(context).bodyText2,
+                            hintText: 'Ingrese su contraseña...',
+                            hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            filled: true,
+                            fillColor:
+                                FlutterFlowTheme.of(context).primaryBackground,
+                            contentPadding:
+                                EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
+                            prefixIcon: Icon(
+                              _obscureTextPassword
+                                  ? FontAwesomeIcons.key
+                                  : FontAwesomeIcons.eyeSlash,
+                              size: 21,
+                            ),
+                          ),
+                          validator: (String? value) {
+                            if (value!.isEmpty)
+                              return 'Por favor ingrese una contraseña';
+                            if (value.length < 6)
+                              return 'Por favor ingrese una contraseña de por lo menos 6 digítos';
+                            return null;
+                          },
+                          onChanged: (value) {
+                            setState(() {
+                              _password = value;
+                            });
+                          },
+                          style: FlutterFlowTheme.of(context).bodyText1,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            _contraseniaEsSegura(fuerzaContrasenia),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 20, 5, 0),
+                              child: FlutterPasswordStrength(
+                                backgroundColor:
+                                    Color.fromARGB(71, 158, 158, 158),
+                                height: 15,
+                                width: 130,
+                                radius: 15,
+                                password: _password,
+                                strengthCallback: (strength) {
+                                  debugPrint(strength.toString());
+                                  fuerzaContrasenia = strength;
+                                },
+                              )),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
+                        child: TextFormField(
+                          focusNode: focusNodeConfirmPassword,
+                          controller: _confirmPasswordController,
+                          obscureText: _obscureTextConfirmPassword,
+                          decoration: InputDecoration(
+                            labelText: 'Confirmar contraseña',
+                            labelStyle: FlutterFlowTheme.of(context).bodyText2,
+                            hintText: 'Confirme su contraseña...',
+                            hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            filled: true,
+                            fillColor:
+                                FlutterFlowTheme.of(context).primaryBackground,
+                            contentPadding:
+                                EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
+                            prefixIcon: Icon(
+                              _obscureTextPassword
+                                  ? FontAwesomeIcons.key
+                                  : FontAwesomeIcons.eyeSlash,
+                              size: 21,
+                            ),
+                          ),
+                          validator: (String? value) {
+                            if (value!.isEmpty) return 'Repita la contraseña';
+                            if (value != _password)
+                              return 'Las contraseñas no coinciden';
+                            return null;
+                          },
+                          style: FlutterFlowTheme.of(context).bodyText1,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
+                        child: TextFormField(
                           validator: (true)
                               ? (value) {
                                   if (value == null || value.isEmpty) {
@@ -529,7 +706,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
                         child: FlutterFlowDropDown<String>(
-                          options: ['funcionario', 'admin', 'user'],
+                          options: ['funcionario'],
                           onChanged: (value) {
                             setState(() {
                               roleController = value;
@@ -624,9 +801,10 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                             .doc(_emailController.text.toLowerCase());
 
                         _registrarFuncionario(funcionarioReference);
+                        Get.snackbar('Registro Exitoso', 'Bienvenido');
                       }
                     },
-                    text: 'AGREGAR',
+                    text: 'REGISTRARME',
                     icon: Icon(
                       Icons.person_add,
                       size: 22,
@@ -678,19 +856,16 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
           nombre: _nombreController.text,
           identificacion: _identificacionController.text,
           email: _emailController.text.toLowerCase(),
+          password: _passwordController.text,
           cargo: cargoController,
           area: areaController,
-          role: roleController,
+          role: 'funcionario',
           telefono: _telefonoController.text);
       await AuthHelper.signupWithEmail(user).then((_) async {
         image = null;
-        await Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PerfilGeneral(),
-          ),
-          (r) => false,
-        );
+
+        await FirebaseAuth.instance.signOut();
+        Get.toNamed('loginmod');
       });
     }
   }
@@ -717,6 +892,36 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
               height: 110,
               fit: BoxFit.cover,
             );
+    }
+  }
+
+  Widget _contraseniaEsSegura(double valor) {
+    if (valor > 0.0 && valor <= 0.25) {
+      return Text("Insegura",
+          style: TextStyle(
+              color: Colors.red, fontFamily: "Poppins-Medium", fontSize: 17));
+    } else if (valor > 0.25 && valor <= 0.5) {
+      return Text("Poco Segura",
+          style: TextStyle(
+              color: Color.fromARGB(255, 163, 151, 39),
+              fontFamily: "Poppins-Medium",
+              fontSize: 17));
+    } else if (valor > 0.5 && valor <= 0.75) {
+      return Text("Segura",
+          style: TextStyle(
+              color: Colors.blue, fontFamily: "Poppins-Medium", fontSize: 17));
+    } else if (valor > 0.75 && valor <= 1) {
+      return Text("Muy segura",
+          style: TextStyle(
+              color: Color.fromARGB(255, 31, 153, 35),
+              fontFamily: "Poppins-Medium",
+              fontSize: 17));
+    } else {
+      return Text("",
+          style: TextStyle(
+              color: Colors.transparent,
+              fontFamily: "Poppins-Medium",
+              fontSize: 17));
     }
   }
 }

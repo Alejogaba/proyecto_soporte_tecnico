@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:login2/model/usuario.dart';
 import '../../Widgets/sign_in.dart';
 import '../../Widgets/sign_up.dart';
 import '../../flutter_flow/flutter_flow_model.dart';
@@ -16,28 +17,51 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
-      late LoginModel _model;
-  late PageController _pageController;
+
+  late LoginModel _model;
   final _formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+  late PageController _pageController;
+  late String cargoController;
+  late String areaController;
+  late String roleController;
+  late String telefonoController;
 
   Color left = Colors.black;
   Color right = Colors.white;
 
   @override
   void dispose() {
-    _pageController?.dispose();
+    _pageController.dispose();
     _model.dispose();
     super.dispose();
   }
+
+   late TextEditingController _nombreController;
+  late TextEditingController _identificacionController;
+  late TextEditingController _cargoController;
+  late TextEditingController _areaController;
+  late TextEditingController _fechanacimientoController;
+  
+  late TextEditingController _confirmPasswordController;
+  late TextEditingController _telefonoController;
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => LoginModel());
+    _nombreController = new TextEditingController();
+    _identificacionController = new TextEditingController();
+    _cargoController = new TextEditingController();
+    _areaController = new TextEditingController();
+    _fechanacimientoController = new TextEditingController();
 
+    _emailController = new TextEditingController();
+    _passwordController = new TextEditingController();
+   _confirmPasswordController = TextEditingController(text: "");
+    _telefonoController = new TextEditingController();
     _emailController = TextEditingController(text: "");
     _passwordController = TextEditingController(text: "");
     _pageController = PageController();
@@ -107,7 +131,7 @@ class _LoginPageState extends State<LoginPage>
                     ),
                     ConstrainedBox(
                       constraints: const BoxConstraints.expand(),
-                      child: const SignUp(),
+                      child:  SignUp(),
                     ),
                   ],
                 ),
@@ -139,7 +163,7 @@ class _LoginPageState extends State<LoginPage>
                 ),
                 onPressed: _onSignInButtonPress,
                 child: Text(
-                  'Existing',
+                  'Iniciar sesión',
                   style: TextStyle(
                       color: left,
                       fontSize: 16.0,
@@ -155,7 +179,7 @@ class _LoginPageState extends State<LoginPage>
                 ),
                 onPressed: _onSignUpButtonPress,
                 child: Text(
-                  'New',
+                  'Crear cuenta',
                   style: TextStyle(
                       color: right,
                       fontSize: 16.0,

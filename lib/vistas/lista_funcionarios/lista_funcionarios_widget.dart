@@ -88,23 +88,7 @@ class _ListaFuncionariosWidgetState extends State<ListaFuncionariosWidget>
           children: [
             AbsorbPointer(
               absorbing: false,
-              child: FloatingActionButton(
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
-                backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-                onPressed: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FuncionarioFormWidget(Usuario(
-                            ))),
-                  ).then((value) {
-                    setState(() {});
-                  });
-                },
-              ),
+           
             )
           ],
         ),

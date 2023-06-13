@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:login2/auth/base_auth_user_provider.dart';
 import 'package:login2/vistas/lista_funcionarios/funcionarioForm.dart';
+import 'package:login2/vistas/login/LoginMOD.dart';
 import 'package:login2/vistas/perfil/PerfilMOD/home.dart';
 import 'package:login2/routes/my_routes.dart';
 import 'package:login2/state/homepageStateProvider.dart';
@@ -21,19 +22,21 @@ import 'package:line_icons/line_icons.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 
+
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'index.dart';
 import 'model/usuario.dart';
 
-
 void main() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('app_icon');
+      AndroidInitializationSettings('app_icon');
 
-final InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid);
+  final InitializationSettings initializationSettings =
+      InitializationSettings(android: initializationSettingsAndroid);
   WidgetsFlutterBinding.ensureInitialized();
+  
+  
   await Firebase.initializeApp();
   final appState = FFAppState(); // Initialize FFAppState
   await appState.initializePersistedState();
@@ -50,7 +53,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 
   // Obtener el token de registro
- 
+
   // Hacer algo con el token, por ejemplo, guardarlo en Firebase o enviarlo a tu servidor
 
   // Procesar el mensaje recibido si es necesario
@@ -77,7 +80,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
-
       initialRoute: '/home',
       navigatorKey: Get.key,
       getPages: routes(),
@@ -123,9 +125,9 @@ class PrincipalPagina extends StatelessWidget {
                     if (usuario.role == 'admin') {
                       return PerfilGeneral();
                     } else if (usuario.role == 'funcionario') {
-                      return NuevaNavBar();
+                      return PerfilGeneral();
                     } else {
-                      return LoginWidget();
+                      return LoginPage();
                     }
                   } else {
                     return Material(
@@ -137,7 +139,7 @@ class PrincipalPagina extends StatelessWidget {
                 },
               );
             }
-            return LoginWidget();
+            return LoginPage();
           }),
     );
   }
@@ -171,7 +173,6 @@ class _NavBarPageState extends State<NavBarPage> {
       'Conversaciones': ConversacionesWidget(),
       'interfazPrincipal': InterfazPrincipalWidget(),
       'Perfil': PerfilGeneral(),
-      
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
@@ -287,8 +288,8 @@ class _NuevaNavBarState extends State<NuevaNavBar> {
               .tertiary
               .withOpacity(0.1), // selected tab background color
           padding: EdgeInsets.symmetric(
-            
-              horizontal: MediaQuery.of(context).size.width * 0.15, vertical: 15), // navigation bar padding
+              horizontal: MediaQuery.of(context).size.width * 0.15,
+              vertical: 15), // navigation bar padding
           mainAxisAlignment: MainAxisAlignment.center,
           tabs: [
             GButton(

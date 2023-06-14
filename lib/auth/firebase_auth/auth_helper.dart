@@ -66,7 +66,7 @@ class AuthHelper {
           "identificacion": "",
           "nombre": "",
           "name": "",
-          "email": email?.toLowerCase(),
+          "email": email.toLowerCase(),
           "last_login": "",
           "created_at": "",
           "role": rol,
@@ -162,7 +162,7 @@ class AuthHelper {
       log('resultado del login: ' + res.toString());
       log('Respuesta Firebase:' + res.user.toString());
       usuario = await AuthHelper().cargarUsuarioDeFirebase(res.user!.uid);
-      log('El uid es:' + res!.user!.uid);
+      log('El uid es:' + res.user!.uid);
       log('Ya se cargo usuario de firebase: ' + usuario.toString());
       Future.delayed(
         Duration(seconds: 2),

@@ -3,14 +3,11 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:login2/auth/base_auth_user_provider.dart';
-import 'package:login2/vistas/lista_funcionarios/funcionarioForm.dart';
 import 'package:login2/vistas/login/LoginMOD.dart';
 import 'package:login2/vistas/perfil/PerfilMOD/home.dart';
 import 'package:login2/routes/my_routes.dart';
@@ -80,7 +77,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
-      initialRoute: '/home',
+
+      home: NuevaNavBar(),
       navigatorKey: Get.key,
       getPages: routes(),
     );

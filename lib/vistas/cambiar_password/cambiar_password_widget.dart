@@ -1,8 +1,6 @@
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
 
 import '../perfil/PerfilMOD/home.dart';
-import '/auth/firebase_auth/auth_util.dart';
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -11,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'cambiar_password_model.dart';
 export 'cambiar_password_model.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_password_strength/flutter_password_strength.dart';
 
 class CambiarPasswordWidget extends StatefulWidget {

@@ -15,7 +15,7 @@ class CambiarPasswordModel extends FlutterFlowModel {
   }
 
   void dispose() {
-    passwordController?.dispose();
+    passwordController.dispose();
   }
 
   /// Additional helper methods are added here.

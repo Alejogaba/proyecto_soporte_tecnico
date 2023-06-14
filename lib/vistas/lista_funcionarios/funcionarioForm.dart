@@ -1,24 +1,19 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_password_strength/flutter_password_strength.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
 
-import 'package:login2/index.dart';
-import 'package:login2/main.dart';
 import 'package:login2/model/usuario.dart';
 import 'package:login2/vistas/perfil/PerfilMOD/home.dart';
 
 import '../../../../flutter_flow/flutter_flow_drop_down.dart';
 import '../../../../flutter_flow/flutter_flow_theme.dart';
 import '../../../../flutter_flow/flutter_flow_widgets.dart';
-import '../../auth/firebase_auth/auth_util.dart';
 import 'package:image_picker/image_picker.dart';
 
 File? image;

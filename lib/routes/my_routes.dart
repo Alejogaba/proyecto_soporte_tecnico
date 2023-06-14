@@ -7,7 +7,7 @@ import 'package:login2/main.dart';
 import 'package:login2/vistas/perfil/PerfilMOD/home.dart';
 
 import '../model/usuario.dart';
-import '../vistas/lista_funcionarios/Lista/lista_funcionariosFinal.dart';
+import '../vistas/lista_funcionarios/lista_funcionariosFinal.dart';
 
 routes() => [
       GetPage(name: "/home", page: () => PrincipalPagina()),

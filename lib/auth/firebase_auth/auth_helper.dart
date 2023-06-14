@@ -150,6 +150,41 @@ class AuthHelper {
     }
   }
 **/
+
+//ACTUALIZAR??????????????????????????????????????
+  void updateUser(Usuario? usuario) {
+    String? nombre = usuario!.nombre;
+    String? email = usuario.email;
+    String? password = usuario.password;
+    String? identificacion = usuario.identificacion;
+    String? fechaNacimiento = usuario.fechaNacimiento;
+    String? area = usuario.area;
+    String? telefono = usuario.telefono;
+    String? cargo = usuario.cargo;
+    String? urlImagen = usuario.urlImagen;
+
+    // Obtén los valores de los demás campos del formulario
+
+    FirebaseFirestore.instance.collection('users').doc(usuario.uid).update({
+      'nombre': nombre,
+      'email': email,
+      'password': password,
+      'identificacion': identificacion,
+      'fechanacimiento': fechaNacimiento,
+      'area': area,
+      'telefono': telefono,
+      'cargo': cargo,
+      'imageUrl': urlImagen
+      // Actualiza los demás campos según sea necesario
+    }).then((value) {
+      // El usuario se actualizó correctamente
+      // Puedes mostrar una notificación o redirigir a otra pantalla
+    }).catchError((error) {
+      // Ocurrió un error al actualizar el usuario
+      // Puedes mostrar una notificación de error o manejarlo de otra manera
+    });
+  }
+
   static signInWithEmail(
       {String email = '',
       String password = '',
@@ -203,9 +238,7 @@ class AuthHelper {
       FirebaseFirestore _db = FirebaseFirestore.instance;
       final UserCredential res = await _auth.createUserWithEmailAndPassword(
           email: usuario.email!.trim().toLowerCase(),
-          password: usuario.password!.trim()
-          );
-
+          password: usuario.password!.trim());
 
       log('resultado del registro: ' + res.toString());
       usuario.uid = res.user!.uid;
@@ -340,20 +373,22 @@ class AuthHelper {
   }
 
   Future<void> resetPassword(String email) async {
-  try {
-    await _auth.sendPasswordResetEmail(email: email);
-     Get.snackbar('Correo de restablecimiento enviado correctamente', 'Siga las instruciones en su correo',
-            duration: Duration(seconds: 5),
-            margin: EdgeInsets.fromLTRB(4, 8, 4, 0),
-            snackStyle: SnackStyle.FLOATING,
-            backgroundColor: Color.fromARGB(211, 28, 138, 46),
-            icon: Icon(
-              Icons.check,
-              color: Colors.white,
-            ),
-            colorText: Color.fromARGB(255, 228, 219, 218));
-  } catch (e) {
-     Get.snackbar('Error', 'Ocurrio un error, verifique que el correo este correctamente escrito',
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      Get.snackbar('Correo de restablecimiento enviado correctamente',
+          'Siga las instruciones en su correo',
+          duration: Duration(seconds: 5),
+          margin: EdgeInsets.fromLTRB(4, 8, 4, 0),
+          snackStyle: SnackStyle.FLOATING,
+          backgroundColor: Color.fromARGB(211, 28, 138, 46),
+          icon: Icon(
+            Icons.check,
+            color: Colors.white,
+          ),
+          colorText: Color.fromARGB(255, 228, 219, 218));
+    } catch (e) {
+      Get.snackbar('Error',
+          'Ocurrio un error, verifique que el correo este correctamente escrito',
           duration: Duration(seconds: 5),
           margin: EdgeInsets.fromLTRB(4, 8, 4, 0),
           snackStyle: SnackStyle.FLOATING,
@@ -364,9 +399,8 @@ class AuthHelper {
           ),
           colorText: Color.fromARGB(255, 228, 219, 218));
       Logger().e('Error resetear la contraseña: $e');
-
+    }
   }
-}
 }
 
 class UserHelper {
@@ -386,7 +420,6 @@ class UserHelper {
   static FirebaseFirestore _db = FirebaseFirestore.instance;
 
   Future<void> eliminarFuncionario(String? uid) async {
-    
     CollectionReference usuarios =
         FirebaseFirestore.instance.collection('users');
     return usuarios
@@ -397,19 +430,21 @@ class UserHelper {
   }
 
   Future<void> eliminarUsuarioPorUID(String uid) async {
-  try {
-    final usuariosQuery = FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: uid);
-    final usuariosSnapshots = await usuariosQuery.get();
+    try {
+      final usuariosQuery = FirebaseFirestore.instance
+          .collection('users')
+          .where('uid', isEqualTo: uid);
+      final usuariosSnapshots = await usuariosQuery.get();
 
-    for (final usuarioSnapshot in usuariosSnapshots.docs) {
-      await usuarioSnapshot.reference.delete();
+      for (final usuarioSnapshot in usuariosSnapshots.docs) {
+        await usuarioSnapshot.reference.delete();
+      }
+
+      print('Usuario eliminado exitosamente');
+    } catch (e) {
+      print('Error al eliminar el usuario: $e');
     }
-
-    print('Usuario eliminado exitosamente');
-  } catch (e) {
-    print('Error al eliminar el usuario: $e');
   }
-}
 
   static saveUser(User user, {String rol = 'user'}) async {
     Map<String, dynamic> userData = {

@@ -3,6 +3,7 @@ import 'package:login2/index.dart';
 import 'package:login2/model/usuario.dart';
 
 import '../../auth/firebase_auth/auth_helper.dart';
+import '../lista_funcionarios/lista_funcionariosFinal.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -674,7 +675,7 @@ class _PerfilWidgetState extends State<PerfilWidget>
                           await Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ListaFuncionariosWidget(),
+                              builder: (context) => ListaFuncionarioss(),
                             ),
                             (r) => false,
                           );

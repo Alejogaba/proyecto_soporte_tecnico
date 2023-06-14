@@ -1,28 +1,31 @@
 class Dependencia {
+  String uid;
   String nombre;
   String jefeEncargado;
   String correo;
   String telefono;
   String? urlImagen;
-  bool tieneCasosPendientes;
+  int casosPendientes;
 
   Dependencia({
+    this.uid = '',
     required this.nombre,
     this.jefeEncargado = '',
     this.correo = '',
     this.telefono = '',
     this.urlImagen,
-    this.tieneCasosPendientes = false,
+    this.casosPendientes = 0,
   });
 
   factory Dependencia.fromMap(Map<String, dynamic> map) {
     return Dependencia(
+      uid: map['uid']??'',
       nombre: map['nombre'] ?? '',
       jefeEncargado: map['jefeEncargado'] ?? '',
       correo: map['correo'] ?? '',
       telefono: map['telefono'] ?? '',
       urlImagen: map['urlImagen'] ?? '',
-      tieneCasosPendientes: map['tieneCasosPendientes'] ?? false,
+      casosPendientes: map['casosPendientes'] ?? 0,
     );
   }
 
@@ -33,7 +36,7 @@ class Dependencia {
       'correo': correo,
       'telefono': telefono,
       'urlImagen': urlImagen,
-      'tieneCasosPendientes': tieneCasosPendientes,
+      'casosPendientes': casosPendientes,
     };
   }
 }

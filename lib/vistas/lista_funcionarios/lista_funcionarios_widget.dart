@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:swipe_to/swipe_to.dart';
 import '../../../auth/firebase_auth/auth_helper.dart';
-import '../../../auth/firebase_auth/auth_util.dart';
 import '../../../../flutter_flow/flutter_flow_animations.dart';
 import '../../../../flutter_flow/flutter_flow_icon_button.dart';
 import '../../../../flutter_flow/flutter_flow_theme.dart';
@@ -14,11 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:login2/vistas/lista_funcionarios/funcionarioForm.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-import 'package:provider/provider.dart';
-import 'lista_funcionarios_model.dart';
 export 'lista_funcionarios_model.dart';
 import '../../model/usuario.dart';
-import '/backend/backend.dart';
 import 'funcionario_information.dart';
 
 

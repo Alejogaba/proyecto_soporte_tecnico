@@ -1,18 +1,11 @@
-import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:login2/auth/base_auth_user_provider.dart';
-import 'package:login2/flutter_flow/flutter_flow_theme.dart';
 import 'package:login2/vistas/login/LoginMOD.dart';
 import 'package:provider/provider.dart';
 
-import '../../../Widgets/card_item.dart';
-import '../../../Widgets/stack_container.dart';
 import '../../../Widgets/top_bar.dart';
 import '../../../app_state.dart';
 import '../../../auth/firebase_auth/auth_helper.dart';
@@ -20,9 +13,6 @@ import '../../../auth/firebase_auth/auth_util.dart';
 import '../../../backend/schema/util/custom_clipper.dart';
 import '../../../flutter_flow/flutter_flow_animations.dart';
 import '../../../flutter_flow/flutter_flow_model.dart';
-import '../../../flutter_flow/flutter_flow_util copy.dart';
-import '../../../flutter_flow/flutter_flow_widgets.dart';
-import '../../login/login_widget.dart';
 import '../../../model/usuario.dart';
 import '../perfil_model.dart';
 import 'ProfileMenuWidget.dart';

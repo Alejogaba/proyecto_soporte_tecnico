@@ -8,7 +8,6 @@ import 'package:login2/auth/firebase_auth/auth_helper.dart';
 import 'package:login2/backend/controlador_chat.dart';
 import 'package:login2/model/chat_mensajes.dart';
 import 'package:login2/model/usuario.dart';
-import 'package:rxdart/rxdart.dart';
 
 import '../chat/chat_widget.dart';
 import '/flutter_flow/chat/index.dart';

@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
+import 'package:login2/vistas/lista_activos_page/lista_activos_page_widget.dart';
 
 import '../../auth/firebase_auth/auth_util.dart';
 import '../../model/usuario.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'interfaz_principal_model.dart';
 export 'interfaz_principal_model.dart';
+import 'package:badges/badges.dart' as badges;
 
 class InterfazPrincipalWidget extends StatefulWidget {
   const InterfazPrincipalWidget({Key? key}) : super(key: key);
@@ -25,6 +27,9 @@ class InterfazPrincipalWidget extends StatefulWidget {
 
 class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
   late InterfazPrincipalModel _model;
+  final double radius = 15;
+  final Color circleColor = Colors.red;
+  final Color fadeColor = Colors.green;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -371,86 +376,114 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                           scrollDirection: Axis.vertical,
                           itemCount: listViewPropertiesRecordList.length,
                           itemBuilder: (context, listViewIndex) {
-                            final listViewPropertiesRecord =
+                            final listDependencias =
                                 listViewPropertiesRecordList[listViewIndex];
                             return Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   16.0, 0.0, 16.0, 12.0),
-                              child: Container(
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 4.0,
-                                      color: Color(0x32000000),
-                                      offset: Offset(0.0, 2.0),
-                                    )
-                                  ],
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                child: Align(
-                                  alignment: AlignmentDirectional(0.0, 0.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Hero(
-                                        tag: valueOrDefault<String>(
-                                          listViewPropertiesRecord.urlImagen,
-                                          'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg' +
-                                              '$listViewIndex',
-                                        ),
-                                        transitionOnUserGestures: true,
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(0.0),
-                                            bottomRight: Radius.circular(0.0),
-                                            topLeft: Radius.circular(8.0),
-                                            topRight: Radius.circular(8.0),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ListaActivosPageWidget(
+                                              dependencia:
+                                                  listDependencias),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 4.0,
+                                        color: Color(0x32000000),
+                                        offset: Offset(0.0, 2.0),
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  child: Align(
+                                    alignment: AlignmentDirectional(0.0, 0.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Hero(
+                                          tag: valueOrDefault<String>(
+                                            listDependencias.urlImagen,
+                                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg' +
+                                                '$listViewIndex',
                                           ),
-                                          child: CachedNetworkImage(
-                                            imageUrl: valueOrDefault<String>(
-                                              listViewPropertiesRecord
-                                                  .urlImagen,
-                                              'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
+                                          transitionOnUserGestures: true,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(0.0),
+                                              bottomRight: Radius.circular(0.0),
+                                              topLeft: Radius.circular(8.0),
+                                              topRight: Radius.circular(8.0),
                                             ),
-                                            width: double.infinity,
-                                            height: 190.0,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            16.0, 12.0, 16.0, 8.0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                listViewPropertiesRecord.nombre
-                                                    .maybeHandleOverflow(
-                                                  maxChars: 36,
-                                                  replacement: '…',
-                                                ),
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .headlineSmall,
+                                            child: CachedNetworkImage(
+                                              imageUrl: valueOrDefault<String>(
+                                                listDependencias
+                                                    .urlImagen,
+                                                'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
                                               ),
+                                              width: double.infinity,
+                                              height: 190.0,
+                                              fit: BoxFit.cover,
                                             ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            16.0, 0.0, 16.0, 8.0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                listViewPropertiesRecord.nombre
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  16.0, 12.0, 16.0, 8.0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  listDependencias
+                                                      .nombre
+                                                      .maybeHandleOverflow(
+                                                    maxChars: 36,
+                                                    replacement: '…',
+                                                  ),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .headlineSmall,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  16.0, 0.0, 16.0, 8.0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  'Correo. ${listDependencias.correo}'
+                                                      .maybeHandleOverflow(
+                                                    maxChars: 90,
+                                                    replacement: '…',
+                                                  ),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Teléfono. ${listDependencias.telefono}'
                                                     .maybeHandleOverflow(
                                                   maxChars: 90,
                                                   replacement: '…',
@@ -459,92 +492,91 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium,
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      StreamBuilder<List<ReviewsRecord>>(
-                                        stream: queryReviewsRecord(
-                                          queryBuilder: (reviewsRecord) =>
-                                              reviewsRecord.where('propertyRef',
-                                                  isEqualTo:
-                                                      listViewPropertiesRecord
-                                                          .nombre),
-                                        ),
-                                        builder: (context, snapshot) {
-                                          // Customize what your widget looks like when it's loading.
-                                          if (!snapshot.hasData) {
-                                            return Center(
-                                              child: SizedBox(
-                                                width: 50.0,
-                                                height: 50.0,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primary,
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                          List<ReviewsRecord>
-                                              containerReviewsRecordList =
-                                              snapshot.data!;
-                                          return Container(
-                                            height: 40.0,
-                                            decoration: BoxDecoration(),
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      16.0, 0.0, 24.0, 12.0),
-                                              child: StreamBuilder<
-                                                  List<ReviewsRecord>>(
-                                                stream: queryReviewsRecord(
-                                                  queryBuilder: (reviewsRecord) =>
-                                                      reviewsRecord.where(
-                                                          'propertyRef',
-                                                          isEqualTo:
-                                                              listViewPropertiesRecord
-                                                                  .nombre),
-                                                  singleRecord: true,
-                                                ),
-                                                builder: (context, snapshot) {
-                                                  // Customize what your widget looks like when it's loading.
-                                                  if (!snapshot.hasData) {
-                                                    return Center(
-                                                      child: SizedBox(
-                                                        width: 50.0,
-                                                        height: 50.0,
-                                                        child:
-                                                            CircularProgressIndicator(
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  16.0, 0.0, 16.0, 8.0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              badges.Badge(
+                                                position:
+                                                    badges.BadgePosition.topEnd(
+                                                        top: -10, end: -12),
+                                                showBadge: true,
+                                                ignorePointer: false,
+                                                onTap: () {},
+                                                badgeContent: Text('3',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Urbanist',
                                                           color: FlutterFlowTheme
                                                                   .of(context)
-                                                              .primary,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }
-                                                  List<ReviewsRecord>
-                                                      ratingBarReviewsRecordList =
-                                                      snapshot.data!;
-                                                  final ratingBarReviewsRecord =
-                                                      ratingBarReviewsRecordList
-                                                              .isNotEmpty
-                                                          ? ratingBarReviewsRecordList
-                                                              .first
-                                                          : null;
-                                                  return Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    children: [],
-                                                  );
-                                                },
+                                                              .tertiary,
+                                                          fontSize: 16.0,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        )),
+                                                badgeAnimation:
+                                                    badges.BadgeAnimation.fade(
+                                                  animationDuration:
+                                                      Duration(seconds: 2),
+                                                  loopAnimation: true,
+                                                  curve: Curves
+                                                      .fastEaseInToSlowEaseOut,
+                                                  colorChangeAnimationCurve:
+                                                      Curves.easeInCubic,
+                                                ),
+                                                badgeStyle: badges.BadgeStyle(
+                                                  shape:
+                                                      badges.BadgeShape.circle,
+                                                  badgeColor: Colors.redAccent,
+                                                  padding: EdgeInsets.all(5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
+                                                  borderSide: BorderSide(
+                                                      color: Colors.redAccent,
+                                                      width: 2),
+                                                  elevation: 0,
+                                                ),
                                               ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ],
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 6.0),
+                                                child: Text(
+                                                  'Solicitudes de soporte técnico'
+                                                      .maybeHandleOverflow(
+                                                    maxChars: 90,
+                                                    replacement: '…',
+                                                  ),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Urbanist',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .error,
+                                                        fontSize: 16.0,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

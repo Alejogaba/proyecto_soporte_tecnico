@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:login2/model/usuario.dart';
 import '../../Widgets/sign_in.dart';
 import '../../Widgets/sign_up.dart';
 import '../../flutter_flow/flutter_flow_model.dart';
@@ -199,7 +198,7 @@ class _LoginPageState extends State<LoginPage>
   }
 
   void _onSignUpButtonPress() {
-    _pageController?.animateToPage(1,
+    _pageController.animateToPage(1,
         duration: const Duration(milliseconds: 500), curve: Curves.decelerate);
   }
 }

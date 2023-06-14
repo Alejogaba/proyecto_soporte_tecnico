@@ -137,9 +137,9 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+      backgroundColor: Color.fromARGB(255, 199, 209, 216),
       appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+        backgroundColor: Color.fromARGB(255, 199, 209, 216),
         automaticallyImplyLeading: false,
         leading: InkWell(
           onTap: () async {
@@ -147,7 +147,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
           },
           child: Icon(
             Icons.chevron_left_rounded,
-            color: FlutterFlowTheme.of(context).gray600,
+            color: Color.fromARGB(255, 43, 45, 46),
             size: 32,
           ),
         ),
@@ -193,13 +193,13 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                         icon: Icon(
                           Icons.photo,
                           color: FlutterFlowTheme.of(context).primaryColor,
-                          size: 15,
+                          size: 20,
                         ),
                         options: FFButtonOptions(
                           height: 40,
-                          color: FlutterFlowTheme.of(context).primaryBackground,
+                          color: Color.fromARGB(255, 241, 245, 242),
                           textStyle: FlutterFlowTheme.of(context).bodyText1,
-                          elevation: 2,
+                          elevation: 3,
                           borderSide: BorderSide(
                             color: Colors.transparent,
                             width: 1,
@@ -218,13 +218,13 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                         icon: Icon(
                           Icons.photo_camera,
                           color: FlutterFlowTheme.of(context).primaryColor,
-                          size: 15,
+                          size: 20,
                         ),
                         options: FFButtonOptions(
                           height: 40,
-                          color: FlutterFlowTheme.of(context).primaryBackground,
+                          color: Color.fromARGB(255, 241, 245, 242),
                           textStyle: FlutterFlowTheme.of(context).bodyText1,
-                          elevation: 2,
+                          elevation: 3,
                           borderSide: BorderSide(
                             color: Colors.transparent,
                             width: 1,
@@ -286,12 +286,12 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             filled: true,
-                            fillColor:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            fillColor: Color.fromARGB(255, 214, 219, 216),
                             contentPadding:
                                 EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
                             prefixIcon: Icon(
                               Icons.person,
+                              color: Color.fromARGB(255, 12, 88, 28),
                             ),
                           ),
                           style: FlutterFlowTheme.of(context).bodyText1,
@@ -344,12 +344,12 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             filled: true,
-                            fillColor:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            fillColor: Color.fromARGB(255, 214, 219, 216),
                             contentPadding:
                                 EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
                             prefixIcon: Icon(
                               Icons.alternate_email,
+                              color: Color.fromARGB(255, 12, 88, 28),
                               size: 21,
                             ),
                           ),
@@ -397,14 +397,14 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             filled: true,
-                            fillColor:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            fillColor: Color.fromARGB(255, 214, 219, 216),
                             contentPadding:
                                 EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
                             prefixIcon: Icon(
                               _obscureTextPassword
                                   ? FontAwesomeIcons.key
                                   : FontAwesomeIcons.eyeSlash,
+                              color: Color.fromARGB(255, 12, 88, 28),
                               size: 21,
                             ),
                           ),
@@ -422,36 +422,6 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                           },
                           style: FlutterFlowTheme.of(context).bodyText1,
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            _contraseniaEsSegura(fuerzaContrasenia),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 20, 5, 0),
-                              child: FlutterPasswordStrength(
-                                backgroundColor:
-                                    Color.fromARGB(71, 158, 158, 158),
-                                height: 15,
-                                width: 130,
-                                radius: 15,
-                                password: _password,
-                                strengthCallback: (strength) {
-                                  debugPrint(strength.toString());
-                                  fuerzaContrasenia = strength;
-                                },
-                              )),
-                        ],
                       ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
@@ -493,14 +463,14 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             filled: true,
-                            fillColor:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            fillColor: Color.fromARGB(255, 214, 219, 216),
                             contentPadding:
                                 EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
                             prefixIcon: Icon(
                               _obscureTextPassword
                                   ? FontAwesomeIcons.key
                                   : FontAwesomeIcons.eyeSlash,
+                              color: Color.fromARGB(255, 12, 88, 28),
                               size: 21,
                             ),
                           ),
@@ -528,6 +498,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                           controller: _identificacionController,
                           obscureText: false,
                           decoration: InputDecoration(
+                            counterStyle: TextStyle(color: Colors.black),
                             labelText: 'Identificación',
                             labelStyle: FlutterFlowTheme.of(context).bodyText2,
                             hintText: 'Ingrese el número de identidad',
@@ -561,13 +532,13 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             filled: true,
-                            fillColor:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            fillColor: Color.fromARGB(255, 214, 219, 216),
                             contentPadding:
                                 EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
                             prefixIcon: Icon(
                               Icons.badge,
                               size: 22,
+                              color: Color.fromARGB(255, 12, 88, 28),
                             ),
                           ),
                           style: FlutterFlowTheme.of(context).bodyText1,
@@ -589,6 +560,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                           controller: _telefonoController,
                           obscureText: false,
                           decoration: InputDecoration(
+                            counterStyle: TextStyle(color: Colors.black),
                             labelText: 'Teléfono',
                             labelStyle: FlutterFlowTheme.of(context).bodyText2,
                             hintText: 'Ingrese el número de Teléfono',
@@ -622,13 +594,13 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             filled: true,
-                            fillColor:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            fillColor: Color.fromARGB(255, 214, 219, 216),
                             contentPadding:
                                 EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
                             prefixIcon: Icon(
                               Icons.phone,
-                              size: 18,
+                              color: Color.fromARGB(255, 12, 88, 28),
+                              size: 22,
                             ),
                           ),
                           style: FlutterFlowTheme.of(context).bodyText1,
@@ -780,8 +752,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             filled: true,
-                            fillColor:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            fillColor: Color.fromARGB(255, 214, 219, 216),
                           ),
                           style: FlutterFlowTheme.of(context).bodyText1,
                           maxLines: 1,

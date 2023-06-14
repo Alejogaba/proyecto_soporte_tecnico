@@ -385,15 +385,31 @@ class UserHelper {
 
   static FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<void> eliminarFuncionario(String email) async {
-    CollectionReference funcionarios =
+  Future<void> eliminarFuncionario(String? uid) async {
+    
+    CollectionReference usuarios =
         FirebaseFirestore.instance.collection('users');
-    return funcionarios
-        .doc(email)
+    return usuarios
+        .doc(uid)
         .delete()
         .then((value) => print("User Deleted"))
         .catchError((error) => print("Failed to delete user: $error"));
   }
+
+  Future<void> eliminarUsuarioPorUID(String uid) async {
+  try {
+    final usuariosQuery = FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: uid);
+    final usuariosSnapshots = await usuariosQuery.get();
+
+    for (final usuarioSnapshot in usuariosSnapshots.docs) {
+      await usuarioSnapshot.reference.delete();
+    }
+
+    print('Usuario eliminado exitosamente');
+  } catch (e) {
+    print('Error al eliminar el usuario: $e');
+  }
+}
 
   static saveUser(User user, {String rol = 'user'}) async {
     Map<String, dynamic> userData = {

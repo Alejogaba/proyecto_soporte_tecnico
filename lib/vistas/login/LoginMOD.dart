@@ -82,8 +82,8 @@ class _LoginPageState extends State<LoginPage>
           decoration: const BoxDecoration(
             gradient: LinearGradient(
                 colors: <Color>[
-                  CustomTheme.loginGradientStart,
-                  CustomTheme.loginGradientEnd
+                  Color.fromARGB(255, 255, 255, 255),
+                  Color.fromARGB(255, 8, 71, 29)
                 ],
                 begin: FractionalOffset(0.0, 0.0),
                 end: FractionalOffset(1.0, 1.0),

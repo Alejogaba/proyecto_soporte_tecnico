@@ -194,7 +194,7 @@ class _PerfilAdminState extends State<PerfilGeneral> {
                 icon: LineAwesomeIcons.user_check,
                 onPress: () {
                   //Get.toNamed('/gestionfuncio');
-                  Get.toNamed('/listafuncio');
+                  Get.toNamed('/listafunciomod');
                 }),
             const Divider(),
             const SizedBox(height: 10),

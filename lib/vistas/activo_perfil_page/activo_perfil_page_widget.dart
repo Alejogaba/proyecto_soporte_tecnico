@@ -1,10 +1,9 @@
 import 'dart:developer';
 
-
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-
+import 'package:login2/index.dart';
 
 import '../../backend/controlador_activo.dart';
 import '../../flutter_flow/flutter_flow_animations.dart';
@@ -21,10 +20,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../model/activo.dart';
+import '../../model/dependencias.dart';
 import '../../model/usuario.dart';
 
 class ActivoPerfilPageWidget extends StatefulWidget {
   final Activo activo;
+  final Dependencia? dependencia;
   final bool selectMode;
   final bool esPrestamo;
   final bool escogerComponente;
@@ -33,7 +34,8 @@ class ActivoPerfilPageWidget extends StatefulWidget {
       required this.activo,
       this.selectMode = false,
       this.esPrestamo = false,
-      this.escogerComponente = false})
+      this.escogerComponente = false,
+      this.dependencia})
       : super(key: key);
 
   @override
@@ -314,14 +316,14 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         floatingActionButton: myFloatingButton(
-                selectMode: selectMode,
-                idActivo: activo.uid,
-                contextPadre: context,
-                activo: activo,
-                esPrestamo: esPrestamo,
-                escogerComponente: escogerComponente,
-              ).animateOnPageLoad(
-                animationsMap['floatingActionButtonOnPageLoadAnimation']!),
+          selectMode: selectMode,
+          idActivo: activo.uid,
+          contextPadre: context,
+          activo: activo,
+          esPrestamo: esPrestamo,
+          escogerComponente: escogerComponente,
+        ).animateOnPageLoad(
+            animationsMap['floatingActionButtonOnPageLoadAnimation']!),
         body: GestureDetector(
           onTap: () => {FocusScope.of(context).unfocus()},
           child: Stack(
@@ -387,88 +389,114 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                             ),
                                           ),
                                         ),
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 0, 24, 0),
-                                              child: Container(
-                                                width: 40,
-                                                height: 40,
-                                                decoration: BoxDecoration(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryBackground,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  border: Border.all(
+                                        if (widget.dependencia != null)
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 24, 0),
+                                                child: Container(
+                                                  width: 40,
+                                                  height: 40,
+                                                  decoration: BoxDecoration(
                                                     color: FlutterFlowTheme.of(
                                                             context)
-                                                        .secondaryText,
-                                                    width: 1,
+                                                        .primaryBackground,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                    border: Border.all(
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryText,
+                                                      width: 1,
+                                                    ),
                                                   ),
-                                                ),
-                                                child: FlutterFlowIconButton(
-                                                  borderColor:
-                                                      Colors.transparent,
-                                                  borderRadius: 30,
-                                                  buttonSize: 46,
-                                                  fillColor: Color(0x00F1F4F8),
-                                                  icon: Icon(
-                                                    Icons.edit,
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
-                                                    size: 16,
+                                                  child: FlutterFlowIconButton(
+                                                    borderColor:
+                                                        Colors.transparent,
+                                                    borderRadius: 30,
+                                                    buttonSize: 46,
+                                                    fillColor:
+                                                        Color(0x00F1F4F8),
+                                                    icon: Icon(
+                                                      Icons.edit,
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                      size: 16,
+                                                    ),
+                                                    onPressed: () async {
+                                                      final Activo? result =
+                                                          await Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              RegistrarEquipoWidget(
+                                                            dependencia: widget
+                                                                .dependencia!,
+                                                            activoEdit: activo,
+                                                          ),
+                                                        ),
+                                                      );
+                                                      if (result != null) {
+                                                        setState(() {
+                                                          activo = result;
+                                                        });
+                                                      }
+                                                    },
                                                   ),
-                                                  onPressed: () async {
-                                                  },
                                                 ),
                                               ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 0, 24, 0),
-                                              child: Container(
-                                                width: 40,
-                                                height: 40,
-                                                decoration: BoxDecoration(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryBackground,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  border: Border.all(
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 24, 0),
+                                                child: Container(
+                                                  width: 40,
+                                                  height: 40,
+                                                  decoration: BoxDecoration(
                                                     color: FlutterFlowTheme.of(
                                                             context)
-                                                        .secondaryText,
-                                                    width: 1,
+                                                        .primaryBackground,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                    border: Border.all(
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryText,
+                                                      width: 1,
+                                                    ),
                                                   ),
-                                                ),
-                                                child: FlutterFlowIconButton(
-                                                  borderColor:
-                                                      Colors.transparent,
-                                                  borderRadius: 30,
-                                                  buttonSize: 46,
-                                                  fillColor: Color(0x00F1F4F8),
-                                                  icon: Icon(
-                                                    Icons.delete_outlined,
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
-                                                    size: 20,
+                                                  child: FlutterFlowIconButton(
+                                                    borderColor:
+                                                        Colors.transparent,
+                                                    borderRadius: 30,
+                                                    buttonSize: 46,
+                                                    fillColor:
+                                                        Color(0x00F1F4F8),
+                                                    icon: Icon(
+                                                      Icons.delete_outlined,
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                      size: 20,
+                                                    ),
+                                                    onPressed: () async {
+                                                      setState(() {
+                                                        blur = true;
+                                                      });
+                                                    },
                                                   ),
-                                                  onPressed: () async {
-                                                    setState(() {
-                                                      blur = true;
-                                                    });
-                                                  },
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
+                                            ],
+                                          ),
                                       ],
                                     ),
                                   ),
@@ -507,7 +535,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                         image:
                                                             CachedNetworkImage(
                                                           imageUrl:
-                                                              activo.urlImagen,
+                                                              activo.urlImagen!,
                                                           fit: BoxFit.contain,
                                                         ),
                                                         allowRotation: false,
@@ -527,7 +555,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                             16),
                                                     child: CachedNetworkImage(
                                                       imageUrl:
-                                                          activo.urlImagen,
+                                                          activo.urlImagen!,
                                                       width: double.infinity,
                                                       height: double.infinity,
                                                       fit: BoxFit.cover,
@@ -550,7 +578,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          activo.nombre,
+                                          '${activo.nombre} marca ${activo.marca}',
                                           style: FlutterFlowTheme.of(context)
                                               .title1
                                               .override(
@@ -609,8 +637,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                   ).animateOnPageLoad(animationsMap[
                                       'rowOnPageLoadAnimation1']!),
                                 ),*/
-                               Row(),
-                                
+                                Row(),
 
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -637,12 +664,11 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                               .bodyText2Family),
                                             ),
                                       ),
-                                     
                                     ],
                                   ).animateOnPageLoad(animationsMap[
                                       'rowOnPageLoadAnimation4']!),
                                 ),
-                               
+
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       24, 16, 0, 0),
@@ -651,30 +677,29 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
-                                          activo.detalles,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText2
-                                              .override(
-                                                fontFamily: 'Lexend Deca',
-                                                color: Color(0xFF8B97A2),
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.normal,
-                                                useGoogleFonts: GoogleFonts
-                                                        .asMap()
-                                                    .containsKey(
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyText2Family),
-                                              ),
-                                        ),
-                                     
+                                        activo.detalles,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyText2
+                                            .override(
+                                              fontFamily: 'Lexend Deca',
+                                              color: Color(0xFF8B97A2),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.normal,
+                                              useGoogleFonts:
+                                                  GoogleFonts.asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText2Family),
+                                            ),
+                                      ),
                                     ],
                                   ).animateOnPageLoad(animationsMap[
                                       'rowOnPageLoadAnimation6']!),
                                 ),
                                 //TituloListafFuncionariosAsignados(animationsMap: animationsMap),
                                 //ListaFuncionariosAsignados(animationsMap: animationsMap)
-                                 Padding(
+                                Padding(
                                   padding: EdgeInsets.all(30),
                                   child: Container(),
                                 )
@@ -725,7 +750,6 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
 
   Widget _tarjetaFuncionario(AsyncSnapshot<List<Usuario>> snapshot,
       bool prestamo, List<String> fechaEntrega) {
-  
     return Column(
       children: [
         Row(
@@ -805,8 +829,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                       ),
                     ),
                     child: InkWell(
-                      onTap: () async {
-                      },
+                      onTap: () async {},
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -887,8 +910,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        snapshot.data![index].nombre
-                                            .toString(),
+                                        snapshot.data![index].nombre.toString(),
                                         style: FlutterFlowTheme.of(context)
                                             .subtitle1
                                             .override(
@@ -917,7 +939,8 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                             padding: const EdgeInsetsDirectional
                                                 .fromSTEB(3, 1.4, 0, 1),
                                             child: Text(
-                                              snapshot.data![index].cargo.toString(),
+                                              snapshot.data![index].cargo
+                                                  .toString(),
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText2
@@ -949,15 +972,12 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                               color: Color(0xFFAD8762),
                                               size: 9,
                                             ),
-                                            
                                           ],
                                         ),
                                       ),
-                                      
                                     ],
                                   ),
                                 ),
-                                
                               ],
                             ),
                           ),
@@ -977,7 +997,6 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
 
   Widget _tarjetaActivo(AsyncSnapshot<List<Activo>> snapshot, bool prestamo,
       List<String> fechaEntrega) {
-
     return Column(
       children: [
         Row(
@@ -1032,8 +1051,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                       ),
                     ),
                     child: InkWell(
-                      onTap: () async {
-                      },
+                      onTap: () async {},
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -1061,7 +1079,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                       child: FastCachedImage(
                                         width: 73,
                                         height: 70,
-                                        url: snapshot.data![index].urlImagen,
+                                        url: snapshot.data![index].urlImagen!,
                                         fit: BoxFit.cover,
                                         fadeInDuration:
                                             const Duration(seconds: 1),
@@ -1175,11 +1193,9 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                               color: Color(0xFFAD8762),
                                               size: 9,
                                             ),
-                                            
                                           ],
                                         ),
                                       ),
-                                      
                                     ],
                                   ),
                                 ),
@@ -1212,8 +1228,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
           color: Color(0xFFE62424),
           size: 24,
         ),
-        onPressed: () async {
-        },
+        onPressed: () async {},
       );
     } else if (prestamo) {
       return FlutterFlowIconButton(
@@ -1225,8 +1240,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
           color: Color.fromARGB(255, 7, 133, 36),
           size: 24,
         ),
-        onPressed: () async {
-        },
+        onPressed: () async {},
       );
     } else {
       return FlutterFlowIconButton(
@@ -1238,14 +1252,10 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
           color: Color(0xFFE62424),
           size: 24,
         ),
-        onPressed: () async {
-        },
+        onPressed: () async {},
       );
     }
   }
-
-
-
 
   Widget _cajaAdvertencia(BuildContext context, mensaje, objetoaEliminar, id) {
     return Align(
@@ -1380,23 +1390,15 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
   }
 
   Future<String> eliminarObjeto(context, String objeto, String id) async {
-    switch (objeto) {
-      case 'activo':
-        ActivoController activoController = ActivoController();
-       // final res = await activoController.eliminarActivo(context, id);
-        return 'res';
-
-      default:
-        return 'error';
-    }
+    var res =
+        await ActivoController().removeActivo(id, widget.dependencia!.uid);
+    return res;
   }
 
   Future<void> cargarActivo(id) async {
     ActivoController activoController = ActivoController();
-   // var res = await activoController.buscarActivo(id);
-    setState(() {
-     
-    });
+    // var res = await activoController.buscarActivo(id);
+    setState(() {});
   }
 }
 
@@ -1419,14 +1421,11 @@ class myFloatingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!selectMode &&
-        !esPrestamo &&
-        !escogerComponente) {
+    if (!selectMode && !esPrestamo && !escogerComponente) {
       return Container();
     } else {
       return FloatingActionButton.extended(
-        onPressed: () async {
-        },
+        onPressed: () async {},
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
         icon: Icon(
           Icons.add_rounded,

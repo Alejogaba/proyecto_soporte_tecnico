@@ -11,17 +11,17 @@ class RegistrarEquipoModel extends FlutterFlowModel {
   String uploadedFileUrl = '';
 
   // State field(s) for propertyName widget.
-  TextEditingController? propertyNameController;
+  TextEditingController? nombreController;
   String? Function(BuildContext, String?)? propertyNameControllerValidator;
   // State field(s) for propertyAddress widget.
-  TextEditingController? propertyAddressController;
+  TextEditingController? marcaController;
   String? Function(BuildContext, String?)? propertyAddressControllerValidator;
   // State field(s) for propertyNeighborhood widget.
-  TextEditingController? propertyNeighborhoodController;
+  TextEditingController? dependenciaController;
   String? Function(BuildContext, String?)?
       propertyNeighborhoodControllerValidator;
   // State field(s) for propertyDescription widget.
-  TextEditingController? propertyDescriptionController;
+  TextEditingController? detallesController;
   String? Function(BuildContext, String?)?
       propertyDescriptionControllerValidator;
   // Stores action output result for [Backend Call - Create Document] action in Button widget.
@@ -34,12 +34,11 @@ class RegistrarEquipoModel extends FlutterFlowModel {
   void initState(BuildContext context) {}
 
   void dispose() {
-    propertyNameController?.dispose();
-    propertyAddressController?.dispose();
-    propertyNeighborhoodController?.dispose();
-    propertyDescriptionController?.dispose();
+    nombreController?.dispose();
+    marcaController?.dispose();
+    dependenciaController?.dispose();
+    detallesController?.dispose();
   }
 
   /// Additional helper methods are added here.
-
 }

@@ -96,6 +96,7 @@ dependencies:
   flutter_speed_dial: ^7.0.0
   fast_cached_network_image: ^1.2.0
   flutter_spinkit: ^5.2.0
+  dotted_border: ^2.0.0+3
   
 
 dev_dependencies:

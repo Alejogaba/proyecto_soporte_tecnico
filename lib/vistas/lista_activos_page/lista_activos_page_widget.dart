@@ -65,6 +65,16 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => RegistrarEquipoWidget(dependencia: dependencia,)),
+        );
+      },
+      child: Icon(Icons.add),
+      backgroundColor: Colors.green,
+    ),
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: NestedScrollView(
@@ -291,7 +301,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          ActivoPerfilPageWidget(activo: snapshot.data![index]!),
+                                                          ActivoPerfilPageWidget(activo: snapshot.data![index]!,dependencia: dependencia,),
                                                     ),
                                                   );
                                                   if (result != null) {
@@ -367,7 +377,7 @@ Widget tarjetaActivo(context, Activo activo,
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Image.network(
-              activo.urlImagen,
+              activo.urlImagen!,
               width: double.infinity,
               height: 125,
               fit: BoxFit.cover,

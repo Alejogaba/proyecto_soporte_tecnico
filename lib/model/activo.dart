@@ -1,35 +1,40 @@
 class Activo {
-  final String uid;
+  String uid = '';
   final String nombre;
+  final String marca;
   final String detalles;
-  final String urlImagen;
-  final int countCasosPendientes;
+  final String? urlImagen;
+  bool casosPendientes;
 
   Activo({
-    required this.uid,
+    this.uid = '',
     required this.nombre,
+    this.marca = 'Generico',
     required this.detalles,
     required this.urlImagen,
-    required this.countCasosPendientes,
+    required this.casosPendientes,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
       'nombre': nombre,
+      'marca':marca,
       'detalles': detalles,
       'urlImagen': urlImagen,
-      'countCasosPendientes': countCasosPendientes,
+      'casosPendientes': casosPendientes,
     };
   }
 
   factory Activo.fromMap(Map<String, dynamic> map) {
     return Activo(
-      uid: map['uid']??'',
-      nombre: map['nombre']??'',
-      detalles: map['detalles']??'',
-      urlImagen: map['urlImagen']??'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Imagen_no_disponible.svg/2048px-Imagen_no_disponible.svg.png',
-      countCasosPendientes: map['countCasosPendientes']??0,
+      uid: map['uid'] ?? '',
+      nombre: map['nombre'] ?? '',
+      marca: map['marca'] ?? 'Generico',
+      detalles: map['detalles'] ?? '',
+      urlImagen: map['urlImagen'] ??
+          'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Imagen_no_disponible.svg/2048px-Imagen_no_disponible.svg.png',
+      casosPendientes: map['casosPendientes'] ?? false,
     );
   }
 }

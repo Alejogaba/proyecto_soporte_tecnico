@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
 
-      home: NuevaNavBar(),
+      initialRoute: '/home',
       navigatorKey: Get.key,
       getPages: routes(),
     );

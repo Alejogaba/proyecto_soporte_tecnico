@@ -1,10 +1,8 @@
 import 'dart:developer';
 
-
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-
 
 import '../../backend/controlador_activo.dart';
 import '../../flutter_flow/flutter_flow_animations.dart';
@@ -314,14 +312,14 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         floatingActionButton: myFloatingButton(
-                selectMode: selectMode,
-                idActivo: activo.uid,
-                contextPadre: context,
-                activo: activo,
-                esPrestamo: esPrestamo,
-                escogerComponente: escogerComponente,
-              ).animateOnPageLoad(
-                animationsMap['floatingActionButtonOnPageLoadAnimation']!),
+          selectMode: selectMode,
+          idActivo: activo.uid,
+          contextPadre: context,
+          activo: activo,
+          esPrestamo: esPrestamo,
+          escogerComponente: escogerComponente,
+        ).animateOnPageLoad(
+            animationsMap['floatingActionButtonOnPageLoadAnimation']!),
         body: GestureDetector(
           onTap: () => {FocusScope.of(context).unfocus()},
           child: Stack(
@@ -422,8 +420,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                         .primaryText,
                                                     size: 16,
                                                   ),
-                                                  onPressed: () async {
-                                                  },
+                                                  onPressed: () async {},
                                                 ),
                                               ),
                                             ),
@@ -609,8 +606,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                   ).animateOnPageLoad(animationsMap[
                                       'rowOnPageLoadAnimation1']!),
                                 ),*/
-                               Row(),
-                                
+                                Row(),
 
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -637,12 +633,11 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                               .bodyText2Family),
                                             ),
                                       ),
-                                     
                                     ],
                                   ).animateOnPageLoad(animationsMap[
                                       'rowOnPageLoadAnimation4']!),
                                 ),
-                               
+
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       24, 16, 0, 0),
@@ -651,30 +646,29 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
-                                          activo.detalles,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText2
-                                              .override(
-                                                fontFamily: 'Lexend Deca',
-                                                color: Color(0xFF8B97A2),
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.normal,
-                                                useGoogleFonts: GoogleFonts
-                                                        .asMap()
-                                                    .containsKey(
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyText2Family),
-                                              ),
-                                        ),
-                                     
+                                        activo.detalles,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyText2
+                                            .override(
+                                              fontFamily: 'Lexend Deca',
+                                              color: Color(0xFF8B97A2),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.normal,
+                                              useGoogleFonts:
+                                                  GoogleFonts.asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText2Family),
+                                            ),
+                                      ),
                                     ],
                                   ).animateOnPageLoad(animationsMap[
                                       'rowOnPageLoadAnimation6']!),
                                 ),
                                 //TituloListafFuncionariosAsignados(animationsMap: animationsMap),
                                 //ListaFuncionariosAsignados(animationsMap: animationsMap)
-                                 Padding(
+                                Padding(
                                   padding: EdgeInsets.all(30),
                                   child: Container(),
                                 )
@@ -725,7 +719,6 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
 
   Widget _tarjetaFuncionario(AsyncSnapshot<List<Usuario>> snapshot,
       bool prestamo, List<String> fechaEntrega) {
-  
     return Column(
       children: [
         Row(
@@ -805,8 +798,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                       ),
                     ),
                     child: InkWell(
-                      onTap: () async {
-                      },
+                      onTap: () async {},
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -887,8 +879,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        snapshot.data![index].nombre
-                                            .toString(),
+                                        snapshot.data![index].nombre.toString(),
                                         style: FlutterFlowTheme.of(context)
                                             .subtitle1
                                             .override(
@@ -917,7 +908,8 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                             padding: const EdgeInsetsDirectional
                                                 .fromSTEB(3, 1.4, 0, 1),
                                             child: Text(
-                                              snapshot.data![index].cargo.toString(),
+                                              snapshot.data![index].cargo
+                                                  .toString(),
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText2
@@ -949,15 +941,12 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                               color: Color(0xFFAD8762),
                                               size: 9,
                                             ),
-                                            
                                           ],
                                         ),
                                       ),
-                                      
                                     ],
                                   ),
                                 ),
-                                
                               ],
                             ),
                           ),
@@ -977,7 +966,6 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
 
   Widget _tarjetaActivo(AsyncSnapshot<List<Activo>> snapshot, bool prestamo,
       List<String> fechaEntrega) {
-
     return Column(
       children: [
         Row(
@@ -1032,8 +1020,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                       ),
                     ),
                     child: InkWell(
-                      onTap: () async {
-                      },
+                      onTap: () async {},
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -1175,11 +1162,9 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                               color: Color(0xFFAD8762),
                                               size: 9,
                                             ),
-                                            
                                           ],
                                         ),
                                       ),
-                                      
                                     ],
                                   ),
                                 ),
@@ -1212,8 +1197,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
           color: Color(0xFFE62424),
           size: 24,
         ),
-        onPressed: () async {
-        },
+        onPressed: () async {},
       );
     } else if (prestamo) {
       return FlutterFlowIconButton(
@@ -1225,8 +1209,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
           color: Color.fromARGB(255, 7, 133, 36),
           size: 24,
         ),
-        onPressed: () async {
-        },
+        onPressed: () async {},
       );
     } else {
       return FlutterFlowIconButton(
@@ -1238,14 +1221,10 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
           color: Color(0xFFE62424),
           size: 24,
         ),
-        onPressed: () async {
-        },
+        onPressed: () async {},
       );
     }
   }
-
-
-
 
   Widget _cajaAdvertencia(BuildContext context, mensaje, objetoaEliminar, id) {
     return Align(
@@ -1383,7 +1362,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
     switch (objeto) {
       case 'activo':
         ActivoController activoController = ActivoController();
-       // final res = await activoController.eliminarActivo(context, id);
+        // final res = await activoController.eliminarActivo(context, id);
         return 'res';
 
       default:
@@ -1393,10 +1372,8 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
 
   Future<void> cargarActivo(id) async {
     ActivoController activoController = ActivoController();
-   // var res = await activoController.buscarActivo(id);
-    setState(() {
-     
-    });
+    // var res = await activoController.buscarActivo(id);
+    setState(() {});
   }
 }
 
@@ -1419,14 +1396,11 @@ class myFloatingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!selectMode &&
-        !esPrestamo &&
-        !escogerComponente) {
+    if (!selectMode && !esPrestamo && !escogerComponente) {
       return Container();
     } else {
       return FloatingActionButton.extended(
-        onPressed: () async {
-        },
+        onPressed: () async {},
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
         icon: Icon(
           Icons.add_rounded,

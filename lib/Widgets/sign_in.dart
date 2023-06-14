@@ -212,15 +212,15 @@ class _SignInState extends State<SignIn> {
                       blurRadius: 20.0,
                     ),
                     BoxShadow(
-                      color: CustomTheme.loginGradientEnd,
+                      color: Color.fromARGB(255, 25, 78, 52),
                       offset: Offset(1.0, 6.0),
                       blurRadius: 20.0,
                     ),
                   ],
                   gradient: LinearGradient(
                       colors: <Color>[
-                        CustomTheme.loginGradientEnd,
-                        CustomTheme.loginGradientStart
+                        Color.fromARGB(255, 16, 68, 29),
+                        Color.fromARGB(255, 226, 222, 218)
                       ],
                       begin: FractionalOffset(0.2, 0.2),
                       end: FractionalOffset(1.0, 1.0),
@@ -229,7 +229,7 @@ class _SignInState extends State<SignIn> {
                 ),
                 child: MaterialButton(
                     highlightColor: Colors.transparent,
-                    splashColor: CustomTheme.loginGradientEnd,
+                    splashColor: Color.fromARGB(255, 9, 85, 32),
                     child: const Padding(
                       padding: EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 42.0),

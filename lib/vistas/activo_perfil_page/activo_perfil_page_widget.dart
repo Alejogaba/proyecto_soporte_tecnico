@@ -830,6 +830,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                     ),
                     child: InkWell(
                       onTap: () async {},
+                      onTap: () async {},
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -911,6 +912,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                     children: [
                                       Text(
                                         snapshot.data![index].nombre.toString(),
+                                        snapshot.data![index].nombre.toString(),
                                         style: FlutterFlowTheme.of(context)
                                             .subtitle1
                                             .override(
@@ -939,6 +941,8 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                             padding: const EdgeInsetsDirectional
                                                 .fromSTEB(3, 1.4, 0, 1),
                                             child: Text(
+                                              snapshot.data![index].cargo
+                                                  .toString(),
                                               snapshot.data![index].cargo
                                                   .toString(),
                                               style:

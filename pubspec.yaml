@@ -140,6 +140,24 @@ flutter:
     - assets/image/ban11.jpg
     - assets/image_02.png
     - assets/img/login_logo.png
+    - assets/images/profile.png
+    - assets/images/perfil1.png
+    - assets/images/perfil2.png
+    - assets/images/tindergoldlogo.png
+    - assets/images/chatbubble.png
+    - assets/images/call_icon.png
+    - assets/images/smiley.png
+    - assets/images/microphone.png
+    - assets/images/send.png
+    - assets/images/profilepic.jpg
+    - assets/images/profilepic2.png
+    - assets/images/profilepic3.png
+    - assets/images/profilepic4.png
+    - assets/images/profilepic5.png
+    - assets/images/profile.png
+    - assets/images/tindergoldlogo.png
+    - assets/images/back_arrow.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

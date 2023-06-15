@@ -116,7 +116,9 @@ class _FuncioInfoState extends State<FuncioInfo> {
               Text(
                 "Dependencia",
                 style: TextStyle(
-                    fontSize: 26, color: const Color.fromARGB(255, 0, 0, 0)),
+                    color: Color(0xff242424),
+                    fontSize: 28,
+                    fontWeight: FontWeight.w600),
               ),
               SizedBox(
                 height: 16,
@@ -180,9 +182,6 @@ class _FuncioInfoState extends State<FuncioInfo> {
                           )
                         ],
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
                     ],
                   ),
                 ],
@@ -190,7 +189,7 @@ class _FuncioInfoState extends State<FuncioInfo> {
               //Lineas
               Container(
                 width: MediaQuery.of(context).size.width - 58,
-                height: 0.6,
+                height: 0.8,
                 color: Color.fromARGB(179, 0, 0, 0),
               ),
 
@@ -230,7 +229,6 @@ class _FuncioInfoState extends State<FuncioInfo> {
               ),
             ],
           ),
-          
         ),
       ),
     );

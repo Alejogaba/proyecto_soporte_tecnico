@@ -174,7 +174,10 @@ class _PerfilAdminState extends State<PerfilGeneral> {
             ProfileMenuWidget(
                 title: "Gestión de dependencias",
                 icon: LineAwesomeIcons.info,
-                onPress: () {}),
+                onPress: () {
+                  
+                   Get.toNamed('/principal');
+                }),
             ProfileMenuWidget(
                 title: "Gestión de reportes",
                 icon: LineAwesomeIcons.wallet,

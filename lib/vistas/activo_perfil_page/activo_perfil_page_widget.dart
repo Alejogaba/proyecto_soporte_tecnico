@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:logger/logger.dart';
 import 'package:login2/index.dart';
 
@@ -495,6 +497,30 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                   ),
                                                 ),
                                               ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 24, 0),
+                                                child: Container(
+                                                  width: 40,
+                                                  height: 40,
+                                                  decoration: BoxDecoration(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryBackground,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                    border: Border.all(
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryText,
+                                                      width: 1,
+                                                    ),
+                                                  ),
+                                                 
+                                                ),
+                                              ),
                                             ],
                                           ),
                                       ],
@@ -941,7 +967,6 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                             child: Text(
                                               snapshot.data![index].cargo
                                                   .toString(),
-                                              
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText2

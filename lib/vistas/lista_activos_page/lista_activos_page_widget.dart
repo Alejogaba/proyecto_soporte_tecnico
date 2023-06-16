@@ -35,7 +35,7 @@ class ListaActivosPageWidget extends StatefulWidget {
 }
 
 class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
-  TextEditingController? textControllerBusqueda;
+  late TextEditingController textControllerBusqueda;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final Dependencia dependencia;
   var id = '';
@@ -58,7 +58,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
 
   @override
   void dispose() {
-    textControllerBusqueda?.dispose();
+    textControllerBusqueda.dispose();
     super.dispose();
   }
 
@@ -264,7 +264,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                     0, 12, 0, 44),
                                 child: StreamBuilder<List<Activo?>>(
                                     stream:
-                                        activoController.obtenerActivosStream(dependencia.uid),
+                                        activoController.obtenerActivosStream(dependencia.uid,textControllerBusqueda.text),
                                     builder: (context, snapshot) {
                                       if (snapshot.data != null &&
                                           snapshot.data!.isNotEmpty){

@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_password_strength/flutter_password_strength.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
+import 'package:login2/backend/controlador_dependencias.dart';
+import 'package:login2/model/dependencias.dart';
 
 import 'package:login2/model/usuario.dart';
 import 'package:login2/vistas/perfil/PerfilMOD/home.dart';
@@ -15,6 +18,8 @@ import '../../../../flutter_flow/flutter_flow_drop_down.dart';
 import '../../../../flutter_flow/flutter_flow_theme.dart';
 import '../../../../flutter_flow/flutter_flow_widgets.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../flutter_flow/flutter_flow_drop_down2.dart';
 
 File? image;
 late String filename;
@@ -30,6 +35,7 @@ final FirebaseFirestore _db = FirebaseFirestore.instance;
 
 class _FuncionarioFormState extends State<FuncionarioFormWidget> {
   String _password = '';
+  bool _dropdownErrorColor = false;
   double fuerzaContrasenia = 0.0;
   bool _obscureTextPassword = true;
   bool _obscureTextConfirmPassword = true;
@@ -68,6 +74,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
   late TextEditingController _passwordController;
   late TextEditingController _confirmPasswordController;
   late TextEditingController _telefonoController;
+  int anchominimo = 640;
 
   double iconSize = 20;
   String? _urlImagen;
@@ -131,6 +138,13 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+    dynamic tamanio_padding = (MediaQuery.of(context).size.width < anchominimo)
+        ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
+        : EdgeInsetsDirectional.fromSTEB(80, 10, 80, 10);
+
+    dynamic anchoColumnaWrap = (MediaQuery.of(context).size.width < anchominimo)
+        ? MediaQuery.of(context).size.width * 0.9
+        : MediaQuery.of(context).size.width * 0.4;
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 199, 209, 216),
       appBar: AppBar(
@@ -604,7 +618,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                       ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
-                        child: FlutterFlowDropDown<String>(
+                        child: FlutterFlowDropDown2<String>(
                           options: ['Jefe', 'Secretario'],
                           onChanged: (value) {
                             setState(() {
@@ -628,51 +642,138 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                           hidesUnderline: true,
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
-                        child: FlutterFlowDropDown<String>(
-                          options: [
-                            'Regimen subsidiado',
-                            'Secretaria de planeacion',
-                            'Comisaria de familia',
-                            'Adulto mayor',
-                            'Desarrollo comunitario',
-                            'Oficina juridica',
-                            'Sisben',
-                            'Secretaria de hacienda',
-                            'Secretaria de gobierno',
-                            'Despacho del Alcalde',
-                            'Tesoreria',
-                            'Secretaría de Servicios Sociales',
-                            'Secretaria de planeación',
-                            'Oficina de Atención a Víctimas',
-                            'Recaudo'
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              areaController = value;
-                            });
-                          },
-                          width: MediaQuery.of(context).size.width,
-                          height: 45,
-                          textStyle:
-                              FlutterFlowTheme.of(context).bodyText1.override(
-                                    fontFamily: 'Poppins',
-                                    color: Color.fromARGB(207, 0, 0, 0),
+                      FutureBuilder<List<Dependencia>>(
+                        future: ControladorDependencias().cargarDependencias(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> snapshot) {
+                          if (snapshot.connectionState ==
+                                  ConnectionState.done &&
+                              snapshot.hasData) {
+                            return Container(
+                              width: anchoColumnaWrap,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 20),
+                                    child: Text(
+                                      'Área del funcionario',
+                                      textAlign: TextAlign.start,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1
+                                          .override(
+                                            fontFamily:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyText1Family,
+                                            fontSize: 20,
+                                            useGoogleFonts: GoogleFonts.asMap()
+                                                .containsKey(
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText1Family),
+                                          ),
+                                    ),
                                   ),
-                          hintText: 'Seleccione el área...',
-                          fillColor: Color(0xFFF1F4F8),
-                          elevation: 2,
-                          borderColor: Colors.transparent,
-                          borderWidth: 0,
-                          borderRadius: 8,
-                          margin: EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
-                          hidesUnderline: true,
-                        ),
+                                  Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 12, 0, 0),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Align(
+                                              alignment:
+                                                  AlignmentDirectional(0, 0),
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 5, 0, 20),
+                                                child: FlutterFlowDropDown<
+                                                    Dependencia>(
+                                                  value: snapshot.data![0],
+                                                  options: List.generate(
+                                                      snapshot.data!.length,
+                                                      (index) =>
+                                                          DropdownMenuItem(
+                                                              value: snapshot
+                                                                  .data![index],
+                                                              child: Text(
+                                                                snapshot
+                                                                    .data![
+                                                                        index]
+                                                                    .nombre
+                                                                    .toString(),
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText1
+                                                                    .override(
+                                                                      fontFamily:
+                                                                          FlutterFlowTheme.of(context)
+                                                                              .bodyText2Family,
+                                                                      fontSize:
+                                                                          18,
+                                                                      useGoogleFonts: GoogleFonts
+                                                                              .asMap()
+                                                                          .containsKey(
+                                                                              FlutterFlowTheme.of(context).bodyText1Family),
+                                                                    ),
+                                                              ))),
+                                                  onChanged: (val) {
+                                                    if (val != null) {
+                                                      areaController = val.uid;
+                                                    }
+                                                  },
+                                                  height: 50,
+                                                  textStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyText1
+                                                          .override(
+                                                            fontFamily:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText2Family,
+                                                            fontSize: 18,
+                                                            useGoogleFonts: GoogleFonts
+                                                                    .asMap()
+                                                                .containsKey(
+                                                                    FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyText1Family),
+                                                          ),
+                                                  hintText: 'Área*',
+                                                  
+                                                  fillColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .primaryBackground,
+                                                  elevation: 2,
+                                                  borderColor:
+                                                      _dropdownErrorColor
+                                                          ? Colors.redAccent
+                                                          : FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryText,
+                                                  borderWidth: 2,
+                                                  borderRadius: 8,
+                                                  margin: EdgeInsetsDirectional
+                                                      .fromSTEB(12, 4, 12, 4),
+                                                  hidesUnderline: true,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
                       ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
-                        child: FlutterFlowDropDown<String>(
+                        child: FlutterFlowDropDown2<String>(
                           options: ['funcionario'],
                           onChanged: (value) {
                             setState(() {

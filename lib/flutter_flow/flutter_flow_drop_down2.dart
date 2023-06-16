@@ -1,37 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
-class FlutterFlowDropDown<T> extends StatefulWidget {
-  const FlutterFlowDropDown({
+class FlutterFlowDropDown2<T> extends StatefulWidget {
+  const FlutterFlowDropDown2({
     this.initialOption,
-    this.hintText,
+    required this.hintText,
     required this.options,
     this.optionLabels,
     required this.onChanged,
     this.icon,
-    this.width,
-    this.height,
-    this.fillColor,
+    required this.width,
+    required this.height,
+    required this.fillColor,
     required this.textStyle,
     required this.elevation,
     required this.borderWidth,
     required this.borderRadius,
     required this.borderColor,
     required this.margin,
-    required this.value,
     this.hidesUnderline = false,
     this.disabled = false,
   });
 
   final T? initialOption;
-  final String? hintText;
-  final List<DropdownMenuItem<T>> options;
+  final String hintText;
+  final List<T> options;
   final List<String>? optionLabels;
-  final Function(T?) onChanged;
+  final Function(T) onChanged;
   final Widget? icon;
-  final double? width;
-  final double? height;
-  final Color? fillColor;
+  final double width;
+  final double height;
+  final Color fillColor;
   final TextStyle textStyle;
   final double elevation;
   final double borderWidth;
@@ -40,35 +38,47 @@ class FlutterFlowDropDown<T> extends StatefulWidget {
   final EdgeInsetsGeometry margin;
   final bool hidesUnderline;
   final bool disabled;
-  final T? value;
 
   @override
-  State<FlutterFlowDropDown<T>> createState() => _FlutterFlowDropDownState<T>();
+  State<FlutterFlowDropDown2<T>> createState() => _FlutterFlowDropDownState2<T>();
 }
 
-class _FlutterFlowDropDownState<T> extends State<FlutterFlowDropDown<T>> {
-  T? dropDownValue;
+class _FlutterFlowDropDownState2<T> extends State<FlutterFlowDropDown2<T>> {
+   T? dropDownValue;
 
   @override
   void initState() {
     super.initState();
-    dropDownValue = widget.initialOption;
   }
 
   @override
   Widget build(BuildContext context) {
     final dropdownWidget = DropdownButton<T>(
-      
-      value: widget.value,
+      value: widget.options.contains(dropDownValue) ? dropDownValue : null,
       hint: widget.hintText != null
-          ? Text(widget.hintText!, style: widget.textStyle)
+          ? Text(widget.hintText, style: widget.textStyle)
           : null,
-      items: widget.options,
+      items: widget.options
+          .asMap()
+          .entries
+          .map(
+            (option) => DropdownMenuItem<T>(
+              value: option.value,
+              child: Text(
+                widget.optionLabels == null ||
+                        widget.optionLabels!.length < option.key + 0
+                    ? option.value.toString()
+                    : widget.optionLabels![option.key],
+                style: widget.textStyle,
+              ),
+            ),
+          )
+          .toList(),
       elevation: widget.elevation.toInt(),
       onChanged: !widget.disabled
           ? (value) {
               dropDownValue = value;
-              widget.onChanged(value);
+              widget.onChanged(value!);
             }
           : null,
       icon: widget.icon,

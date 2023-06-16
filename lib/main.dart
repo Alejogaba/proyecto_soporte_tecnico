@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:login2/vistas/lista_activos_funcionarios_page/lista_activos_funcionarios_page_widget.dart';
 import 'package:login2/vistas/login/LoginMOD.dart';
 import 'package:login2/vistas/perfil/PerfilMOD/home.dart';
 import 'package:login2/routes/my_routes.dart';
@@ -19,10 +20,10 @@ import 'package:line_icons/line_icons.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 
-
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'index.dart';
+import 'model/dependencias.dart';
 import 'model/usuario.dart';
 
 void main() async {
@@ -32,8 +33,7 @@ void main() async {
   final InitializationSettings initializationSettings =
       InitializationSettings(android: initializationSettingsAndroid);
   WidgetsFlutterBinding.ensureInitialized();
-  
-  
+
   await Firebase.initializeApp();
   final appState = FFAppState(); // Initialize FFAppState
   await appState.initializePersistedState();
@@ -77,7 +77,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
-
       initialRoute: '/home',
       navigatorKey: Get.key,
       getPages: routes(),
@@ -118,19 +117,19 @@ class PrincipalPagina extends StatelessWidget {
                   if (snapshot.hasData && snapshot.data != null) {
                     final userDoc = snapshot.data;
                     final user = userDoc?.data();
-                    if (user==null) {
+                    if (user == null) {
                       return LoginWidget();
-                    }else{
-                      Usuario usuario =
-                        Usuario.mapeo(user as Map<String, dynamic>);
-                    if (usuario.role == 'admin') {
-                      return PerfilGeneral();
-                    } else if (usuario.role == 'funcionario') {
-                      return PerfilGeneral();
                     } else {
-                      return LoginPage();
+                      Usuario usuario =
+                          Usuario.mapeo(user as Map<String, dynamic>);
+                      if (usuario.role == 'admin') {
+                        return PerfilGeneral();
+                      } else if (usuario.role == 'funcionario') {
+                        return PerfilGeneral();
+                      } else {
+                        return LoginPage();
+                      }
                     }
-                    }    
                   } else {
                     return Material(
                       child: Center(
@@ -247,6 +246,96 @@ class _NuevaNavBarState extends State<NuevaNavBar> {
     ConversacionesWidget(),
     InterfazPrincipalWidget(),
   ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: FlutterFlowTheme.of(context).primary,
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black.withOpacity(.1),
+            )
+          ],
+        ),
+        child: GNav(
+          haptic: false, // haptic feedback
+          tabBorderRadius: 6,
+          tabActiveBorder: Border.all(
+              color: FlutterFlowTheme.of(context).primary,
+              width: 1), // tab button border
+          backgroundColor: FlutterFlowTheme.of(context).primary,
+          tabShadow: [
+            BoxShadow(
+                color: FlutterFlowTheme.of(context).primary.withOpacity(0.5),
+                blurRadius: 8)
+          ], // tab button shadow
+          curve: Curves.easeOutExpo, // tab animation curves
+          duration: Duration(milliseconds: 600), // tab animation duration
+          gap: 2, // the tab button gap between icon and text
+          color: FlutterFlowTheme.of(context)
+              .tertiary
+              .withOpacity(0.7), // unselected icon color
+          activeColor: FlutterFlowTheme.of(context)
+              .tertiary, // selected icon and text color
+          iconSize: 30, // tab button icon size
+          tabBackgroundColor: FlutterFlowTheme.of(context)
+              .tertiary
+              .withOpacity(0.1), // selected tab background color
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.15,
+              vertical: 15), // navigation bar padding
+          mainAxisAlignment: MainAxisAlignment.center,
+          tabs: [
+            GButton(
+              icon: LineIcons.comment,
+              text: 'Chat',
+            ),
+            GButton(
+              icon: LineIcons.building,
+              text: 'Dependencias',
+            ),
+          ],
+          selectedIndex: _selectedIndex,
+          onTabChange: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class NuevaNavBarFuncionario extends StatefulWidget {
+  final Dependencia dependencia;
+
+  const NuevaNavBarFuncionario({Key? key, required this.dependencia})
+      : super(key: key);
+  @override
+  _NuevaNavBarStateFuncionario createState() =>
+      _NuevaNavBarStateFuncionario(this.dependencia);
+}
+
+class _NuevaNavBarStateFuncionario extends State<NuevaNavBarFuncionario> {
+  int _selectedIndex = 0;
+  Dependencia dependencia;
+
+   _NuevaNavBarStateFuncionario(this.dependencia);
+
+  static const List<Widget> _widgetOptions = <Widget>[
+    ConversacionesWidget(),
+    ListaActivosFuncionariosPageWidget(dependencia: null),
+  ];
+
+ 
 
   @override
   Widget build(BuildContext context) {

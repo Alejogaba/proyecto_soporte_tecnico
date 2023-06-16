@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'package:login2/auth/firebase_auth/firebase_user_provider.dart';
+import 'package:login2/model/dependencias.dart';
 import 'package:translator/translator.dart';
 
 import '../../model/usuario.dart';
@@ -203,9 +205,7 @@ class AuthHelper {
       FirebaseFirestore _db = FirebaseFirestore.instance;
       final UserCredential res = await _auth.createUserWithEmailAndPassword(
           email: usuario.email!.trim().toLowerCase(),
-          password: usuario.password!.trim()
-          );
-
+          password: usuario.password!.trim());
 
       log('resultado del registro: ' + res.toString());
       usuario.uid = res.user!.uid;
@@ -293,6 +293,38 @@ class AuthHelper {
     }
   }
 
+  Future<Dependencia?> buscarDependenciaUsuarioActual() async {
+    try {
+      final userSnapshot = await FirebaseFirestore.instance
+          .collection(
+              'users') // Reemplaza 'users' por el nombre de tu colección de usuarios
+          .doc(currentUser!.uid)
+          .get();
+      log('Buscando la dependencia correspondiente');
+      if (userSnapshot.exists) {
+        final Usuario usuario =
+            Usuario.mapeo(userSnapshot.data() as Map<String, dynamic>);
+        final dependenciaSnapshot = await FirebaseFirestore.instance
+            .collection(
+                'dependencias') // Reemplaza 'users' por el nombre de tu colección de usuarios
+            .doc(usuario.area)
+            .get();
+        if (dependenciaSnapshot.exists) {
+          final Dependencia dependencia =
+              Dependencia.fromMap(userSnapshot.data() as Map<String, dynamic>);
+          return dependencia;
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    } catch (e) {
+      Logger().e('Error al buscar la dependencia del usuario actual: $e');
+      return null;
+    }
+  }
+
   Future<String> changePassword(String newPassword) async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
@@ -340,20 +372,22 @@ class AuthHelper {
   }
 
   Future<void> resetPassword(String email) async {
-  try {
-    await _auth.sendPasswordResetEmail(email: email);
-     Get.snackbar('Correo de restablecimiento enviado correctamente', 'Siga las instruciones en su correo',
-            duration: Duration(seconds: 5),
-            margin: EdgeInsets.fromLTRB(4, 8, 4, 0),
-            snackStyle: SnackStyle.FLOATING,
-            backgroundColor: Color.fromARGB(211, 28, 138, 46),
-            icon: Icon(
-              Icons.check,
-              color: Colors.white,
-            ),
-            colorText: Color.fromARGB(255, 228, 219, 218));
-  } catch (e) {
-     Get.snackbar('Error', 'Ocurrio un error, verifique que el correo este correctamente escrito',
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      Get.snackbar('Correo de restablecimiento enviado correctamente',
+          'Siga las instruciones en su correo',
+          duration: Duration(seconds: 5),
+          margin: EdgeInsets.fromLTRB(4, 8, 4, 0),
+          snackStyle: SnackStyle.FLOATING,
+          backgroundColor: Color.fromARGB(211, 28, 138, 46),
+          icon: Icon(
+            Icons.check,
+            color: Colors.white,
+          ),
+          colorText: Color.fromARGB(255, 228, 219, 218));
+    } catch (e) {
+      Get.snackbar('Error',
+          'Ocurrio un error, verifique que el correo este correctamente escrito',
           duration: Duration(seconds: 5),
           margin: EdgeInsets.fromLTRB(4, 8, 4, 0),
           snackStyle: SnackStyle.FLOATING,
@@ -364,9 +398,8 @@ class AuthHelper {
           ),
           colorText: Color.fromARGB(255, 228, 219, 218));
       Logger().e('Error resetear la contraseña: $e');
-
+    }
   }
-}
 }
 
 class UserHelper {
@@ -386,7 +419,6 @@ class UserHelper {
   static FirebaseFirestore _db = FirebaseFirestore.instance;
 
   Future<void> eliminarFuncionario(String? uid) async {
-    
     CollectionReference usuarios =
         FirebaseFirestore.instance.collection('users');
     return usuarios
@@ -397,19 +429,21 @@ class UserHelper {
   }
 
   Future<void> eliminarUsuarioPorUID(String uid) async {
-  try {
-    final usuariosQuery = FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: uid);
-    final usuariosSnapshots = await usuariosQuery.get();
+    try {
+      final usuariosQuery = FirebaseFirestore.instance
+          .collection('users')
+          .where('uid', isEqualTo: uid);
+      final usuariosSnapshots = await usuariosQuery.get();
 
-    for (final usuarioSnapshot in usuariosSnapshots.docs) {
-      await usuarioSnapshot.reference.delete();
+      for (final usuarioSnapshot in usuariosSnapshots.docs) {
+        await usuarioSnapshot.reference.delete();
+      }
+
+      print('Usuario eliminado exitosamente');
+    } catch (e) {
+      print('Error al eliminar el usuario: $e');
     }
-
-    print('Usuario eliminado exitosamente');
-  } catch (e) {
-    print('Error al eliminar el usuario: $e');
   }
-}
 
   static saveUser(User user, {String rol = 'user'}) async {
     Map<String, dynamic> userData = {

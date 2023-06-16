@@ -6,8 +6,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import '../model/activo.dart';
 
 class ActivoController {
-  Stream<List<Activo?>> obtenerActivosStream(String uidDependencia) {
-    return FirebaseFirestore.instance
+  Stream<List<Activo?>> obtenerActivosStream(String uidDependencia,String valorBusqueda) {
+    if (valorBusqueda.isEmpty) {
+      return FirebaseFirestore.instance
         .collection('dependencias')
         .doc(uidDependencia)
         .collection('activos')
@@ -19,6 +20,23 @@ class ActivoController {
       log('lista dependencias: ' + dependencias[0].nombre.toString());
       return dependencias;
     });
+    }else{
+      return FirebaseFirestore.instance
+        .collection('dependencias')
+        .doc(uidDependencia)
+        .collection('activos')
+        .where('nombre', isGreaterThanOrEqualTo: valorBusqueda)
+      .where('nombre', isLessThanOrEqualTo: valorBusqueda + '\uf8ff')
+        .snapshots()
+        .map((QuerySnapshot querySnapshot) {
+      List<Activo> dependencias = [];
+      querySnapshot.docs.forEach((doc) =>
+          dependencias.add(Activo.fromMap(doc.data() as Map<String, dynamic>)));
+      log('lista dependencias: ' + dependencias[0].nombre.toString());
+      return dependencias;
+    });
+    }
+    
   }
 
   addModActivo(

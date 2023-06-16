@@ -5,7 +5,6 @@ export 'vistas/interfaz_principal/interfaz_principal_widget.dart'
     show InterfazPrincipalWidget;
 export 'vistas/chat/chat_widget.dart' show ChatWidget;
 
-export 'vistas/perfil/perfil_widget.dart' show PerfilWidget;
 export 'vistas/editar_perfil/editar_perfil_widget.dart' show EditarPerfilWidget;
 export 'vistas/cambiar_password/cambiar_password_widget.dart'
     show CambiarPasswordWidget;

@@ -80,13 +80,13 @@ class TripsRecord extends FirestoreRecord {
 
   // "complete" field.
   bool? _complete;
-  bool get complete => _complete ?? false;
-  bool hasComplete() => _complete != null;
+  bool? get complete => _complete ?? false;
+  bool? hasComplete() => _complete != null;
 
   // "rated" field.
   bool? _rated;
-  bool get rated => _rated ?? false;
-  bool hasRated() => _rated != null;
+  bool? get rated => _rated ?? false;
+  bool? hasRated() => _rated != null;
 
   void _initializeFields() {
     _propertyRef = snapshotData['propertyRef'] as DocumentReference?;

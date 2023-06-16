@@ -13,6 +13,7 @@ routes() => [
       GetPage(name: "/home", page: () => PrincipalPagina()),
       GetPage(name: "/principal", page: () => NuevaNavBar()),
       GetPage(name: "/listafuncio", page: () => ListaFuncionarioss()),
+       GetPage(name: "/addreporte", page: () => NuevoReporteWidget()),
       GetPage(name: "/loginmod", page: () => LoginPage()),
       GetPage(name: "/loguear", page: () => SignIn()),
       GetPage(

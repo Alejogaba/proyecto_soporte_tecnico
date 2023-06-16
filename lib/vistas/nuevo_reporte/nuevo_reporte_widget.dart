@@ -48,14 +48,17 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
     super.initState();
     _model = createModel(context, () => NuevoReporteModel());
 
-    _model.pricePerNightController ??= TextEditingController(
+   /* _model.pricePerNightController ??= TextEditingController(
         text: formatNumber(
       widget.propertyRef!.price,
       formatType: FormatType.decimal,
       decimalType: DecimalType.automatic,
     ));
+
+    
     _model.notesController ??=
         TextEditingController(text: widget.propertyRef!.notes);
+        **/
   }
 
   @override

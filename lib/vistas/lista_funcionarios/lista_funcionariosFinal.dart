@@ -1,14 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:login2/vistas/lista_funcionarios/Lista/views/FuncioInfo.dart';
 
-import '../../../auth/firebase_auth/auth_helper.dart';
-import '../../../backend/diseño_interfaz_app_theme.dart';
-import '../../../flutter_flow/flutter_flow_animations.dart';
-import '../../../flutter_flow/flutter_flow_theme.dart';
-import '../../../model/usuario.dart';
-import '../funcionarioForm.dart';
-import '../funcionario_information.dart';
+import '../../auth/firebase_auth/auth_helper.dart';
+import '../../backend/diseño_interfaz_app_theme.dart';
+import '../../flutter_flow/flutter_flow_animations.dart';
+import '../../flutter_flow/flutter_flow_theme.dart';
+import '../../model/usuario.dart';
+import 'funcionarioForm.dart';
+import 'funcionario_information.dart';
 
 class ListaFuncionarioss extends StatefulWidget {
   const ListaFuncionarioss({
@@ -156,6 +158,15 @@ class _ListaFuncionariossState extends State<ListaFuncionarioss>
                       ),
                     ],
                   ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  //Lineas
+                  Container(
+                    width: MediaQuery.of(context).size.width - 136,
+                    height: 0.4,
+                    color: Color.fromARGB(179, 194, 185, 185),
+                  ),
 
                   Expanded(
                     flex: 1,
@@ -181,7 +192,9 @@ class _ListaFuncionariossState extends State<ListaFuncionarioss>
                                       itemCount: snapshot.data!.length,
                                       itemBuilder: (context, index) {
                                         return GestureDetector(
-                                          onTap: () {},
+                                          onTap: () => _navigateToFuncionario(
+                                              context, snapshot.data![index]),
+                                          onLongPress: () async {},
                                           child: Container(
                                             padding:
                                                 EdgeInsets.only(bottom: 16),
@@ -248,8 +261,7 @@ class _ListaFuncionariossState extends State<ListaFuncionarioss>
                                                           SizedBox(
                                                             width: 6,
                                                           ),
-
-                                                          Row(
+                                                          /*Row(
                                                             children: <Widget>[
                                                               Container(
                                                                 width: 6,
@@ -278,20 +290,51 @@ class _ListaFuncionariossState extends State<ListaFuncionarioss>
                                                                         14),
                                                               ),
                                                             ],
+                                                            
                                                           ),
-
-                                                          // TODO add Spacer(),
-                                                          Spacer(),
-                                                          Text(
-                                                            snapshot
-                                                                .data![index]
-                                                                .role
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                                color: Colors
-                                                                    .white70),
+                                                          **/
+                                                          if (snapshot
+                                                                  .data![index]
+                                                                  .uid!
+                                                                  .toLowerCase() !=
+                                                              FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser!
+                                                                  .uid
+                                                                  .toLowerCase())
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      right:
+                                                                          20),
+                                                            ),
+                                                          IconButton(
+                                                            icon: Icon(
+                                                              Icons
+                                                                  .delete_outline,
+                                                              color: Colors.red,
+                                                              size: 24,
+                                                            ),
+                                                            onPressed: () =>
+                                                                _showDialog(
+                                                                    snapshot.data![
+                                                                        index],
+                                                                    context),
                                                           ),
+                                                          IconButton(
+                                                              icon: Icon(
+                                                                Icons
+                                                                    .mode_edit_outline,
+                                                                color:
+                                                                    Colors.red,
+                                                                size: 24,
+                                                              ),
+                                                              onPressed: () =>
+                                                                  _navigateToFuncionarioInformation(
+                                                                      context,
+                                                                      snapshot.data![
+                                                                          index])),
                                                         ],
                                                       ),
                                                     ),
@@ -320,6 +363,8 @@ class _ListaFuncionariossState extends State<ListaFuncionarioss>
                                                         ),
                                                       ],
                                                     ),
+
+                                                    //Lineas
                                                     SizedBox(
                                                       height: 20,
                                                     ),
@@ -329,7 +374,7 @@ class _ListaFuncionariossState extends State<ListaFuncionarioss>
                                                                   .size
                                                                   .width -
                                                               136,
-                                                      height: 0.2,
+                                                      height: 0.4,
                                                       color: Colors.white70,
                                                     ),
                                                     SizedBox(
@@ -364,13 +409,13 @@ class _ListaFuncionariossState extends State<ListaFuncionarioss>
                   width: AppBar().preferredSize.height,
                   height: AppBar().preferredSize.height,
                   child: Material(
-                    color: Colors.transparent,
+                    color: const Color.fromARGB(0, 255, 255, 255),
                     child: InkWell(
                       borderRadius:
                           BorderRadius.circular(AppBar().preferredSize.height),
                       child: Icon(
                         Icons.arrow_back_ios,
-                        color: InterfazAppTheme.nearlyBlack,
+                        color: const Color.fromARGB(255, 255, 255, 255),
                       ),
                       onTap: () {
                         Navigator.pop(context);
@@ -438,7 +483,7 @@ class _ListaFuncionariossState extends State<ListaFuncionarioss>
     await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => FuncionarioInformation(
+          builder: (context) => FuncioInfo(
                 usuario: usuario,
               )),
     );

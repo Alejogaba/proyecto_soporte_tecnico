@@ -157,6 +157,20 @@ flutter:
     - assets/images/profile.png
     - assets/images/tindergoldlogo.png
     - assets/images/back_arrow.png
+    - assets/img1.png
+    - assets/img2.png
+    - assets/img3.png
+    - assets/doctor_pic.png
+    - assets/doctor_pic2.png
+    - assets/doctor_pic2.png
+    - assets/list.png
+    - assets/email.png
+    - assets/call.png
+    - assets/video_call.png
+    - assets/mappin.png
+    - assets/clock.png
+    - assets/map.png
+    - assets/interfaz/banner.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

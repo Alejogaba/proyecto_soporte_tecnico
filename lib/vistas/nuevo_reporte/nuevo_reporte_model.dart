@@ -7,6 +7,10 @@ class NuevoReporteModel extends FlutterFlowModel {
   // State field(s) for pricePerNight widget.
   TextEditingController? pricePerNightController;
   String? Function(BuildContext, String?)? pricePerNightControllerValidator;
+  bool isDataUploading = false;
+  FFUploadedFile uploadedLocalFile =
+      FFUploadedFile(bytes: Uint8List.fromList([]));
+  String uploadedFileUrl = '';
   // State field(s) for notes widget.
   TextEditingController? notesController;
   String? Function(BuildContext, String?)? notesControllerValidator;

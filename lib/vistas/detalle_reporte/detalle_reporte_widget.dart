@@ -74,7 +74,7 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
         ),
         actions: [
           Visibility(
-            visible: !widget.tripRef!.complete,
+            visible: widget.tripRef!.complete!,
             child: FlutterFlowIconButton(
               borderColor: Colors.transparent,
               borderRadius: 30.0,
@@ -325,7 +325,7 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                       ],
                     ),
                   ),
-                  if (!widget.tripRef!.complete)
+                  if (!widget.tripRef!.complete!)
                     Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -334,7 +334,7 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [],
                         ),
-                        if (!widget.tripRef!.complete)
+                        if (!widget.tripRef!.complete!)
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 12.0, 0.0, 24.0),

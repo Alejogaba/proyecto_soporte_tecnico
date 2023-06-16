@@ -7,6 +7,8 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:login2/index.dart';
 import 'package:login2/model/dependencias.dart';
@@ -131,6 +133,18 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                   size: 30,
                 ),
                 onPressed: () async {},
+              ),
+                FlutterFlowIconButton(
+                borderColor: Colors.transparent,
+                borderRadius: 30,
+                borderWidth: 1,
+                buttonSize: 60,
+                icon: FaIcon(
+                  FontAwesomeIcons.add,
+                  color: FlutterFlowTheme.of(context).tertiary,
+                  size: 30,
+                ),
+                onPressed: () async { Get.toNamed('/addreporte');},
               ),
             ],
             centerTitle: false,

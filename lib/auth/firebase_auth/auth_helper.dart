@@ -152,6 +152,41 @@ class AuthHelper {
     }
   }
 **/
+
+//ACTUALIZAR??????????????????????????????????????
+  void updateUser(Usuario? usuario) {
+    String? nombre = usuario!.nombre;
+    String? email = usuario.email;
+    String? password = usuario.password;
+    String? identificacion = usuario.identificacion;
+    String? fechaNacimiento = usuario.fechaNacimiento;
+    String? area = usuario.area;
+    String? telefono = usuario.telefono;
+    String? cargo = usuario.cargo;
+    String? urlImagen = usuario.urlImagen;
+
+    // Obtén los valores de los demás campos del formulario
+
+    FirebaseFirestore.instance.collection('users').doc(usuario.uid).update({
+      'nombre': nombre,
+      'email': email,
+      'password': password,
+      'identificacion': identificacion,
+      'fechanacimiento': fechaNacimiento,
+      'area': area,
+      'telefono': telefono,
+      'cargo': cargo,
+      'imageUrl': urlImagen
+      // Actualiza los demás campos según sea necesario
+    }).then((value) {
+      // El usuario se actualizó correctamente
+      // Puedes mostrar una notificación o redirigir a otra pantalla
+    }).catchError((error) {
+      // Ocurrió un error al actualizar el usuario
+      // Puedes mostrar una notificación de error o manejarlo de otra manera
+    });
+  }
+
   static signInWithEmail(
       {String email = '',
       String password = '',

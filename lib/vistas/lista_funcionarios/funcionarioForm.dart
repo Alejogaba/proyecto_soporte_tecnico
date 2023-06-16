@@ -25,7 +25,8 @@ File? image;
 late String filename;
 
 class FuncionarioFormWidget extends StatefulWidget {
-  const FuncionarioFormWidget(Usuario usuario, {Key? key}) : super(key: key);
+  final Usuario usuario;
+  FuncionarioFormWidget(this.usuario);
 
   @override
   _FuncionarioFormState createState() => _FuncionarioFormState();

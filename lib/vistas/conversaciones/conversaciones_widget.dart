@@ -52,6 +52,7 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          List<String> listaIdCasos = [];
           types.User otheruser = types.User(id: 'WyFEzjfkFacfhDj07MUoC7jQChq2');
           types.Room room =
               await FirebaseChatCore.instance.createRoom(otheruser);

@@ -45,11 +45,12 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
   final FocusNode focusNodeEmail = FocusNode();
   late DateTime picked;
   late String cargoController;
-  late String areaController;
+  Dependencia? areaController;
   late String roleController;
   late String telefonoController;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  int posicionArea = 0;
   void _pickDateDialog() async {
     picked = (await showDatePicker(
       context: context,
@@ -143,9 +144,8 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
         ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
         : EdgeInsetsDirectional.fromSTEB(80, 10, 80, 10);
 
-    dynamic anchoColumnaWrap = (MediaQuery.of(context).size.width < anchominimo)
-        ? MediaQuery.of(context).size.width * 0.9
-        : MediaQuery.of(context).size.width * 0.4;
+    dynamic anchoColumnaWrap = MediaQuery.of(context).size.width * 0.95;
+
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 199, 209, 216),
       appBar: AppBar(
@@ -645,8 +645,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                       ),
                       FutureBuilder<List<Dependencia>>(
                         future: ControladorDependencias().cargarDependencias(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<dynamic> snapshot) {
+                        builder: (BuildContext context, snapshot) {
                           if (snapshot.connectionState ==
                                   ConnectionState.done &&
                               snapshot.hasData) {
@@ -657,27 +656,8 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: Text(
-                                      'Área del funcionario',
-                                      textAlign: TextAlign.start,
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText1
-                                          .override(
-                                            fontFamily:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyText1Family,
-                                            fontSize: 20,
-                                            useGoogleFonts: GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyText1Family),
-                                          ),
-                                    ),
-                                  ),
-                                  Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 12, 0, 0),
+                                          0, 30, 0, 0),
                                       child: Row(
                                         children: [
                                           Expanded(
@@ -689,7 +669,33 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                                                     .fromSTEB(0, 5, 0, 20),
                                                 child: FlutterFlowDropDown<
                                                     Dependencia>(
-                                                  value: snapshot.data![0],
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  height: 45,
+                                                  textStyle: FlutterFlowTheme
+                                                          .of(context)
+                                                      .bodyText1
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color: Color.fromARGB(
+                                                            207, 0, 0, 0),
+                                                      ),
+                                                  hintText: 'Area...',
+                                                  
+                                                  fillColor: Color(0xFFF1F4F8),
+                                                  elevation: 2,
+                                                  borderColor:
+                                                      Colors.transparent,
+                                                  borderWidth: 0,
+                                                  borderRadius: 8,
+                                                  margin: EdgeInsetsDirectional
+                                                      .fromSTEB(12, 4, 12, 4),
+                                                  hidesUnderline: true,
+                                                  value: snapshot
+                                                      .data![posicionArea],
+                                                  initialOption: snapshot
+                                                      .data![posicionArea],
                                                   options: List.generate(
                                                       snapshot.data!.length,
                                                       (index) =>
@@ -702,62 +708,17 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                                                                         index]
                                                                     .nombre
                                                                     .toString(),
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyText1
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          FlutterFlowTheme.of(context)
-                                                                              .bodyText2Family,
-                                                                      fontSize:
-                                                                          18,
-                                                                      useGoogleFonts: GoogleFonts
-                                                                              .asMap()
-                                                                          .containsKey(
-                                                                              FlutterFlowTheme.of(context).bodyText1Family),
-                                                                    ),
                                                               ))),
                                                   onChanged: (val) {
                                                     if (val != null) {
-                                                      areaController = val.uid;
+                                                      setState(() {
+                                                        posicionArea = snapshot
+                                                            .data!
+                                                            .indexOf(val);
+                                                        areaController = val;
+                                                      });
                                                     }
                                                   },
-                                                  height: 50,
-                                                  textStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyText1
-                                                          .override(
-                                                            fontFamily:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyText2Family,
-                                                            fontSize: 18,
-                                                            useGoogleFonts: GoogleFonts
-                                                                    .asMap()
-                                                                .containsKey(
-                                                                    FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyText1Family),
-                                                          ),
-                                                  hintText: 'Área*',
-                                                  
-                                                  fillColor:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .primaryBackground,
-                                                  elevation: 2,
-                                                  borderColor:
-                                                      _dropdownErrorColor
-                                                          ? Colors.redAccent
-                                                          : FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondaryText,
-                                                  borderWidth: 2,
-                                                  borderRadius: 8,
-                                                  margin: EdgeInsetsDirectional
-                                                      .fromSTEB(12, 4, 12, 4),
-                                                  hidesUnderline: true,
                                                 ),
                                               ),
                                             ),
@@ -768,7 +729,11 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                               ),
                             );
                           } else {
-                            return Container();
+                            return Center(
+                              child: Container(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
                           }
                         },
                       ),
@@ -926,7 +891,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
           email: _emailController.text.toLowerCase(),
           password: _passwordController.text,
           cargo: cargoController,
-          area: areaController,
+          area: areaController!.uid,
           role: 'funcionario',
           telefono: _telefonoController.text);
       await AuthHelper.signupWithEmail(user).then((_) async {

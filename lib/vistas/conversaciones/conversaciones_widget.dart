@@ -141,7 +141,7 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                               onTap: () async {
                                 Usuario? usuarioActual = await AuthHelper()
                                     .cargarUsuarioDeFirebase(
-                                        getCurrentUser()!.uid);
+                                        );
 
                                 if (usuarioActual != null) {
                                   try {

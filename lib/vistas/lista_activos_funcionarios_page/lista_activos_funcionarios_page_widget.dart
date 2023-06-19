@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:login2/index.dart';
 import 'package:login2/model/dependencias.dart';
 import 'package:login2/vistas/activo_perfil_page/activo_perfil_page_widget.dart';
+import 'package:login2/vistas/login/LoginMOD.dart';
 
 import '../../auth/firebase_auth/auth_helper.dart';
 import '../../auth/firebase_auth/auth_util.dart';
@@ -213,7 +214,7 @@ class _ListaActivosFuncionariosPageWidgetState
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
-                                                      LoginWidget(),
+                                                      LoginPage(),
                                                 ),
                                                 (r) => false,
                                               );
@@ -239,7 +240,7 @@ class _ListaActivosFuncionariosPageWidgetState
                                     FutureBuilder<Usuario?>(
                                       future: AuthHelper()
                                           .cargarUsuarioDeFirebase(
-                                              currentUser!.uid.toString()),
+                                              ),
                                       builder:
                                           (BuildContext context, snapshot) {
                                         if (snapshot.connectionState ==

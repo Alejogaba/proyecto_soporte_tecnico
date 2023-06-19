@@ -11,7 +11,7 @@ class Activo {
     required this.nombre,
     this.marca = 'Generico',
     required this.detalles,
-    required this.urlImagen,
+    this.urlImagen='https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Imagen_no_disponible.svg/2048px-Imagen_no_disponible.svg.png',
     required this.casosPendientes,
   });
 

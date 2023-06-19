@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:login2/model/activo.dart';
+import 'package:login2/model/dependencias.dart';
 
 import '../../backend/firebase_storage/storage.dart';
 import '../../flutter_flow/upload_data.dart';
@@ -19,10 +21,11 @@ export 'nuevo_reporte_model.dart';
 class NuevoReporteWidget extends StatefulWidget {
   const NuevoReporteWidget({
     Key? key,
-    this.propertyRef,
+    this.dependencia,
+    required this.activo,
   }) : super(key: key);
-
-  final PropertiesRecord? propertyRef;
+  final Activo activo;
+  final Dependencia? dependencia;
 
   @override
   _NuevoReporteWidgetState createState() => _NuevoReporteWidgetState();
@@ -30,8 +33,9 @@ class NuevoReporteWidget extends StatefulWidget {
 
 class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
     with TickerProviderStateMixin {
-  
   late NuevoReporteModel _model;
+    TextEditingController dependenciaController = TextEditingController();
+    TextEditingController activoController = TextEditingController();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -54,8 +58,8 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
   void initState() {
     super.initState();
     _model = createModel(context, () => NuevoReporteModel());
-
-
+    dependenciaController.text = widget.dependencia!.nombre;
+    activoController.text = widget.activo.nombre;
     /* _model.pricePerNightController ??= TextEditingController(
         text: formatNumber(
       widget.propertyRef!.price,
@@ -68,8 +72,6 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
         TextEditingController(text: widget.propertyRef!.notes);
         **/
   }
-
-
 
   @override
   void dispose() {
@@ -144,7 +146,7 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                         child: TextFormField(
-                          controller: _model.pricePerNightController,
+                          controller: dependenciaController,
                           obscureText: false,
                           decoration: InputDecoration(
                             hintText: '\ Dependencia',
@@ -235,7 +237,8 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                         child: TextFormField(
-                          controller: _model.pricePerNightController,
+                          controller: activoController,
+                          readOnly: true,
                           obscureText: false,
                           decoration: InputDecoration(
                             hintText: '\ equipo de computo',
@@ -625,6 +628,4 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
       ),
     );
   }
-
-  
 }

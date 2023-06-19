@@ -77,8 +77,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
-   
-      home: NuevaNavBarFuncionario(),
+      initialRoute: '/home',
       navigatorKey: Get.key,
       getPages: routes(),
     );
@@ -119,14 +118,14 @@ class PrincipalPagina extends StatelessWidget {
                     final userDoc = snapshot.data;
                     final user = userDoc?.data();
                     if (user == null) {
-                      return LoginWidget();
+                      return LoginPage();
                     } else {
                       Usuario usuario =
                           Usuario.mapeo(user as Map<String, dynamic>);
                       if (usuario.role == 'admin') {
-                        return PerfilGeneral();
+                        return NuevaNavBar();
                       } else if (usuario.role == 'funcionario') {
-                        return PerfilGeneral();
+                        return NuevaNavBarFuncionario();
                       } else {
                         return LoginPage();
                       }
@@ -316,26 +315,20 @@ class _NuevaNavBarState extends State<NuevaNavBar> {
 }
 
 class NuevaNavBarFuncionario extends StatefulWidget {
-
-
-  const NuevaNavBarFuncionario({Key? key})
-      : super(key: key);
+  const NuevaNavBarFuncionario({Key? key}) : super(key: key);
   @override
-  _NuevaNavBarStateFuncionario createState() =>
-      _NuevaNavBarStateFuncionario();
+  _NuevaNavBarStateFuncionario createState() => _NuevaNavBarStateFuncionario();
 }
 
 class _NuevaNavBarStateFuncionario extends State<NuevaNavBarFuncionario> {
   int _selectedIndex = 0;
 
-   _NuevaNavBarStateFuncionario();
+  _NuevaNavBarStateFuncionario();
 
   static const List<Widget> _widgetOptions = <Widget>[
     ConversacionesWidget(),
     ListaActivosFuncionariosPageWidget(dependencia: null),
   ];
-
- 
 
   @override
   Widget build(BuildContext context) {

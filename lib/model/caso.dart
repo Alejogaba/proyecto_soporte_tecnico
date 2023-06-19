@@ -7,11 +7,11 @@ class Caso {
   String urlAdjunto;
 
   Caso({
-    required this.uid,
+    this.uid='',
     required this.uidSolicitante,
     required this.uidActivo,
     required this.descripcion,
-    required this.solucionado,
+   this.solucionado=false,
     required this.urlAdjunto,
   });
 

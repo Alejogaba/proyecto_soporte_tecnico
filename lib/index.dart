@@ -1,5 +1,4 @@
-// Export pages
-export 'vistas/login/login_widget.dart' show LoginWidget;
+
 export 'vistas/conversaciones/conversaciones_widget.dart' show ConversacionesWidget;
 export 'vistas/interfaz_principal/interfaz_principal_widget.dart'
     show InterfazPrincipalWidget;

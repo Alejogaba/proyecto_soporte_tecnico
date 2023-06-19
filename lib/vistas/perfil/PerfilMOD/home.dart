@@ -90,7 +90,7 @@ class _PerfilAdminState extends State<PerfilGeneral> {
                   ),
                   FutureBuilder<Usuario?>(
                     future: AuthHelper().cargarUsuarioDeFirebase(
-                        FirebaseAuth.instance.currentUser?.uid),
+                        ),
                     builder: (BuildContext context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done &&
                           snapshot.hasData) {

@@ -5,7 +5,7 @@ class NuevoReporteModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for pricePerNight widget.
-  TextEditingController? pricePerNightController;
+
   String? Function(BuildContext, String?)? pricePerNightControllerValidator;
   bool isDataUploading = false;
   FFUploadedFile uploadedLocalFile =
@@ -20,10 +20,9 @@ class NuevoReporteModel extends FlutterFlowModel {
   void initState(BuildContext context) {}
 
   void dispose() {
-    pricePerNightController?.dispose();
+
     notesController?.dispose();
   }
 
   /// Additional helper methods are added here.
-
 }

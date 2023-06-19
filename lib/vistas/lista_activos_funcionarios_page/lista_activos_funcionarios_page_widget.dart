@@ -89,67 +89,8 @@ class _ListaActivosFuncionariosPageWidgetState
       ),
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, _) => [
-          SliverAppBar(
-            pinned: true,
-            floating: false,
-            leading: InkWell(
-              onTap: () async {
-                Navigator.pop(context);
-              },
-              child: Icon(
-                Icons.chevron_left_rounded,
-                color: FlutterFlowTheme.of(context).tertiary,
-                size: 30,
-              ),
-            ),
-            backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-            iconTheme:
-                IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
-            automaticallyImplyLeading: false,
-            title: AutoSizeText(
-              (dependencia != null) ? dependencia!.nombre : '',
-              style: FlutterFlowTheme.of(context).bodyText1.override(
-                    fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
-                    color: FlutterFlowTheme.of(context).tertiary,
-                    fontSize: 28,
-                    fontWeight: FontWeight.w600,
-                    useGoogleFonts: GoogleFonts.asMap().containsKey(
-                        FlutterFlowTheme.of(context).bodyText1Family),
-                  ),
-            ),
-            actions: [
-              FlutterFlowIconButton(
-                borderColor: Colors.transparent,
-                borderRadius: 30,
-                borderWidth: 1,
-                buttonSize: 60,
-                icon: FaIcon(
-                  FontAwesomeIcons.filePdf,
-                  color: FlutterFlowTheme.of(context).tertiary,
-                  size: 30,
-                ),
-                onPressed: () async {},
-              ),
-              FlutterFlowIconButton(
-                borderColor: Colors.transparent,
-                borderRadius: 30,
-                borderWidth: 1,
-                buttonSize: 60,
-                icon: FaIcon(
-                  FontAwesomeIcons.penToSquare,
-                  color: FlutterFlowTheme.of(context).tertiary,
-                  size: 30,
-                ),
-                onPressed: () async {},
-              ),
-            ],
-            centerTitle: false,
-            elevation: 4,
-          )
-        ],
-        body: Builder(
+      body: SafeArea(
+        child: Builder(
           builder: (context) {
             return GestureDetector(
               onTap: () => FocusScope.of(context).unfocus(),
@@ -316,8 +257,9 @@ class _ListaActivosFuncionariosPageWidgetState
                                                 ),
                                           );
                                         } else {
+                                         
                                           return Text(
-                                            '¡Bienvenido!',
+                                            '¡Bienvenid@!',
                                             style: FlutterFlowTheme.of(context)
                                                 .displaySmall
                                                 .override(
@@ -354,11 +296,13 @@ class _ListaActivosFuncionariosPageWidgetState
                                               EdgeInsetsDirectional.fromSTEB(
                                                   4.0, 0.0, 4.0, 0.0),
                                           child: TextFormField(
+                                            onChanged: (value) {
+                                              setState(() {});
+                                            },
                                             controller: textControllerBusqueda,
                                             obscureText: false,
                                             decoration: InputDecoration(
-                                              labelText:
-                                                  'Buscar dependencia...',
+                                              labelText: 'Buscar activo...',
                                               labelStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -415,44 +359,8 @@ class _ListaActivosFuncionariosPageWidgetState
                                                   fontFamily: 'Urbanist',
                                                   color: FlutterFlowTheme.of(
                                                           context)
-                                                      .tertiary,
+                                                      .primaryText,
                                                 ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 8.0, 0.0),
-                                        child: FFButtonWidget(
-                                          onPressed: () {
-                                            print('Button pressed ...');
-                                          },
-                                          text: 'Buscar',
-                                          options: FFButtonOptions(
-                                            width: 100.0,
-                                            height: 40.0,
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 0.0, 0.0),
-                                            iconPadding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 0.0, 0.0),
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            textStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .titleSmall
-                                                    .override(
-                                                      fontFamily: 'Urbanist',
-                                                      color: Colors.white,
-                                                    ),
-                                            elevation: 2.0,
-                                            borderSide: BorderSide(
-                                              color: Colors.transparent,
-                                              width: 1.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(50.0),
                                           ),
                                         ),
                                       ),
@@ -463,168 +371,94 @@ class _ListaActivosFuncionariosPageWidgetState
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 12, 0, 0),
-                                  child: TextFormField(
-                                    controller: textControllerBusqueda,
-                                    onChanged: (_) => EasyDebounce.debounce(
-                                      'textController',
-                                      Duration(milliseconds: 2000),
-                                      () => setState(() {}),
-                                    ),
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      labelText: 'Buscar activo...',
-                                      labelStyle: FlutterFlowTheme.of(context)
-                                          .bodyText2
-                                          .override(
-                                            fontFamily: 'Poppins',
-                                            color: Color(0xFF57636C),
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.normal,
-                                            useGoogleFonts: GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyText2Family),
-                                          ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryText,
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryText,
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      filled: true,
-                                      fillColor: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      prefixIcon: Icon(
-                                        Icons.search_rounded,
-                                        color: Color(0xFF57636C),
-                                      ),
-                                    ),
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyText1
-                                        .override(
-                                          fontFamily: 'Poppins',
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryText,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.normal,
-                                          useGoogleFonts: GoogleFonts.asMap()
-                                              .containsKey(
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText1Family),
-                                        ),
-                                    maxLines: null,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 44),
-                          child: StreamBuilder<List<Activo?>>(
-                              stream: activoController.obtenerActivosStream(
-                                  dependencia!.uid,
-                                  textControllerBusqueda.text),
-                              builder: (context, snapshot) {
-                                if (snapshot.data != null &&
-                                    snapshot.data!.isNotEmpty) {
-                                  listaActivos.clear();
-                                  return Wrap(
-                                    spacing: MediaQuery.of(context).size.width *
-                                        0.01,
-                                    runSpacing: 15,
-                                    alignment: WrapAlignment.start,
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.start,
-                                    direction: Axis.horizontal,
-                                    runAlignment: WrapAlignment.start,
-                                    verticalDirection: VerticalDirection.down,
-                                    clipBehavior: Clip.none,
-                                    children: List.generate(
-                                        snapshot.data!.length, (index) {
-                                      return GestureDetector(
-                                          onTap: () async {
-                                            if (selectMode) {
-                                              final Activo? result =
-                                                  await Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      InterfazPrincipalWidget(),
-                                                ),
-                                              );
-                                            } else {
-                                              final Activo? result =
-                                                  await Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ActivoPerfilPageWidget(
-                                                    activo:
-                                                        snapshot.data![index]!,
-                                                    dependencia: dependencia,
+                        if (dependencia != null)
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 12, 0, 44),
+                            child: StreamBuilder<List<Activo?>>(
+                                stream: activoController.obtenerActivosStream(
+                                    dependencia!.uid,
+                                    textControllerBusqueda.text),
+                                builder: (context, snapshot) {
+                                  if (snapshot.data != null &&
+                                      snapshot.data!.isNotEmpty) {
+                                    listaActivos.clear();
+                                    return Wrap(
+                                      spacing:
+                                          MediaQuery.of(context).size.width *
+                                              0.01,
+                                      runSpacing: 15,
+                                      alignment: WrapAlignment.start,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.start,
+                                      direction: Axis.horizontal,
+                                      runAlignment: WrapAlignment.start,
+                                      verticalDirection: VerticalDirection.down,
+                                      clipBehavior: Clip.none,
+                                      children: List.generate(
+                                          snapshot.data!.length, (index) {
+                                        return GestureDetector(
+                                            onTap: () async {
+                                              if (selectMode) {
+                                                final Activo? result =
+                                                    await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        InterfazPrincipalWidget(),
                                                   ),
-                                                ),
-                                              );
-                                              if (result != null) {
-                                                // ignore: use_build_context_synchronously
-                                                Navigator.pop(context, result);
+                                                );
                                               } else {
-                                                setState(() {});
+                                                final Activo? result =
+                                                    await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ActivoPerfilPageWidget(
+                                                      activo: snapshot
+                                                          .data![index]!,
+                                                      dependencia: dependencia,
+                                                    ),
+                                                  ),
+                                                );
+                                                if (result != null) {
+                                                  // ignore: use_build_context_synchronously
+                                                  Navigator.pop(
+                                                      context, result);
+                                                }
                                               }
-                                            }
-                                          },
-                                          child: tarjetaActivo(
-                                            context,
-                                            snapshot.data![index]!,
-                                            selectMode: selectMode,
+                                            },
+                                            child: tarjetaActivo(
+                                              context,
+                                              snapshot.data![index]!,
+                                              selectMode: selectMode,
+                                            ));
+                                      }),
+                                    );
+                                  } else {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Center(
+                                          heightFactor: 22,
+                                          child: Container(
+                                            child: CircularProgressIndicator(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                            ),
                                           ));
-                                    }),
-                                  );
-                                } else {
-                                  return Center(
-                                      child: Container(
-                                    child: CircularProgressIndicator(
-                                      color:
-                                          FlutterFlowTheme.of(context).primary,
-                                    ),
-                                  ));
-                                }
-                              }),
-                        ),
+                                    } else {
+                                      return Center(
+                                        heightFactor: 50,
+                                        child: Container(
+                                          child: Text(
+                                              'No se han encontrado activos registrados...'),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                }),
+                          ),
                       ],
                     ),
                   ),

@@ -77,7 +77,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
-      initialRoute: '/home',
+   
+      home: NuevaNavBarFuncionario(),
       navigatorKey: Get.key,
       getPages: routes(),
     );
@@ -315,20 +316,19 @@ class _NuevaNavBarState extends State<NuevaNavBar> {
 }
 
 class NuevaNavBarFuncionario extends StatefulWidget {
-  final Dependencia dependencia;
 
-  const NuevaNavBarFuncionario({Key? key, required this.dependencia})
+
+  const NuevaNavBarFuncionario({Key? key})
       : super(key: key);
   @override
   _NuevaNavBarStateFuncionario createState() =>
-      _NuevaNavBarStateFuncionario(this.dependencia);
+      _NuevaNavBarStateFuncionario();
 }
 
 class _NuevaNavBarStateFuncionario extends State<NuevaNavBarFuncionario> {
   int _selectedIndex = 0;
-  Dependencia dependencia;
 
-   _NuevaNavBarStateFuncionario(this.dependencia);
+   _NuevaNavBarStateFuncionario();
 
   static const List<Widget> _widgetOptions = <Widget>[
     ConversacionesWidget(),

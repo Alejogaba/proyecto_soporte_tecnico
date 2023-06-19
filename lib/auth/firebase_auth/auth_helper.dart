@@ -335,7 +335,7 @@ class AuthHelper {
               'users') // Reemplaza 'users' por el nombre de tu colección de usuarios
           .doc(currentUser!.uid)
           .get();
-      log('Buscando la dependencia correspondiente');
+      
       if (userSnapshot.exists) {
         final Usuario usuario =
             Usuario.mapeo(userSnapshot.data() as Map<String, dynamic>);
@@ -344,9 +344,11 @@ class AuthHelper {
                 'dependencias') // Reemplaza 'users' por el nombre de tu colección de usuarios
             .doc(usuario.area)
             .get();
+        log('Buscando el usuario correspondiente a: '+usuario.area.toString());
         if (dependenciaSnapshot.exists) {
           final Dependencia dependencia =
-              Dependencia.fromMap(userSnapshot.data() as Map<String, dynamic>);
+              Dependencia.fromMap(dependenciaSnapshot.data() as Map<String, dynamic>);
+        log('Buscando la dependencia correspondiente a: '+dependencia.uid.toString());
           return dependencia;
         } else {
           return null;

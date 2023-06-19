@@ -2,41 +2,43 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:login2/utils/utilidades.dart';
 
 import '../model/activo.dart';
 
 class ActivoController {
-  Stream<List<Activo?>> obtenerActivosStream(String uidDependencia,String valorBusqueda) {
+  Utilidades util = Utilidades();
+  Stream<List<Activo?>> obtenerActivosStream(
+      String uidDependencia, String valorBusqueda) {
+          log('Retornando todos los activos - uidDependencia: $uidDependencia - valorBusqueda: $valorBusqueda');
     if (valorBusqueda.isEmpty) {
       return FirebaseFirestore.instance
-        .collection('dependencias')
-        .doc(uidDependencia)
-        .collection('activos')
-        .snapshots()
-        .map((QuerySnapshot querySnapshot) {
-      List<Activo> dependencias = [];
-      querySnapshot.docs.forEach((doc) =>
-          dependencias.add(Activo.fromMap(doc.data() as Map<String, dynamic>)));
-      log('lista dependencias: ' + dependencias[0].nombre.toString());
-      return dependencias;
-    });
-    }else{
+          .collection('dependencias')
+          .doc(uidDependencia)
+          .collection('activos')
+          .snapshots()
+          .map((QuerySnapshot querySnapshot) {
+        List<Activo> dependencias = [];
+        querySnapshot.docs.forEach((doc) => dependencias
+            .add(Activo.fromMap(doc.data() as Map<String, dynamic>)));
+        return dependencias;
+      });
+    } else {
       return FirebaseFirestore.instance
-        .collection('dependencias')
-        .doc(uidDependencia)
-        .collection('activos')
-        .where('nombre', isGreaterThanOrEqualTo: valorBusqueda)
-      .where('nombre', isLessThanOrEqualTo: valorBusqueda + '\uf8ff')
-        .snapshots()
-        .map((QuerySnapshot querySnapshot) {
-      List<Activo> dependencias = [];
-      querySnapshot.docs.forEach((doc) =>
-          dependencias.add(Activo.fromMap(doc.data() as Map<String, dynamic>)));
-      log('lista dependencias: ' + dependencias[0].nombre.toString());
-      return dependencias;
-    });
+          .collection('dependencias')
+          .doc(uidDependencia)
+          .collection('activos')
+          .where('nombre', isGreaterThanOrEqualTo: util.capitalizarPalabras(valorBusqueda) )
+          .where('nombre', isLessThanOrEqualTo: util.capitalizarPalabras(valorBusqueda) + '\uf8ff')
+          .snapshots()
+          .map((QuerySnapshot querySnapshot) {
+        List<Activo> dependencias = [];
+        querySnapshot.docs.forEach((doc) => dependencias
+            .add(Activo.fromMap(doc.data() as Map<String, dynamic>)));
+        log('lista dependencias: ' + dependencias[0].nombre.toString());
+        return dependencias;
+      });
     }
-    
   }
 
   addModActivo(
@@ -48,14 +50,17 @@ class ActivoController {
             .collection("dependencias")
             .doc(uidDpendencia)
             .collection('activos')
-            .add(activoAguardar.toMap()).then((value) {
-              _db
-            .collection("dependencias")
-            .doc(uidDpendencia)
-            .collection('activos').doc(value.id).update({
-                                      'uid': value.id,
-                                    });
-            });
+            .add(activoAguardar.toMap())
+            .then((value) {
+          _db
+              .collection("dependencias")
+              .doc(uidDpendencia)
+              .collection('activos')
+              .doc(value.id)
+              .update({
+            'uid': value.id,
+          });
+        });
         return 'ok';
       } else {
         await _db

@@ -12,7 +12,7 @@ class NuevoReporteModel extends FlutterFlowModel {
       FFUploadedFile(bytes: Uint8List.fromList([]));
   String uploadedFileUrl = '';
   // State field(s) for notes widget.
-  TextEditingController? notesController;
+  TextEditingController? detallesController;
   String? Function(BuildContext, String?)? notesControllerValidator;
 
   /// Initialization and disposal methods.
@@ -20,8 +20,7 @@ class NuevoReporteModel extends FlutterFlowModel {
   void initState(BuildContext context) {}
 
   void dispose() {
-
-    notesController?.dispose();
+    detallesController?.dispose();
   }
 
   /// Additional helper methods are added here.

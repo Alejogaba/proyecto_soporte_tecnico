@@ -2,16 +2,18 @@ class Caso {
   String uid;
   String uidSolicitante;
   String uidActivo;
+  String uidDependencia;
   String descripcion;
   bool solucionado;
   String urlAdjunto;
 
   Caso({
-    this.uid='',
+    this.uid = '',
     required this.uidSolicitante,
     required this.uidActivo,
+    required this.uidDependencia,
     required this.descripcion,
-   this.solucionado=false,
+    this.solucionado = false,
     required this.urlAdjunto,
   });
 
@@ -22,7 +24,8 @@ class Caso {
       uidActivo: map['uidActivo'] ?? '',
       descripcion: map['descripcion'] ?? '',
       solucionado: map['solucionado'] ?? false,
-      urlAdjunto: map['urlAdjunto'] ?? '',
+      urlAdjunto: map['urlAdjunto'] ?? '', 
+      uidDependencia: map['uidDependencia'] ?? '',
     );
   }
 
@@ -34,6 +37,7 @@ class Caso {
       'descripcion': descripcion,
       'solucionado': solucionado,
       'urlAdjunto': urlAdjunto,
+      'uidDependencia': uidDependencia,
     };
   }
 }

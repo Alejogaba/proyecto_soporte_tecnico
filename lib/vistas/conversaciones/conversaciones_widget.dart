@@ -17,7 +17,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'conversaciones_model.dart';
 export 'conversaciones_model.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class ConversacionesWidget extends StatefulWidget {
@@ -51,15 +51,7 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          List<String> listaIdCasos = [];
-          types.User otheruser = types.User(id: 'WyFEzjfkFacfhDj07MUoC7jQChq2');
-          types.Room room =
-              await FirebaseChatCore.instance.createRoom(otheruser);
-          final collectionRef =
-              FirebaseFirestore.instance.collection('rooms').doc(room.id);
-          await collectionRef.update({'uid': room.id});
-        },
+        onPressed: () async {},
         child: Icon(Icons.add),
       ),
       key: scaffoldKey,
@@ -140,8 +132,7 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                             return FFChatPreview(
                               onTap: () async {
                                 Usuario? usuarioActual = await AuthHelper()
-                                    .cargarUsuarioDeFirebase(
-                                        );
+                                    .cargarUsuarioDeFirebase();
 
                                 if (usuarioActual != null) {
                                   try {
@@ -165,19 +156,23 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                                       'fcmToken': token,
                                     });
                                   }
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ChatWidget(
-                                          currentUserToken: token,
-                                          otherUserToken:
-                                              snapshot.data!.fcmToken,
-                                          nombre:
-                                              '${snapshot.data!.nombre} - ${snapshot.data!.cargo} ${snapshot.data!.area}',
-                                          usuarios: listViewChatsRecord.users,
-                                          uid: listViewChatsRecord.roomUid),
-                                    ),
-                                  );
+                                 
+                                  if (snapshot.data!= null) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ChatWidget(
+                                            otroUsuario: snapshot.data!,
+                                            currentUserToken: token,
+                                            otherUserToken:
+                                                snapshot.data!.fcmToken,
+                                            nombre:
+                                                '${snapshot.data!.nombre} - ${snapshot.data!.cargo} ${snapshot.data!.area}',
+                                            usuarios: listViewChatsRecord.users,
+                                            uid: listViewChatsRecord.roomUid),
+                                      ),
+                                    );
+                                  }
                                 }
                               },
                               lastChatText: (lastMessage != null)

@@ -6,8 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:login2/Widgets/snackbar.dart';
 import 'package:translator/translator.dart';
-import '../model/usuario.dart';
-import '../vistas/login/theme.dart';
+import '../../model/usuario.dart';
+import 'theme.dart';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';

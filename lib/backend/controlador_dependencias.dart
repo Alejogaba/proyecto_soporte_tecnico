@@ -16,4 +16,11 @@ class ControladorDependencias {
 
     return DependenciaList;
   }
+
+  Future<int> getTotalCasosCountDependencia(String uidDependencia) async {
+    final querySnapshot =
+        await FirebaseFirestore.instance.collection('dependencias').doc(uidDependencia).collection('activos')
+        .where('casosPendientes',isEqualTo: true).get();
+    return querySnapshot.size;
+  }
 }

@@ -1,9 +1,22 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:login2/auth/firebase_auth/auth_helper.dart';
+import 'package:login2/backend/controlador_caso.dart';
+import 'package:login2/model/activo.dart';
+import 'package:login2/model/dependencias.dart';
+import 'package:login2/utils/utilidades.dart';
+import 'package:login2/vistas/lista_reportes/lista_reportes_widget.dart';
 
 import '../../backend/firebase_storage/storage.dart';
 import '../../flutter_flow/upload_data.dart';
+import '../../model/caso.dart';
+import '../../model/usuario.dart';
+import '../chat/chat_widget.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -15,14 +28,16 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'nuevo_reporte_model.dart';
 export 'nuevo_reporte_model.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class NuevoReporteWidget extends StatefulWidget {
   const NuevoReporteWidget({
     Key? key,
-    this.propertyRef,
+    this.dependencia,
+    required this.activo,
   }) : super(key: key);
-
-  final PropertiesRecord? propertyRef;
+  final Activo activo;
+  final Dependencia? dependencia;
 
   @override
   _NuevoReporteWidgetState createState() => _NuevoReporteWidgetState();
@@ -30,8 +45,9 @@ class NuevoReporteWidget extends StatefulWidget {
 
 class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
     with TickerProviderStateMixin {
-  
   late NuevoReporteModel _model;
+  TextEditingController dependenciaController = TextEditingController();
+  TextEditingController activoController = TextEditingController();
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -54,8 +70,8 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
   void initState() {
     super.initState();
     _model = createModel(context, () => NuevoReporteModel());
-
-
+    dependenciaController.text = widget.dependencia!.nombre;
+    activoController.text = widget.activo.nombre;
     /* _model.pricePerNightController ??= TextEditingController(
         text: formatNumber(
       widget.propertyRef!.price,
@@ -68,8 +84,6 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
         TextEditingController(text: widget.propertyRef!.notes);
         **/
   }
-
-
 
   @override
   void dispose() {
@@ -144,7 +158,8 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                         child: TextFormField(
-                          controller: _model.pricePerNightController,
+                          readOnly: true,
+                          controller: dependenciaController,
                           obscureText: false,
                           decoration: InputDecoration(
                             hintText: '\ Dependencia',
@@ -235,7 +250,8 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                         child: TextFormField(
-                          controller: _model.pricePerNightController,
+                          controller: activoController,
+                          readOnly: true,
                           obscureText: false,
                           decoration: InputDecoration(
                             hintText: '\ equipo de computo',
@@ -327,7 +343,7 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 12.0),
                         child: TextFormField(
-                          controller: _model.notesController,
+                          controller: _model.detallesController,
                           obscureText: false,
                           decoration: InputDecoration(
                             hintText: 'Detalles',
@@ -592,8 +608,66 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                     children: [],
                   ),
                   FFButtonWidget(
-                    onPressed: () {
-                      print('Button pressed ...');
+                    onPressed: () async {
+                      //Falta validar
+                      FirebaseAuth auth = FirebaseAuth.instance;
+                      if (auth.currentUser != null) {
+                        Caso casoAregistrar = Caso(
+                            uidDependencia: widget.dependencia!.uid,
+                            uidSolicitante: auth.currentUser!.uid,
+                            uidActivo: widget.activo.uid,
+                            descripcion: _model.detallesController.text,
+                            urlAdjunto: _model.uploadedFileUrl);
+                        await CasosController().addModCaso(casoAregistrar);
+                        final collectionRef = FirebaseFirestore.instance
+                            .collection('dependencias')
+                            .doc(widget.dependencia!.uid)
+                            .collection('activos')
+                            .doc(widget.activo.uid);
+                        await collectionRef.update({'casosPendientes': true});
+                        List<Usuario> usuariosObtenidos =
+                            await UserHelper().obtenerUsuarios();
+                        if (usuariosObtenidos.isNotEmpty) {
+                          for (var element in usuariosObtenidos) {
+                            if (element.role == 'admin' &&
+                                element.uid != auth.currentUser!.uid) {
+                              types.User otheruser =
+                                  types.User(id: element.uid!);
+                              types.Room room = await FirebaseChatCore.instance
+                                  .createRoom(otheruser);
+                              final collectionRef = FirebaseFirestore.instance
+                                  .collection('rooms')
+                                  .doc(room.id);
+                              await collectionRef.update({
+                                'uid': room.id,
+                                'sinRespuesta': true,
+                                'finalizado': false
+                              });
+                              Utilidades().sendNotification(
+                                  element.fcmToken!,
+                                  'Nuevo reporte',
+                                  'Un equipo en ${widget.dependencia!.nombre} requiere servicio técnico');
+                            }
+                          }
+                          Get.snackbar('Reporte registrado',
+                              'Se ha registrado correctamente el reporte y se ha notificado a los tecnicos encargados, en breve responderan a su solicitud',
+                              duration: Duration(seconds: 6),
+                              margin: EdgeInsets.fromLTRB(4, 8, 4, 0),
+                              snackStyle: SnackStyle.FLOATING,
+                              backgroundColor: Color.fromARGB(211, 28, 138, 46),
+                              icon: Icon(
+                                Icons.check,
+                                color: Colors.white,
+                              ),
+                              colorText: Color.fromARGB(255, 228, 219, 218));
+                        }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ListaReportesWidget(),
+                          ),
+                        );
+                      }
                     },
                     text: 'Enviar',
                     options: FFButtonOptions(
@@ -625,6 +699,4 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
       ),
     );
   }
-
-  
 }

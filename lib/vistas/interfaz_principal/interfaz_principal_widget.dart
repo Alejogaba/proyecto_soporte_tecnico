@@ -1,10 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
 import 'package:login2/vistas/lista_activos_page/lista_activos_page_widget.dart';
+import 'package:login2/vistas/login/LoginMOD.dart';
+import 'package:login2/vistas/perfil/PerfilMOD/home.dart';
 
 import '../../auth/firebase_auth/auth_util.dart';
 import '../../model/usuario.dart';
-import '../login/login_widget.dart';
+
 import '../../model/dependencias.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -150,28 +152,21 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.person_add,
-                                        color: FlutterFlowTheme.of(context)
-                                            .tertiary,
-                                      )),
+                                  
                                   IconButton(
                                       onPressed: () async {
-                                        await authManager.signOut();
-                                        await Navigator.pushAndRemoveUntil(
+                                        await Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => LoginWidget(),
+                                            builder: (context) => PerfilGeneral(),
                                           ),
-                                          (r) => false,
                                         );
                                       },
                                       icon: Icon(
-                                        Icons.logout,
+                                        Icons.settings,
                                         color: FlutterFlowTheme.of(context)
                                             .tertiary,
+                                       size: 30,
                                       )),
                                 ],
                               )
@@ -187,7 +182,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                             children: [
                               FutureBuilder<Usuario?>(
                                 future: AuthHelper().cargarUsuarioDeFirebase(
-                                    currentUser!.uid.toString()),
+                                    ),
                                 builder: (BuildContext context, snapshot) {
                                   if (snapshot.connectionState ==
                                           ConnectionState.done &&

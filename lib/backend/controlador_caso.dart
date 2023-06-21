@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,53 +6,80 @@ import 'package:flutter/src/widgets/framework.dart';
 
 import '../model/activo.dart';
 import '../model/caso.dart';
+
 class CasosController {
-  Stream<List<Caso>> obtenerCasosStream() {
-    return FirebaseFirestore.instance
-          .collection('casos')
-          .snapshots()
-          .map((QuerySnapshot querySnapshot) {
-        List<Caso> casos = [];
-        querySnapshot.docs.forEach((doc) =>
-            casos.add(Caso.fromMap(doc.data() as Map<String, dynamic>)));
-        log('lista casos: ' + casos[0].descripcion.toString());
-        return casos;
-      });
+  Stream<List<Caso>> obtenerCasosStream({String uidSolicitante=''}) {
+    if (uidSolicitante.isEmpty) {
+      return FirebaseFirestore.instance
+        .collection('casos')
+        .snapshots()
+        .map((QuerySnapshot querySnapshot) {
+      List<Caso> casos = [];
+      querySnapshot.docs.forEach(
+          (doc) => casos.add(Caso.fromMap(doc.data() as Map<String, dynamic>)));
+      log('lista casos: ' + casos[0].descripcion.toString());
+      return casos;
+    });
+    } else {
+      return FirebaseFirestore.instance
+        .collection('casos')
+        .where('uidSolicitante',isEqualTo: uidSolicitante)
+        .snapshots()
+        .map((QuerySnapshot querySnapshot) {
+      List<Caso> casos = [];
+      querySnapshot.docs.forEach(
+          (doc) => casos.add(Caso.fromMap(doc.data() as Map<String, dynamic>)));
+      log('lista casos: ' + casos[0].descripcion.toString());
+      return casos;
+    });
+    }
   }
 
-  Future<Caso?> buscarCasoPorIDactivo(String uidActivo) async { 
-    try {
-    final querySnapshot = await FirebaseFirestore.instance
-        .collection('casos')
-        .where('uidActivo', isEqualTo: uidActivo)
-        .limit(1)
-        .get();
+  Stream<int> getTotalCasosCountSolicitante(String uidSolicitante) {
+  // ignore: close_sinks
+  StreamController<int> controller = StreamController<int>();
 
-    if (querySnapshot.size > 0) {
-      final docSnapshot = querySnapshot.docs[0];
-      final caso = Caso.fromMap(docSnapshot.data());
-      return caso;
-    } else {
+  FirebaseFirestore.instance
+      .collection('casos')
+      .where('uidSolicitante', isEqualTo: uidSolicitante)
+      .snapshots()
+      .listen((QuerySnapshot querySnapshot) {
+    int count = querySnapshot.size;
+    controller.add(count);
+  });
+
+  return controller.stream;
+}
+
+
+
+  Future<Caso?> buscarCasoPorIDactivo(String uidActivo) async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('casos')
+          .where('uidActivo', isEqualTo: uidActivo)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.size > 0) {
+        final docSnapshot = querySnapshot.docs[0];
+        final caso = Caso.fromMap(docSnapshot.data());
+        return caso;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error al cargar el caso individual: $e');
       return null;
     }
-  } catch (e) {
-    print('Error al cargar el caso individual: $e');
-    return null;
-  }
   }
 
   addModCaso(Caso casoAguardar) async {
     try {
       FirebaseFirestore _db = FirebaseFirestore.instance;
       if (casoAguardar.uid.isEmpty) {
-        await _db
-            .collection('casos')
-            .add(casoAguardar.toMap())
-            .then((value) {
-          _db
-              .collection('casos')
-              .doc(value.id)
-              .update({'uid': value.id});
+        await _db.collection('casos').add(casoAguardar.toMap()).then((value) {
+          _db.collection('casos').doc(value.id).update({'uid': value.id});
         });
         return 'ok';
       } else {
@@ -66,13 +94,17 @@ class CasosController {
     }
   }
 
-  removeCaso(String idCaso) async {
+  quitarCaso(Caso caso) async {
     try {
       FirebaseFirestore _db = FirebaseFirestore.instance;
-      await _db
-          .collection('casos')
-          .doc(idCaso)
-          .delete();
+      await _db.collection('casos').doc(caso.uid).delete().then((value) {
+        _db
+            .collection('dependencias')
+            .doc(caso.uidDependencia)
+            .collection('activos')
+            .doc(caso.uidActivo)
+            .update({'casosPendientes': false});
+      });
       return 'ok';
     } catch (e) {
       return 'error';

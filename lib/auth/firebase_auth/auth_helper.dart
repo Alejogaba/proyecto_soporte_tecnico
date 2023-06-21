@@ -28,10 +28,12 @@ class AuthHelper {
     }
   }
 
-  Future<Usuario?> cargarUsuarioDeFirebase(String? uid) async {
-    if (uid != null && uid.isNotEmpty) {
+  Future<Usuario?> cargarUsuarioDeFirebase() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    Logger().i('Usuario actual funcion firebase: ${auth.currentUser!.email}');
+    if (auth.currentUser!= null) {
       final querySnapshot =
-          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+          await FirebaseFirestore.instance.collection('users').doc(auth.currentUser!.uid).get();
       if (querySnapshot.data() != null && querySnapshot.data()!.isNotEmpty) {
         return Usuario.mapeo(querySnapshot.data()!);
       } else {
@@ -198,7 +200,7 @@ class AuthHelper {
           email: email, password: password);
       log('resultado del login: ' + res.toString());
       log('Respuesta Firebase:' + res.user.toString());
-      usuario = await AuthHelper().cargarUsuarioDeFirebase(res.user!.uid);
+      usuario = await AuthHelper().cargarUsuarioDeFirebase();
       log('El uid es:' + res.user!.uid);
       log('Ya se cargo usuario de firebase: ' + usuario.toString());
       Future.delayed(
@@ -330,12 +332,13 @@ class AuthHelper {
 
   Future<Dependencia?> buscarDependenciaUsuarioActual() async {
     try {
+      FirebaseAuth auth = FirebaseAuth.instance;
       final userSnapshot = await FirebaseFirestore.instance
           .collection(
               'users') // Reemplaza 'users' por el nombre de tu colección de usuarios
-          .doc(currentUser!.uid)
+          .doc(auth.currentUser!.uid)
           .get();
-      
+
       if (userSnapshot.exists) {
         final Usuario usuario =
             Usuario.mapeo(userSnapshot.data() as Map<String, dynamic>);
@@ -344,11 +347,13 @@ class AuthHelper {
                 'dependencias') // Reemplaza 'users' por el nombre de tu colección de usuarios
             .doc(usuario.area)
             .get();
-        log('Buscando el usuario correspondiente a: '+usuario.area.toString());
+        log('Buscando el usuario correspondiente a: ' +
+            usuario.area.toString());
         if (dependenciaSnapshot.exists) {
-          final Dependencia dependencia =
-              Dependencia.fromMap(dependenciaSnapshot.data() as Map<String, dynamic>);
-        log('Buscando la dependencia correspondiente a: '+dependencia.uid.toString());
+          final Dependencia dependencia = Dependencia.fromMap(
+              dependenciaSnapshot.data() as Map<String, dynamic>);
+          log('Buscando la dependencia correspondiente a: ' +
+              dependencia.uid.toString());
           return dependencia;
         } else {
           return null;

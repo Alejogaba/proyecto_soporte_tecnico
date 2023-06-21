@@ -1,4 +1,6 @@
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:login2/backend/controlador_caso.dart';
+import 'package:login2/model/usuario.dart';
 import '../../flutter_flow/chat/chat_page_firebase.dart';
 import '/flutter_flow/chat/index.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'chat_model.dart';
 export 'chat_model.dart';
+import 'package:badges/badges.dart' as badges;
 
 class ChatWidget extends StatefulWidget {
   const ChatWidget(
@@ -16,7 +19,9 @@ class ChatWidget extends StatefulWidget {
       required this.uid,
       required this.nombre,
       required,
-      this.currentUserToken, this.otherUserToken})
+      this.currentUserToken,
+      this.otherUserToken,
+      required this.otroUsuario})
       : super(key: key);
   final List<String> usuarios;
   final String? currentUserToken;
@@ -24,6 +29,7 @@ class ChatWidget extends StatefulWidget {
   final DocumentReference? chatRef;
   final String uid;
   final String nombre;
+  final Usuario otroUsuario;
   @override
   _ChatWidgetState createState() => _ChatWidgetState(usuarios);
 }
@@ -80,19 +86,102 @@ class _ChatWidgetState extends State<ChatWidget> {
           ),
           title: Text(
             widget.nombre,
+            overflow: TextOverflow.ellipsis,
             style: FlutterFlowTheme.of(context).titleMedium.override(
                   fontFamily: 'Urbanist',
                   color: FlutterFlowTheme.of(context).tertiary,
                 ),
           ),
-          actions: [],
+          actions: [
+            StreamBuilder<int>(
+                stream: CasosController()
+                    .getTotalCasosCountSolicitante(widget.otroUsuario.uid!),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.hasData) {
+                    return InkWell(
+                      onTap: () {},
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 0.0, 16.0, 8.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            badges.Badge(
+                              position: badges.BadgePosition.topEnd(
+                                  top: -10, end: -12),
+                              showBadge: true,
+                              ignorePointer: false,
+                              onTap: () {
+                                print('Abrir lista reportes');
+                              },
+                              badgeContent: Text(snapshot.data.toString(),
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Urbanist',
+                                        color: FlutterFlowTheme.of(context)
+                                            .tertiary,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w500,
+                                      )),
+                              badgeAnimation: badges.BadgeAnimation.fade(
+                                animationDuration: Duration(seconds: 2),
+                                loopAnimation: true,
+                                curve: Curves.fastEaseInToSlowEaseOut,
+                                colorChangeAnimationCurve: Curves.easeInCubic,
+                              ),
+                              badgeStyle: badges.BadgeStyle(
+                                shape: badges.BadgeShape.circle,
+                                badgeColor: Colors.redAccent,
+                                padding: EdgeInsets.all(5),
+                                borderRadius: BorderRadius.circular(4),
+                                borderSide: BorderSide(
+                                    color: Colors.redAccent, width: 2),
+                                elevation: 0,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 6.0),
+                              child: Text(
+                                'Reportes'.maybeHandleOverflow(
+                                  maxChars: 90,
+                                  replacement: '…',
+                                ),
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Urbanist',
+                                      color: FlutterFlowTheme.of(context).error,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  } else if (snapshot.connectionState == ConnectionState.done &&
+                      !(snapshot.hasData)) {
+                    return Container();
+                  } else {
+                    return Center(
+                      child: Container(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+                }),
+          ],
           centerTitle: false,
           elevation: 2.0,
         ),
         body: ChatPageFirebase(
-          nombre: widget.nombre,
-          currentUserToken: widget.currentUserToken,
-          otherUserToken: widget.otherUserToken,
+            nombre: widget.nombre,
+            currentUserToken: widget.currentUserToken,
+            otherUserToken: widget.otherUserToken,
             chatUid: widget.uid,
             room: types.Room(
                 id: widget.uid, type: types.RoomType.direct, users: users)));

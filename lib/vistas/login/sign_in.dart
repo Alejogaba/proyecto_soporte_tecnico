@@ -8,11 +8,12 @@ import 'package:login2/Widgets/snackbar.dart';
 import 'package:login2/main.dart';
 import 'package:translator/translator.dart';
 
-import '../auth/firebase_auth/auth_helper.dart';
-import '../model/usuario.dart';
-import '../vistas/cambiar_password/cambiar_password_widget.dart';
-import '../vistas/login/theme.dart';
-import '../vistas/perfil/PerfilMOD/home.dart';
+import '../../auth/firebase_auth/auth_helper.dart';
+import '../../model/usuario.dart';
+import '../../theme.dart';
+import '../cambiar_password/cambiar_password_widget.dart';
+import '../perfil/PerfilMOD/home.dart';
+
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -183,7 +184,7 @@ class _SignInState extends State<SignIn> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  PerfilGeneral()));
+                                                  NuevaNavBar()));
                                     } else {
                                       Navigator.push(
                                           context,
@@ -269,13 +270,13 @@ class _SignInState extends State<SignIn> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        PerfilGeneral()));
+                                                        NuevaNavBar()));
                                           } else {
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        NuevaNavBarFuncionario()));
+                                                         NuevaNavBarFuncionario()));
                                           }
                                           }
                                         }
@@ -426,3 +427,4 @@ class _SignInState extends State<SignIn> {
   }
   
 }
+

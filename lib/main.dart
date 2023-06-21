@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
    
-      home: NuevaNavBarFuncionario(),
+      initialRoute: '/home',
       navigatorKey: Get.key,
       getPages: routes(),
     );
@@ -126,7 +126,7 @@ class PrincipalPagina extends StatelessWidget {
                       if (usuario.role == 'admin') {
                         return PerfilGeneral();
                       } else if (usuario.role == 'funcionario') {
-                        return PerfilGeneral();
+                        return NuevaNavBarFuncionario();
                       } else {
                         return LoginPage();
                       }

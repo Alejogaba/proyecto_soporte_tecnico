@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:login2/Widgets/snackbar.dart';
+import 'package:login2/main.dart';
 import 'package:translator/translator.dart';
 
 import '../auth/firebase_auth/auth_helper.dart';
@@ -188,7 +189,7 @@ class _SignInState extends State<SignIn> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  PerfilGeneral()));
+                                                  NuevaNavBarFuncionario()));
                                     }
                                   }
                                 }
@@ -274,7 +275,7 @@ class _SignInState extends State<SignIn> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        PerfilGeneral()));
+                                                        NuevaNavBarFuncionario()));
                                           }
                                           }
                                         }

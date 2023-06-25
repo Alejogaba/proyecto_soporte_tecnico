@@ -77,6 +77,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
+   
       initialRoute: '/home',
       navigatorKey: Get.key,
       getPages: routes(),

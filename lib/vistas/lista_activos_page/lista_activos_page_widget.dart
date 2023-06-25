@@ -414,6 +414,7 @@ Widget tarjetaActivo(context, Activo activo,
               style: FlutterFlowTheme.of(context).subtitle1,
             ),
           ),
+          if(activo.casosPendientes)
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [

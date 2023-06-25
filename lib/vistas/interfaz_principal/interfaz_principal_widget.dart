@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
+import 'package:login2/backend/controlador_dependencias.dart';
 import 'package:login2/vistas/lista_activos_page/lista_activos_page_widget.dart';
 import 'package:login2/vistas/login/LoginMOD.dart';
 import 'package:login2/vistas/perfil/PerfilMOD/home.dart';
@@ -152,13 +153,13 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  
                                   IconButton(
                                       onPressed: () async {
                                         await Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => PerfilGeneral(),
+                                            builder: (context) =>
+                                                PerfilGeneral(),
                                           ),
                                         );
                                       },
@@ -166,7 +167,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                         Icons.settings,
                                         color: FlutterFlowTheme.of(context)
                                             .tertiary,
-                                       size: 30,
+                                        size: 30,
                                       )),
                                 ],
                               )
@@ -181,8 +182,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               FutureBuilder<Usuario?>(
-                                future: AuthHelper().cargarUsuarioDeFirebase(
-                                    ),
+                                future: AuthHelper().cargarUsuarioDeFirebase(),
                                 builder: (BuildContext context, snapshot) {
                                   if (snapshot.connectionState ==
                                           ConnectionState.done &&
@@ -383,8 +383,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                     MaterialPageRoute(
                                       builder: (context) =>
                                           ListaActivosPageWidget(
-                                              dependencia:
-                                                  listDependencias),
+                                              dependencia: listDependencias),
                                     ),
                                   );
                                 },
@@ -423,8 +422,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                             ),
                                             child: CachedNetworkImage(
                                               imageUrl: valueOrDefault<String>(
-                                                listDependencias
-                                                    .urlImagen,
+                                                listDependencias.urlImagen,
                                                 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
                                               ),
                                               width: double.infinity,
@@ -442,8 +440,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                             children: [
                                               Expanded(
                                                 child: Text(
-                                                  listDependencias
-                                                      .nombre
+                                                  listDependencias.nombre
                                                       .maybeHandleOverflow(
                                                     maxChars: 36,
                                                     replacement: '…',
@@ -490,86 +487,135 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                             ],
                                           ),
                                         ),
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  16.0, 0.0, 16.0, 8.0),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              badges.Badge(
-                                                position:
-                                                    badges.BadgePosition.topEnd(
-                                                        top: -10, end: -12),
-                                                showBadge: true,
-                                                ignorePointer: false,
-                                                onTap: () {},
-                                                badgeContent: Text('3',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Urbanist',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .tertiary,
-                                                          fontSize: 16.0,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        )),
-                                                badgeAnimation:
-                                                    badges.BadgeAnimation.fade(
-                                                  animationDuration:
-                                                      Duration(seconds: 2),
-                                                  loopAnimation: true,
-                                                  curve: Curves
-                                                      .fastEaseInToSlowEaseOut,
-                                                  colorChangeAnimationCurve:
-                                                      Curves.easeInCubic,
-                                                ),
-                                                badgeStyle: badges.BadgeStyle(
-                                                  shape:
-                                                      badges.BadgeShape.circle,
-                                                  badgeColor: Colors.redAccent,
-                                                  padding: EdgeInsets.all(5),
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                  borderSide: BorderSide(
-                                                      color: Colors.redAccent,
-                                                      width: 2),
-                                                  elevation: 0,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 6.0),
-                                                child: Text(
-                                                  'Solicitudes de soporte técnico'
-                                                      .maybeHandleOverflow(
-                                                    maxChars: 90,
-                                                    replacement: '…',
-                                                  ),
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Urbanist',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .error,
-                                                        fontSize: 16.0,
-                                                        fontWeight:
-                                                            FontWeight.w500,
+                                        StreamBuilder<int>(
+                                            stream: ControladorDependencias()
+                                                .getTotalCasosCountDependencia(
+                                                    listDependencias.uid),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                      ConnectionState.done &&
+                                                  snapshot.hasData) {
+                                                if (snapshot.data! > 0) {
+                                                  return Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          16.0, 0.0, 16.0, 8.0),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      badges.Badge(
+                                                        position:
+                                                            badges.BadgePosition
+                                                                .topEnd(
+                                                                    top: -10,
+                                                                    end: -12),
+                                                        showBadge: true,
+                                                        ignorePointer: false,
+                                                        onTap: () {
+                                                          print(
+                                                              'Abrir lista reportes');
+                                                        },
+                                                        badgeContent: Text(
+                                                            snapshot.data
+                                                                .toString(),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Urbanist',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .tertiary,
+                                                                  fontSize:
+                                                                      16.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                )),
+                                                        badgeAnimation: badges
+                                                                .BadgeAnimation
+                                                            .fade(
+                                                          animationDuration:
+                                                              Duration(
+                                                                  seconds: 2),
+                                                          loopAnimation: true,
+                                                          curve: Curves
+                                                              .fastEaseInToSlowEaseOut,
+                                                          colorChangeAnimationCurve:
+                                                              Curves
+                                                                  .easeInCubic,
+                                                        ),
+                                                        badgeStyle:
+                                                            badges.BadgeStyle(
+                                                          shape: badges
+                                                              .BadgeShape
+                                                              .circle,
+                                                          badgeColor:
+                                                              Colors.redAccent,
+                                                          padding:
+                                                              EdgeInsets.all(5),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(4),
+                                                          borderSide: BorderSide(
+                                                              color: Colors
+                                                                  .redAccent,
+                                                              width: 2),
+                                                          elevation: 0,
+                                                        ),
                                                       ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 6.0),
+                                                        child: Text(
+                                                          'Solicitudes de soporte técnico'
+                                                              .maybeHandleOverflow(
+                                                            maxChars: 90,
+                                                            replacement: '…',
+                                                          ),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Urbanist',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .error,
+                                                                fontSize: 16.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                                } else {
+                                                  return Container();
+                                                }
+                                                
+                                              } else if (snapshot
+                                                          .connectionState ==
+                                                      ConnectionState.done &&
+                                                  !(snapshot.hasData)) {
+                                                return Container();
+                                              } else {
+                                                return Center(
+                                                  child: Container(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  ),
+                                                );
+                                              }
+                                            }),
                                       ],
                                     ),
                                   ),

@@ -5,6 +5,8 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:login2/index.dart';
 import 'package:login2/model/dependencias.dart';
@@ -199,7 +201,9 @@ class _ListaActivosFuncionariosPageWidgetState
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         IconButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Get.toNamed('/addreporte');
+                                            },
                                             icon: Icon(
                                               Icons.person_add,
                                               color:

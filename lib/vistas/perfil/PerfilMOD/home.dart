@@ -65,7 +65,7 @@ class _PerfilAdminState extends State<PerfilGeneral> {
 
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: Color.fromARGB(255, 229, 234, 238),
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -182,7 +182,7 @@ class _PerfilAdminState extends State<PerfilGeneral> {
                 title: "Gestión de reportes",
                 icon: LineAwesomeIcons.wallet,
                 onPress: () {
-                    Get.toNamed('/addreporte');
+                    Get.toNamed('/listareportes');
                   
                 }),
             ProfileMenuWidget(

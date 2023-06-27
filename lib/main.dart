@@ -300,7 +300,7 @@ class _NuevaNavBarState extends State<NuevaNavBar> {
             ),
             GButton(
               icon: LineIcons.building,
-              text: 'Dependencias',
+              text: 'Equipos',
             ),
           ],
           selectedIndex: _selectedIndex,
@@ -368,7 +368,7 @@ class _NuevaNavBarStateFuncionario extends State<NuevaNavBarFuncionario> {
               .withOpacity(0.7), // unselected icon color
           activeColor: FlutterFlowTheme.of(context)
               .tertiary, // selected icon and text color
-          iconSize: 30, // tab button icon size
+          iconSize: 28, // tab button icon size
           tabBackgroundColor: FlutterFlowTheme.of(context)
               .tertiary
               .withOpacity(0.1), // selected tab background color
@@ -382,8 +382,8 @@ class _NuevaNavBarStateFuncionario extends State<NuevaNavBarFuncionario> {
               text: 'Chat',
             ),
             GButton(
-              icon: LineIcons.building,
-              text: 'Dependencias',
+              icon: Icons.computer,
+              text: 'Equipos',
             ),
           ],
           selectedIndex: _selectedIndex,

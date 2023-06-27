@@ -75,7 +75,31 @@ class _ListaActivosFuncionariosPageWidgetState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: FlutterFlowTheme.of(context).primary,
+        centerTitle: true,
+         title: Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      Icon(Icons.computer),
+      SizedBox(width: 8.0), // Espacio entre el icono y el texto
+      Text('Equipos de cómputo'),
+    ],
+  ),
+      
+        actions: [],
+        elevation: 0,
+      ),
       floatingActionButton: FloatingActionButton(
+        onPressed: () {
+         Get.toNamed('/perfilgen');
+        },
+        child: Icon(Icons.person, color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .tertiary,),
+        backgroundColor: Color.fromARGB(255, 39, 128, 42),
+      ),
+      /*floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (dependencia != null) {
             Navigator.push(
@@ -90,6 +114,7 @@ class _ListaActivosFuncionariosPageWidgetState
         child: Icon(Icons.add),
         backgroundColor: Colors.green,
       ),
+      **/
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: SafeArea(
@@ -122,7 +147,8 @@ class _ListaActivosFuncionariosPageWidgetState
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(3.0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                                    4.0, 4.0, 0.0, 0.0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +156,7 @@ class _ListaActivosFuncionariosPageWidgetState
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 4.0),
+                                      padding: const EdgeInsets.only(top: 2.0),
                                       child: Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
@@ -167,7 +193,7 @@ class _ListaActivosFuncionariosPageWidgetState
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .tertiary,
-                                                        fontSize: 25.0,
+                                                        fontSize: 20.0,
                                                         fontWeight:
                                                             FontWeight.w800,
                                                       ),
@@ -185,7 +211,7 @@ class _ListaActivosFuncionariosPageWidgetState
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .tertiary,
-                                                        fontSize: 18.0,
+                                                        fontSize: 27.0,
                                                         fontWeight:
                                                             FontWeight.w600,
                                                       ),
@@ -196,21 +222,22 @@ class _ListaActivosFuncionariosPageWidgetState
                                         ],
                                       ),
                                     ),
+                                    /*
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         IconButton(
                                             onPressed: () {
-                                              Get.toNamed('/addreporte');
+                                              Get.toNamed('/perfilgen');
                                             },
                                             icon: Icon(
-                                              Icons.person_add,
+                                              Icons.person,
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .tertiary,
+                                                      .tertiary, size: 28,
                                             )),
-                                        IconButton(
+                                       /* IconButton(
                                             onPressed: () async {
                                               await authManager.signOut();
                                               await Navigator
@@ -229,18 +256,39 @@ class _ListaActivosFuncionariosPageWidgetState
                                                   FlutterFlowTheme.of(context)
                                                       .tertiary,
                                             )),
+                                            **/
+                                            
                                       ],
                                     )
+                                    **/
                                   ],
                                 ),
+                                
                               ),
+                             Padding(padding: EdgeInsetsDirectional.fromSTEB(
+                                    16.0, 26.0, 16.0, 0.0),
+                             child: Row(
+                              children: [
+                                             Container(
+                    width: MediaQuery.of(context).size.width - 38,
+                    height: 0.6,
+                    color: Color.fromARGB(179, 235, 229, 229),
+                  ),
+                              ],
+                             ),
+                             
+                             ),
+                              
                               Padding(
+                                
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    24.0, 12.0, 24.0, 8.0),
+                                    16.0, 26.0, 16.0, 0.0),
+                                    
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
+                                             
                                     FutureBuilder<Usuario?>(
                                       future: AuthHelper()
                                           .cargarUsuarioDeFirebase(
@@ -255,11 +303,12 @@ class _ListaActivosFuncionariosPageWidgetState
                                             style: FlutterFlowTheme.of(context)
                                                 .displaySmall
                                                 .override(
-                                                  fontFamily: 'Urbanist',
+                                                  fontFamily: 'Urbanist', fontSize: 22,
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .tertiary,
                                                 ),
+                                                
                                           );
                                         } else {
                                          
@@ -373,6 +422,7 @@ class _ListaActivosFuncionariosPageWidgetState
                                   ),
                                 ),
                               ),
+                              
                             ],
                           ),
                         ),

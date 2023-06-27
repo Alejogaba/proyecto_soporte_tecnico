@@ -17,7 +17,7 @@ routes() => [
       GetPage(name: "/home", page: () => PrincipalPagina()),
       GetPage(name: "/principal", page: () => InterfazPrincipalWidget()),
       GetPage(name: "/listafuncio", page: () => ListaFuncionarioss()),
-      //GetPage(name: "/addreporte", page: () => NuevoReporteWidget()),
+      GetPage(name: "/listareportes", page: () => ListaReportesWidget()),
 
       GetPage(name: "/loginmod", page: () => LoginPage()),
       GetPage(name: "/loguear", page: () => SignIn()),

@@ -40,9 +40,9 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
 
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+      backgroundColor: FlutterFlowTheme.of(context).primary,
       appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+        backgroundColor: FlutterFlowTheme.of(context).primary,
         automaticallyImplyLeading: false,
         leading: FlutterFlowIconButton(
           borderColor: Colors.transparent,
@@ -60,7 +60,19 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
         ),
         title: Text(
           'Reportes',
-          style: FlutterFlowTheme.of(context).headlineMedium,
+          style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Urbanist',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .tertiary,
+                                                        fontSize: 20.0,
+                                                        fontWeight:
+                                                            FontWeight.w800,
+                                                      ),
         ),
         actions: [],
         centerTitle: false,
@@ -80,7 +92,7 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                     child: TabBar(
                       labelColor: FlutterFlowTheme.of(context).turquoise,
                       unselectedLabelColor:
-                          FlutterFlowTheme.of(context).grayIcon,
+                          const Color.fromARGB(255, 255, 255, 255),
                       labelStyle:
                           FlutterFlowTheme.of(context).titleSmall.override(
                                 fontFamily: 'Urbanist',

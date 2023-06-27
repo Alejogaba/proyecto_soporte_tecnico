@@ -213,13 +213,18 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                                 0.0, 24.0, 0.0, 24.0),
                             prefixIcon: Icon(
                               Icons.apartment,
-                              color: FlutterFlowTheme.of(context).dark600,
+                              color: Color.fromARGB(255, 12, 71, 20),
+                              size: 28,
                             ),
                           ),
                           style: FlutterFlowTheme.of(context).headlineMedium,
                           keyboardType: TextInputType.number,
-                          validator: _model.pricePerNightControllerValidator
-                              .asValidator(context),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Por favor, ingrese un valor';
+                            }
+                            return null;
+                          },
                         ),
                       ),
                       Divider(
@@ -305,14 +310,18 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                                 0.0, 24.0, 0.0, 24.0),
                             prefixIcon: Icon(
                               Icons.computer,
-                              color: FlutterFlowTheme.of(context).dark600,
+                              color: Color.fromARGB(255, 12, 71, 20),
                               size: 28,
                             ),
                           ),
                           style: FlutterFlowTheme.of(context).headlineMedium,
                           keyboardType: TextInputType.number,
-                          validator: _model.pricePerNightControllerValidator
-                              .asValidator(context),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Por favor, ingrese un valor';
+                            }
+                            return null;
+                          },
                         ),
                       ),
                       Divider(
@@ -392,9 +401,13 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                                 0.0, 24.0, 0.0, 24.0),
                           ),
                           style: FlutterFlowTheme.of(context).bodySmall,
-                          maxLines: 4,
-                          validator: _model.notesControllerValidator
-                              .asValidator(context),
+                          maxLines: 6,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Por favor, ingrese un valor';
+                            }
+                            return null;
+                          },
                         ),
                       ),
                       Text(
@@ -677,7 +690,7 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                           EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                       iconPadding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      color: FlutterFlowTheme.of(context).turquoise,
+                      color: Color.fromARGB(255, 17, 78, 32),
                       textStyle:
                           FlutterFlowTheme.of(context).headlineSmall.override(
                                 fontFamily: 'Urbanist',

@@ -246,7 +246,7 @@ class ThemeTypography extends Typography {
   String get headlineMediumFamily => 'Urbanist';
   TextStyle get headlineMedium => GoogleFonts.getFont(
         'Urbanist',
-        color: theme.primaryText,
+        color: Color.fromARGB(255, 37, 36, 36),
         fontWeight: FontWeight.w500,
         fontSize: 22.0,
       );

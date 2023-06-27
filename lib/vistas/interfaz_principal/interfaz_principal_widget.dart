@@ -58,6 +58,22 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
     return SafeArea(
       bottom: false,
       child: Scaffold(
+        /* appBar: AppBar(
+        backgroundColor: FlutterFlowTheme.of(context).primary,
+        centerTitle: true,
+         title: Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      Icon(Icons.apartment_sharp),
+      SizedBox(width: 8.0), // Espacio entre el icono y el texto
+      Text('Dependencias'),
+    ],
+  ),
+      
+        actions: [],
+        elevation: 0,
+      ),
+      **/
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         body: Column(
@@ -124,7 +140,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .tertiary,
-                                                  fontSize: 25.0,
+                                                  fontSize: 20.0,
                                                   fontWeight: FontWeight.w800,
                                                 ),
                                           ),
@@ -176,7 +192,20 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                         ),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
-                              24.0, 12.0, 24.0, 8.0),
+                              16.0, 26.0, 16.0, 0.0),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width - 38,
+                                height: 0.6,
+                                color: Color.fromARGB(179, 235, 229, 229),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              18.0, 26.0, 16.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -497,30 +526,92 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                   snapshot.hasData) {
                                                 if (snapshot.data! > 0) {
                                                   return Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          16.0, 0.0, 16.0, 8.0),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      badges.Badge(
-                                                        position:
-                                                            badges.BadgePosition
-                                                                .topEnd(
-                                                                    top: -10,
-                                                                    end: -12),
-                                                        showBadge: true,
-                                                        ignorePointer: false,
-                                                        onTap: () {
-                                                          print(
-                                                              'Abrir lista reportes');
-                                                        },
-                                                        badgeContent: Text(
-                                                            snapshot.data
-                                                                .toString(),
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(16.0, 0.0,
+                                                                16.0, 8.0),
+                                                    child: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        badges.Badge(
+                                                          position: badges
+                                                                  .BadgePosition
+                                                              .topEnd(
+                                                                  top: -10,
+                                                                  end: -12),
+                                                          showBadge: true,
+                                                          ignorePointer: false,
+                                                          onTap: () {
+                                                            print(
+                                                                'Abrir lista reportes');
+                                                          },
+                                                          badgeContent: Text(
+                                                              snapshot.data
+                                                                  .toString(),
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Urbanist',
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .tertiary,
+                                                                    fontSize:
+                                                                        16.0,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                  )),
+                                                          badgeAnimation: badges
+                                                                  .BadgeAnimation
+                                                              .fade(
+                                                            animationDuration:
+                                                                Duration(
+                                                                    seconds: 2),
+                                                            loopAnimation: true,
+                                                            curve: Curves
+                                                                .fastEaseInToSlowEaseOut,
+                                                            colorChangeAnimationCurve:
+                                                                Curves
+                                                                    .easeInCubic,
+                                                          ),
+                                                          badgeStyle:
+                                                              badges.BadgeStyle(
+                                                            shape: badges
+                                                                .BadgeShape
+                                                                .circle,
+                                                            badgeColor: Colors
+                                                                .redAccent,
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    5),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        4),
+                                                            borderSide: BorderSide(
+                                                                color: Colors
+                                                                    .redAccent,
+                                                                width: 2),
+                                                            elevation: 0,
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 6.0),
+                                                          child: Text(
+                                                            'Solicitudes de soporte técnico'
+                                                                .maybeHandleOverflow(
+                                                              maxChars: 90,
+                                                              replacement: '…',
+                                                            ),
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyMedium
@@ -529,79 +620,21 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                                       'Urbanist',
                                                                   color: FlutterFlowTheme.of(
                                                                           context)
-                                                                      .tertiary,
+                                                                      .error,
                                                                   fontSize:
                                                                       16.0,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w500,
-                                                                )),
-                                                        badgeAnimation: badges
-                                                                .BadgeAnimation
-                                                            .fade(
-                                                          animationDuration:
-                                                              Duration(
-                                                                  seconds: 2),
-                                                          loopAnimation: true,
-                                                          curve: Curves
-                                                              .fastEaseInToSlowEaseOut,
-                                                          colorChangeAnimationCurve:
-                                                              Curves
-                                                                  .easeInCubic,
-                                                        ),
-                                                        badgeStyle:
-                                                            badges.BadgeStyle(
-                                                          shape: badges
-                                                              .BadgeShape
-                                                              .circle,
-                                                          badgeColor:
-                                                              Colors.redAccent,
-                                                          padding:
-                                                              EdgeInsets.all(5),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(4),
-                                                          borderSide: BorderSide(
-                                                              color: Colors
-                                                                  .redAccent,
-                                                              width: 2),
-                                                          elevation: 0,
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 6.0),
-                                                        child: Text(
-                                                          'Solicitudes de soporte técnico'
-                                                              .maybeHandleOverflow(
-                                                            maxChars: 90,
-                                                            replacement: '…',
+                                                                ),
                                                           ),
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Urbanist',
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .error,
-                                                                fontSize: 16.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                              ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
+                                                      ],
+                                                    ),
+                                                  );
                                                 } else {
                                                   return Container();
                                                 }
-                                                
                                               } else if (snapshot
                                                           .connectionState ==
                                                       ConnectionState.done &&

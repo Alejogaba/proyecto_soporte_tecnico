@@ -316,17 +316,17 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
       bottom: false,
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-        onPressed: () {
+          onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => NuevoReporteWidget(activo:widget.activo,dependencia:widget.dependencia)),
+                  builder: (context) => NuevoReporteWidget(
+                      activo: widget.activo, dependencia: widget.dependencia)),
             );
-        
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.green,
-      ),
+          },
+          child: Icon(Icons.add),
+          backgroundColor: Colors.green,
+        ),
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         body: GestureDetector(
@@ -500,30 +500,6 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                   ),
                                                 ),
                                               ),
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 0, 24, 0),
-                                                child: Container(
-                                                  width: 40,
-                                                  height: 40,
-                                                  decoration: BoxDecoration(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryBackground,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    border: Border.all(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondaryText,
-                                                      width: 1,
-                                                    ),
-                                                  ),
-                                                 
-                                                ),
-                                              ),
                                             ],
                                           ),
                                       ],
@@ -537,7 +513,6 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      
                                       Container(
                                         width:
                                             MediaQuery.of(context).size.width *
@@ -564,18 +539,27 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                           FlutterFlowExpandedImageView(
                                                         image:
                                                             CachedNetworkImage(
-                                                          imageUrl:
-                                                              (activo.urlImagen==null||activo.urlImagen!.isEmpty) ? 'https://cderma.com.co/wp-content/uploads/2022/04/IMAGEN-NO-DISPONIBLE.png': activo.urlImagen!,
+                                                          imageUrl: (activo
+                                                                          .urlImagen ==
+                                                                      null ||
+                                                                  activo
+                                                                      .urlImagen!
+                                                                      .isEmpty)
+                                                              ? 'https://cderma.com.co/wp-content/uploads/2022/04/IMAGEN-NO-DISPONIBLE.png'
+                                                              : activo
+                                                                  .urlImagen!,
                                                           fit: BoxFit.contain,
-                                                          errorWidget: (context, exception, stacktrace) {
-                
-                return Image.asset(
-                  'assets/images/nodisponible.png',
-                  width: double.infinity,
-                  height: 125,
-                  fit: BoxFit.cover,
-                );
-              },
+                                                          errorWidget: (context,
+                                                              exception,
+                                                              stacktrace) {
+                                                            return Image.asset(
+                                                              'assets/images/nodisponible.png',
+                                                              width: double
+                                                                  .infinity,
+                                                              height: 125,
+                                                              fit: BoxFit.cover,
+                                                            );
+                                                          },
                                                         ),
                                                         allowRotation: false,
                                                         tag: 'mainImage',
@@ -593,9 +577,13 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                         BorderRadius.circular(
                                                             16),
                                                     child: CachedNetworkImage(
-                                                      imageUrl:
-                                                          (activo.urlImagen==null||activo.urlImagen!.isEmpty) ? 'https://cderma.com.co/wp-content/uploads/2022/04/IMAGEN-NO-DISPONIBLE.png': activo.urlImagen!,
-                                                         
+                                                      imageUrl: (activo
+                                                                      .urlImagen ==
+                                                                  null ||
+                                                              activo.urlImagen!
+                                                                  .isEmpty)
+                                                          ? 'https://cderma.com.co/wp-content/uploads/2022/04/IMAGEN-NO-DISPONIBLE.png'
+                                                          : activo.urlImagen!,
                                                       width: double.infinity,
                                                       height: double.infinity,
                                                       fit: BoxFit.cover,
@@ -1119,8 +1107,12 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                       child: FastCachedImage(
                                         width: 73,
                                         height: 70,
-                                        url:  (snapshot.data![index].urlImagen==null||snapshot.data![index].urlImagen!.isEmpty) ? 'https://cderma.com.co/wp-content/uploads/2022/04/IMAGEN-NO-DISPONIBLE.png': snapshot.data![index].urlImagen!,
-                                                         
+                                        url: (snapshot.data![index].urlImagen ==
+                                                    null ||
+                                                snapshot.data![index].urlImagen!
+                                                    .isEmpty)
+                                            ? 'https://cderma.com.co/wp-content/uploads/2022/04/IMAGEN-NO-DISPONIBLE.png'
+                                            : snapshot.data![index].urlImagen!,
                                         fit: BoxFit.cover,
                                         fadeInDuration:
                                             const Duration(seconds: 1),

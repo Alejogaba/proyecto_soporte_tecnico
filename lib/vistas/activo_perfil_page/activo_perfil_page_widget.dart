@@ -720,6 +720,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                                   context)
                                                               .bodyText2Family),
                                             ),
+                                        maxLines: 4,
                                       ),
                                     ],
                                   ).animateOnPageLoad(animationsMap[

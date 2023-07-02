@@ -704,23 +704,28 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        activo.detalles,
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText2
-                                            .override(
-                                              fontFamily: 'Lexend Deca',
-                                              color: Color(0xFF8B97A2),
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.normal,
-                                              useGoogleFonts:
-                                                  GoogleFonts.asMap()
-                                                      .containsKey(
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyText2Family),
-                                            ),
-                                        maxLines: 4,
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.9,
+                                        child: Text(
+                                          activo.detalles,
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyText2
+                                              .override(
+                                                fontFamily: 'Lexend Deca',
+                                                color: Color(0xFF8B97A2),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.normal,
+                                                useGoogleFonts:
+                                                    GoogleFonts.asMap()
+                                                        .containsKey(
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyText2Family),
+                                              ),
+                                          maxLines: 4,
+                                        ),
                                       ),
                                     ],
                                   ).animateOnPageLoad(animationsMap[

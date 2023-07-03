@@ -112,107 +112,126 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                 itemBuilder: (context, listViewIndex) {
                   final listViewChatsRecord =
                       listViewChatsRecordList[listViewIndex];
-                  log('$listViewChatsRecord');
+                  log('listviewChatRecord: $listViewChatsRecord');
                   return StreamBuilder<Usuario>(
                     stream: Usuario().getUsuarioStream(listViewChatsRecord),
                     builder: (context, snapshot) {
-                      final Usuario chatInfo = snapshot.data ?? Usuario();
+                      final Usuario? chatInfo = snapshot.data;
+                      log('chatInfo: ${chatInfo}');
+                      if (chatInfo != null) {
+                        return StreamBuilder<ChatMensajes?>(
+                          stream: ControladorChat().ObtenerUltimoMensajeChat(
+                              listViewChatsRecord.roomUid),
+                          builder:
+                              (BuildContext context, snapshotUltimoMensaje) {
+                            if (snapshotUltimoMensaje.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (snapshotUltimoMensaje.connectionState !=
+                                    ConnectionState.waiting &&
+                                snapshot.data == null) {
+                              return Center(
+                                  child: Text(
+                                      'No se han encontrado conversaciones'));
+                            } else {
+                              final ChatMensajes? lastMessage =
+                                  snapshotUltimoMensaje.data;
 
-                      return StreamBuilder<ChatMensajes?>(
-                        stream: ControladorChat().ObtenerUltimoMensajeChat(
-                            listViewChatsRecord.roomUid),
-                        builder: (BuildContext context, snapshotUltimoMensaje) {
-                          if (snapshotUltimoMensaje.connectionState ==
-                              ConnectionState.waiting) {
-                            return CircularProgressIndicator();
-                          } else {
-                            final ChatMensajes? lastMessage =
-                                snapshotUltimoMensaje.data;
+                              return FFChatPreview(
+                                onTap: () async {
+                                  Usuario? usuarioActual = await AuthHelper()
+                                      .cargarUsuarioDeFirebase();
 
-                            return FFChatPreview(
-                              onTap: () async {
-                                Usuario? usuarioActual = await AuthHelper()
-                                    .cargarUsuarioDeFirebase();
-
-                                if (usuarioActual != null) {
-                                  try {
-                                    await FlutterLocalNotificationsPlugin()
-                                        .resolvePlatformSpecificImplementation<
-                                            AndroidFlutterLocalNotificationsPlugin>()
-                                        ?.requestPermission();
-                                  } catch (e) {
-                                    log('No se pudo pedir permiso de notificacion: ' +
-                                        e.toString());
+                                  if (usuarioActual != null) {
+                                    try {
+                                      await FlutterLocalNotificationsPlugin()
+                                          .resolvePlatformSpecificImplementation<
+                                              AndroidFlutterLocalNotificationsPlugin>()
+                                          ?.requestPermission();
+                                    } catch (e) {
+                                      log('No se pudo pedir permiso de notificacion: ' +
+                                          e.toString());
+                                    }
+                                    String? token = await FirebaseMessaging
+                                        .instance
+                                        .getToken();
+                                    User? user = getCurrentUser();
+                                    if (user != null && token != null) {
+                                      var docRef = FirebaseFirestore.instance
+                                          .collection("users")
+                                          .doc(user.uid);
+                                      await docRef.update({
+                                        'fcmToken': token,
+                                      });
+                                    }
+                                    Logger().i('Id Room: ' +
+                                        listViewChatsRecord.roomUid);
+                                    if (snapshot.data != null) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ChatWidget(
+                                              otroUsuario: snapshot.data!,
+                                              currentUserToken: token,
+                                              otherUserToken:
+                                                  snapshot.data!.fcmToken,
+                                              nombre:
+                                                  '${snapshot.data!.nombre} - ${snapshot.data!.cargo} ${snapshot.data!.area}',
+                                              usuarios:
+                                                  listViewChatsRecord.users,
+                                              uid: listViewChatsRecord.roomUid
+                                                  .trim()),
+                                        ),
+                                      );
+                                    }
                                   }
-                                  String? token = await FirebaseMessaging
-                                      .instance
-                                      .getToken();
-                                  User? user = getCurrentUser();
-                                  if (user != null && token != null) {
-                                    var docRef = FirebaseFirestore.instance
-                                        .collection("users")
-                                        .doc(user.uid);
-                                    await docRef.update({
-                                      'fcmToken': token,
-                                    });
-                                  }
-                                 
-                                  if (snapshot.data!= null) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ChatWidget(
-                                            otroUsuario: snapshot.data!,
-                                            currentUserToken: token,
-                                            otherUserToken:
-                                                snapshot.data!.fcmToken,
-                                            nombre:
-                                                '${snapshot.data!.nombre} - ${snapshot.data!.cargo} ${snapshot.data!.area}',
-                                            usuarios: listViewChatsRecord.users,
-                                            uid: listViewChatsRecord.roomUid),
-                                      ),
-                                    );
-                                  }
-                                }
-                              },
-                              lastChatText: (lastMessage != null)
-                                  ? definirUltimoMensaje(
-                                      lastMessage.mensaje, lastMessage.tipo)
-                                  : " ",
-                              lastChatTime: listViewChatsRecord.lastMessageTime,
-                              seen: false,
-                              title:
-                                  '${snapshot.data!.nombre} - ${snapshot.data!.cargo} ${snapshot.data!.area}',
-                              userProfilePic: chatInfo.urlImagen,
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              unreadColor: FlutterFlowTheme.of(context).primary,
-                              titleTextStyle: GoogleFonts.getFont(
-                                'Urbanist',
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.0,
-                              ),
-                              dateTextStyle: GoogleFonts.getFont(
-                                'Urbanist',
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 14.0,
-                              ),
-                              previewTextStyle: GoogleFonts.getFont(
-                                'Urbanist',
-                                color: FlutterFlowTheme.of(context).grayIcon,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14.0,
-                              ),
-                              contentPadding: EdgeInsetsDirectional.fromSTEB(
-                                  8.0, 3.0, 8.0, 3.0),
-                              borderRadius: BorderRadius.circular(0.0),
-                            );
-                          }
-                        },
-                      );
+                                },
+                                lastChatText: (lastMessage != null)
+                                    ? definirUltimoMensaje(
+                                        lastMessage.mensaje, lastMessage.tipo)
+                                    : " ",
+                                lastChatTime:
+                                    listViewChatsRecord.lastMessageTime,
+                                seen: false,
+                                title:
+                                    '${snapshot.data!.nombre} - ${snapshot.data!.cargo} ${snapshot.data!.area}',
+                                userProfilePic: chatInfo.urlImagen,
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                unreadColor:
+                                    FlutterFlowTheme.of(context).primary,
+                                titleTextStyle: GoogleFonts.getFont(
+                                  'Urbanist',
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.0,
+                                ),
+                                dateTextStyle: GoogleFonts.getFont(
+                                  'Urbanist',
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryText,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 14.0,
+                                ),
+                                previewTextStyle: GoogleFonts.getFont(
+                                  'Urbanist',
+                                  color: FlutterFlowTheme.of(context).grayIcon,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14.0,
+                                ),
+                                contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                    8.0, 3.0, 8.0, 3.0),
+                                borderRadius: BorderRadius.circular(0.0),
+                              );
+                            }
+                          },
+                        );
+                      } else {
+                        return Center(
+                          child: Text('Nada que ver aqui'),
+                        );
+                      }
                     },
                   );
                 },

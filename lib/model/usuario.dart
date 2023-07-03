@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:login2/auth/firebase_auth/firebase_user_provider.dart';
 import 'package:login2/backend/backend.dart';
 
@@ -18,8 +19,7 @@ class Usuario {
       "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Empty_set_symbol.svg/640px-Empty_set_symbol.svg.png";
   String? fcmToken;
   Usuario(
-      {
-      this.fechaNacimiento = "",
+      {this.fechaNacimiento = "",
       this.area = "",
       this.telefono = "",
       this.cargo = "",
@@ -43,6 +43,7 @@ class Usuario {
     email = map['email'] ?? "";
     role = map['role'] ?? "";
     uid = map['uid'] ?? "";
+    fcmToken = map['fcmToken'] ?? "";
     urlImagen = map['imageUrl'] ??
         "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Empty_set_symbol.svg/640px-Empty_set_symbol.svg.png";
   }
@@ -65,15 +66,22 @@ class Usuario {
 
   Stream<Usuario>? getUsuarioStream(ChatsRecord? chatsrecords) {
     if (chatsrecords != null) {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      log('GetUsuarioStream: chatsrecord encontrado');
+      log('GetUsuarioStream: usuario actual: ' +
+          auth.currentUser!.uid.toString().trim());
+      log('GetUsuarioStream: usuario 0: ' + chatsrecords.users[0].trim());
+      log('GetUsuarioStream: usuario 1: ' + chatsrecords.users[1].trim());
       late DocumentReference? usuarioRef;
-      if (getCurrentUser()!.uid.toString().trim() == chatsrecords.users[0]) {
+      if (auth.currentUser!.uid.toString().trim() ==
+          chatsrecords.users[0].trim()) {
         usuarioRef = FirebaseFirestore.instance
             .collection('users')
-            .doc(chatsrecords.users[1]);
+            .doc(chatsrecords.users[1].trim());
       } else {
         usuarioRef = FirebaseFirestore.instance
             .collection('users')
-            .doc(chatsrecords.users[0]);
+            .doc(chatsrecords.users[0].trim());
       }
       log('Usuario escogido: ' + usuarioRef.toString());
       return usuarioRef.snapshots().map((snapshot) {

@@ -8,6 +8,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
 import 'package:login2/backend/controlador_caso.dart';
 import 'package:login2/model/activo.dart';
+import 'package:login2/model/chat_mensajes.dart';
 import 'package:login2/model/dependencias.dart';
 import 'package:login2/utils/utilidades.dart';
 import 'package:login2/vistas/lista_reportes/lista_reportes_widget.dart';
@@ -29,6 +30,8 @@ import 'package:provider/provider.dart';
 import 'nuevo_reporte_model.dart';
 export 'nuevo_reporte_model.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:image/image.dart' as img;
+import 'dart:typed_data';
 
 class NuevoReporteWidget extends StatefulWidget {
   const NuevoReporteWidget({
@@ -48,7 +51,8 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
   late NuevoReporteModel _model;
   TextEditingController dependenciaController = TextEditingController();
   TextEditingController activoController = TextEditingController();
-
+  TextEditingController descripcionController = TextEditingController();
+  late FFUploadedFile archivoSubido;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final animationsMap = {
@@ -352,7 +356,7 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 12.0),
                         child: TextFormField(
-                          controller: _model.detallesController,
+                          controller: descripcionController,
                           obscureText: false,
                           decoration: InputDecoration(
                             hintText: 'Detalles',
@@ -459,7 +463,7 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                                         blurHash: m.blurHash,
                                       ))
                                   .toList();
-
+                              archivoSubido = selectedUploadedFiles[0];
                               downloadUrls = (await Future.wait(
                                 selectedMedia.map(
                                   (m) async =>
@@ -625,11 +629,13 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                       //Falta validar
                       FirebaseAuth auth = FirebaseAuth.instance;
                       if (auth.currentUser != null) {
+                        log('Current user: ' +
+                            auth.currentUser!.uid.toString());
                         Caso casoAregistrar = Caso(
                             uidDependencia: widget.dependencia!.uid,
                             uidSolicitante: auth.currentUser!.uid,
                             uidActivo: widget.activo.uid,
-                            descripcion: _model.detallesController.text,
+                            descripcion: descripcionController.text,
                             urlAdjunto: _model.uploadedFileUrl);
                         await CasosController().addModCaso(casoAregistrar);
                         final collectionRef = FirebaseFirestore.instance
@@ -640,26 +646,80 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                         await collectionRef.update({'casosPendientes': true});
                         List<Usuario> usuariosObtenidos =
                             await UserHelper().obtenerUsuarios();
-                        if (usuariosObtenidos.isNotEmpty) {
+                        log('lista tecnicos: ' + usuariosObtenidos.toString());
+                        if (usuariosObtenidos.length > 0) {
                           for (var element in usuariosObtenidos) {
                             if (element.role == 'admin' &&
                                 element.uid != auth.currentUser!.uid) {
+                              log('tecnico: ' + element.nombre.toString());
                               types.User otheruser =
-                                  types.User(id: element.uid!);
+                                  types.User(id: element.uid!.trim());
                               types.Room room = await FirebaseChatCore.instance
                                   .createRoom(otheruser);
+
                               final collectionRef = FirebaseFirestore.instance
                                   .collection('rooms')
                                   .doc(room.id);
+                              ChatMensajes mensaje1 = ChatMensajes(
+                                  authorId: auth.currentUser!.uid.trim(),
+                                  updatedAt: DateTime.now(),
+                                  mensaje:
+                                      'Requiero servicio técnico para ${widget.activo.nombre}',
+                                  tipo: 'text',
+                                  fechaHora: DateTime.now());
+                              await FirebaseFirestore.instance
+                                  .collection('rooms')
+                                  .doc(room.id)
+                                  .collection('messages')
+                                  .add(mensaje1.toMapText());
+                              if (descripcionController.text.isNotEmpty) {
+                                ChatMensajes mensaje2 = ChatMensajes(
+                                    authorId: auth.currentUser!.uid.trim(),
+                                    updatedAt: DateTime.now()
+                                        .add(Duration(seconds: 1)),
+                                    mensaje: '${descripcionController.text}',
+                                    tipo: 'text',
+                                    fechaHora: DateTime.now()
+                                        .add(Duration(seconds: 1)));
+                                await FirebaseFirestore.instance
+                                    .collection('rooms')
+                                    .doc(room.id)
+                                    .collection('messages')
+                                    .add(mensaje2.toMapText());
+                              }
+                              if (_model.uploadedFileUrl.isNotEmpty) {
+                                img.Image? image =
+                                    img.decodeImage(archivoSubido.bytes!);
+                                int width = image!.width;
+                                int height = image!.height;
+                                ChatMensajes mensaje3 = ChatMensajes(
+                                    height: height,
+                                    width: width,
+                                    size: archivoSubido.bytes!.length,
+                                    uri: _model.uploadedFileUrl,
+                                    authorId: auth.currentUser!.uid.trim(),
+                                    updatedAt: DateTime.now()
+                                        .add(Duration(seconds: 2)),
+                                    mensaje: (archivoSubido.name!=null&&archivoSubido.name!.isNotEmpty) ? archivoSubido.name!:'Archivo_adjunto.jpg' ,
+                                    fechaHora: DateTime.now()
+                                        .add(Duration(seconds: 2)));
+                                await FirebaseFirestore.instance
+                                    .collection('rooms')
+                                    .doc(room.id)
+                                    .collection('messages')
+                                    .add(mensaje3.toMapImage());
+                              }
                               await collectionRef.update({
                                 'uid': room.id,
                                 'sinRespuesta': true,
                                 'finalizado': false
                               });
-                              Utilidades().sendNotification(
-                                  element.fcmToken!,
-                                  'Nuevo reporte',
-                                  'Un equipo en ${widget.dependencia!.nombre} requiere servicio técnico');
+                              if (element.fcmToken!.isNotEmpty) {
+                                Utilidades().sendNotification(
+                                    element.fcmToken!,
+                                    'Nuevo reporte',
+                                    'Un equipo en ${widget.dependencia!.nombre} requiere servicio técnico');
+                              }
                             }
                           }
                           Get.snackbar('Reporte registrado',
@@ -674,7 +734,7 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                               ),
                               colorText: Color.fromARGB(255, 228, 219, 218));
                         }
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ListaReportesWidget(),

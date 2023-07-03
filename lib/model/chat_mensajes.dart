@@ -10,37 +10,61 @@ class ChatMensajes {
   String mensaje;
   String tipo;
   DateTime fechaHora;
+  int? height;
+  int? width;
+  int? size;
+  String? uri;
 
   ChatMensajes({
     required this.authorId,
     required this.updatedAt,
-    required this.mensaje,
-    required this.tipo,
+    this.mensaje = '',
+    this.height = 0,
+    this.width = 0,
+    this.size = 0,
+    this.uri = '',
+    this.tipo = '',
     required this.fechaHora,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMapText() {
     return {
       'authorId': authorId,
       'updatedAt': Timestamp.fromDate(updatedAt),
       'text': mensaje,
-      'type': tipo,
+      'type': 'text',
       'createdAt': Timestamp.fromDate(fechaHora),
+    };
+  }
+
+  Map<String, dynamic> toMapImage() {
+    return {
+      'authorId': authorId,
+      'updatedAt': Timestamp.fromDate(updatedAt),
+      'name': mensaje,
+      'type': 'image',
+      'createdAt': Timestamp.fromDate(fechaHora),
+      'height': height,
+      'width': width,
+      'size': size,
+      'uri': uri,
     };
   }
 
   static ChatMensajes fromMap(Map<String, dynamic> map) {
     return ChatMensajes(
-      authorId: map['authorId']??'',
+      authorId: map['authorId'] ?? '',
       updatedAt: (map['updatedAt'] as Timestamp).toDate(),
-      mensaje: map['text']??'',
+      mensaje: map['text'] ?? '',
       tipo: map['type'],
       fechaHora: (map['createdAt'] as Timestamp).toDate(),
     );
   }
 
   Future<void> guardarChatMensaje() async {
-    await FirebaseFirestore.instance.collection('chat_mensajes').add(toMap());
+    await FirebaseFirestore.instance
+        .collection('chat_mensajes')
+        .add(toMapText());
   }
 
   static Stream<List<ChatMensajes>> obtenerChatMensajes({required String uid}) {
@@ -54,7 +78,7 @@ class ChatMensajes {
             snapshot.docs.map((doc) => fromMap(doc.data())).toList())
         .doOnError((p0, p1) {
       p0.printError();
-    p1.printError();
+      p1.printError();
     });
 
     return stream;

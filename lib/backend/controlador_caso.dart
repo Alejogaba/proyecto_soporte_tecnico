@@ -36,6 +36,64 @@ class CasosController {
     }
   }
 
+  Stream<List<Caso>> obtenerCasosStreamSinFinalizar({String uidSolicitante = ''}) {
+    if (uidSolicitante.isEmpty) {
+      return FirebaseFirestore.instance
+          .collection('casos')
+          .where('solucionado', isEqualTo: false)
+          .snapshots()
+          .map((QuerySnapshot querySnapshot) {
+        List<Caso> casos = [];
+        querySnapshot.docs.forEach((doc) =>
+            casos.add(Caso.fromMap(doc.data() as Map<String, dynamic>)));
+        log('lista casos: ' + casos[0].descripcion.toString());
+        return casos;
+      });
+    } else {
+      return FirebaseFirestore.instance
+          .collection('casos')
+          .where('uidSolicitante', isEqualTo: uidSolicitante)
+          .where('solucionado', isEqualTo: false)
+          .snapshots()
+          .map((QuerySnapshot querySnapshot) {
+        List<Caso> casos = [];
+        querySnapshot.docs.forEach((doc) =>
+            casos.add(Caso.fromMap(doc.data() as Map<String, dynamic>)));
+        log('lista casos: ' + casos[0].descripcion.toString());
+        return casos;
+      });
+    }
+  }
+
+  Stream<List<Caso>> obtenerCasosStreamFinalizados({String uidSolicitante = ''}) {
+    if (uidSolicitante.isEmpty) {
+      return FirebaseFirestore.instance
+          .collection('casos')
+          .where('solucionado', isEqualTo: true)
+          .snapshots()
+          .map((QuerySnapshot querySnapshot) {
+        List<Caso> casos = [];
+        querySnapshot.docs.forEach((doc) =>
+            casos.add(Caso.fromMap(doc.data() as Map<String, dynamic>)));
+        log('lista casos: ' + casos[0].descripcion.toString());
+        return casos;
+      });
+    } else {
+      return FirebaseFirestore.instance
+          .collection('casos')
+          .where('uidSolicitante', isEqualTo: uidSolicitante)
+          .where('solucionado', isEqualTo: true)
+          .snapshots()
+          .map((QuerySnapshot querySnapshot) {
+        List<Caso> casos = [];
+        querySnapshot.docs.forEach((doc) =>
+            casos.add(Caso.fromMap(doc.data() as Map<String, dynamic>)));
+        log('lista casos: ' + casos[0].descripcion.toString());
+        return casos;
+      });
+    }
+  }
+
   Stream<int> getTotalCasosCountSolicitante(String uidSolicitante) {
     // ignore: close_sinks
     StreamController<int> controller = StreamController<int>();

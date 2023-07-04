@@ -1,3 +1,7 @@
+import 'package:login2/backend/controlador_caso.dart';
+import 'package:login2/model/caso.dart';
+import 'package:login2/model/dependencias.dart';
+
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -123,16 +127,8 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                           child: Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 8.0, 0.0, 0.0),
-                            child: StreamBuilder<List<PropertiesRecord>>(
-                              stream: queryPropertiesRecord(
-                                queryBuilder: (propertiesRecord) =>
-                                    propertiesRecord
-                                        .where('userRef',
-                                            isEqualTo: currentUserReference)
-                                        .where('isLive', isEqualTo: true)
-                                        .orderBy('lastUpdated',
-                                            descending: true),
-                              ),
+                            child: StreamBuilder<List<Caso>>(
+                              stream: CasosController().obtenerCasosStreamSinFinalizar(),
                               builder: (context, snapshot) {
                                 // Customize what your widget looks like when it's loading.
                                 if (!snapshot.hasData) {
@@ -147,7 +143,7 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                     ),
                                   );
                                 }
-                                List<PropertiesRecord>
+                                List<Caso>
                                     wrapPropertiesRecordList = snapshot.data!;
                                 if (wrapPropertiesRecordList.isEmpty) {
                                   return Center(
@@ -199,7 +195,7 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                           children: [
                                             Hero(
                                               tag: valueOrDefault<String>(
-                                                wrapPropertiesRecord.mainImage,
+                                                wrapPropertiesRecord.urlAdjunto.isNotEmpty ? wrapPropertiesRecord.urlAdjunto : null,
                                                 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg' +
                                                     '$wrapIndex',
                                               ),
@@ -217,8 +213,7 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                 child: CachedNetworkImage(
                                                   imageUrl:
                                                       valueOrDefault<String>(
-                                                    wrapPropertiesRecord
-                                                        .mainImage,
+                                                    wrapPropertiesRecord.urlAdjunto.isNotEmpty ? wrapPropertiesRecord.urlAdjunto : null,
                                                     'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
                                                   ),
                                                   width: double.infinity,
@@ -236,7 +231,7 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                 children: [
                                                   Text(
                                                     wrapPropertiesRecord
-                                                        .propertyName,
+                                                        .descripcion,
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .headlineSmall
@@ -274,7 +269,7 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                                   0.0),
                                                       child: Text(
                                                         wrapPropertiesRecord
-                                                            .propertyAddress,
+                                                            .uidActivo,
                                                         style:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -290,15 +285,8 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    formatNumber(
-                                                      wrapPropertiesRecord
-                                                          .price,
-                                                      formatType:
-                                                          FormatType.decimal,
-                                                      decimalType:
-                                                          DecimalType.automatic,
-                                                      currency: '\$',
-                                                    ),
+                                                    wrapPropertiesRecord
+                                                            .fecha.toString(),
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .titleMedium,
@@ -326,16 +314,8 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                           child: Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 8.0, 0.0, 0.0),
-                            child: StreamBuilder<List<PropertiesRecord>>(
-                              stream: queryPropertiesRecord(
-                                queryBuilder: (propertiesRecord) =>
-                                    propertiesRecord
-                                        .where('userRef',
-                                            isEqualTo: currentUserReference)
-                                        .where('isLive', isEqualTo: false)
-                                        .orderBy('lastUpdated',
-                                            descending: true),
-                              ),
+                            child: StreamBuilder<List<Caso>>(
+                              stream: CasosController().obtenerCasosStreamFinalizados(),
                               builder: (context, snapshot) {
                                 // Customize what your widget looks like when it's loading.
                                 if (!snapshot.hasData) {
@@ -350,7 +330,7 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                     ),
                                   );
                                 }
-                                List<PropertiesRecord>
+                                List<Caso>
                                     listViewPropertiesRecordList =
                                     snapshot.data!;
                                 if (listViewPropertiesRecordList.isEmpty) {
@@ -404,8 +384,7 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                               ),
                                               child: Image.network(
                                                 valueOrDefault<String>(
-                                                  listViewPropertiesRecord
-                                                      .mainImage,
+                                                  listViewPropertiesRecord.urlAdjunto.isNotEmpty ? listViewPropertiesRecord.urlAdjunto : null,
                                                   'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
                                                 ),
                                                 width: double.infinity,
@@ -422,7 +401,7 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                 children: [
                                                   Text(
                                                     listViewPropertiesRecord
-                                                        .propertyName,
+                                                        .descripcion,
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .headlineSmall
@@ -460,7 +439,7 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                                   0.0),
                                                       child: Text(
                                                         listViewPropertiesRecord
-                                                            .propertyAddress,
+                                                            .uid,
                                                         style:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -476,15 +455,7 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    formatNumber(
-                                                      listViewPropertiesRecord
-                                                          .price,
-                                                      formatType:
-                                                          FormatType.decimal,
-                                                      decimalType:
-                                                          DecimalType.automatic,
-                                                      currency: '\$',
-                                                    ),
+                                                    listViewPropertiesRecord.descripcion,
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .titleMedium,

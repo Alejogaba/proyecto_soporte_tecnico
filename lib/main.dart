@@ -34,7 +34,6 @@ void main() async {
   final InitializationSettings initializationSettings =
       InitializationSettings(android: initializationSettingsAndroid);
   WidgetsFlutterBinding.ensureInitialized();
-  
 
   await Firebase.initializeApp();
   final appState = FFAppState(); // Initialize FFAppState
@@ -64,7 +63,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext csontext) {
-   
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,

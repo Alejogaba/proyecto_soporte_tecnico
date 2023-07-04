@@ -19,6 +19,18 @@ class ControladorDependencias {
     return DependenciaList;
   }
 
+  
+  
+  Future<Dependencia> cargarDependenciaUID(String uidDependencia) async {
+    final querySnapshot =
+          await FirebaseFirestore.instance.collection('dependencias').doc(uidDependencia).get();
+      if (querySnapshot.data() != null && querySnapshot.data()!.isNotEmpty) {
+        return Dependencia.fromMap(querySnapshot.data()!);
+      } else {
+        return Dependencia(nombre: '');
+      }
+  }
+
   Stream<int> getTotalCasosCountDependencia(String uidDependencia) {
   // ignore: close_sinks
   StreamController<int> controller = StreamController<int>();

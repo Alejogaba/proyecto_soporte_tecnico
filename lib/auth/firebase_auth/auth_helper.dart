@@ -28,12 +28,26 @@ class AuthHelper {
     }
   }
 
+  Stream<Usuario>? getUsuarioStreamUID(String uidusuario) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(uidusuario)
+        .snapshots()
+        .map((snapshot) {
+      final result = Usuario.mapeo(snapshot.data()!);
+      log('ultimo mensaje: $result');
+      return result;
+    });
+  }
+
   Future<Usuario?> cargarUsuarioDeFirebase() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     Logger().i('Usuario actual funcion firebase: ${auth.currentUser!.email}');
-    if (auth.currentUser!= null) {
-      final querySnapshot =
-          await FirebaseFirestore.instance.collection('users').doc(auth.currentUser!.uid).get();
+    if (auth.currentUser != null) {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(auth.currentUser!.uid)
+          .get();
       if (querySnapshot.data() != null && querySnapshot.data()!.isNotEmpty) {
         return Usuario.mapeo(querySnapshot.data()!);
       } else {

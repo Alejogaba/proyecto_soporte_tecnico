@@ -15,6 +15,7 @@ import 'package:login2/vistas/lista_reportes/lista_reportes_widget.dart';
 
 import '../../backend/firebase_storage/storage.dart';
 import '../../flutter_flow/upload_data.dart';
+import '../../main.dart';
 import '../../model/caso.dart';
 import '../../model/usuario.dart';
 import '../chat/chat_widget.dart';
@@ -632,6 +633,7 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                         log('Current user: ' +
                             auth.currentUser!.uid.toString());
                         Caso casoAregistrar = Caso(
+                          fecha: DateTime.now(),
                             uidDependencia: widget.dependencia!.uid,
                             uidSolicitante: auth.currentUser!.uid,
                             uidActivo: widget.activo.uid,
@@ -693,6 +695,7 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                                 int width = image!.width;
                                 int height = image!.height;
                                 ChatMensajes mensaje3 = ChatMensajes(
+                                  
                                     height: height,
                                     width: width,
                                     size: archivoSubido.bytes!.length,
@@ -737,7 +740,7 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ListaReportesWidget(),
+                            builder: (context) => NuevaNavBarFuncionario(),
                           ),
                         );
                       }

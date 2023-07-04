@@ -3,55 +3,55 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:logger/logger.dart';
 
 import '../model/activo.dart';
 import '../model/caso.dart';
 
 class CasosController {
-  Stream<List<Caso>> obtenerCasosStream({String uidSolicitante=''}) {
+  Stream<List<Caso>> obtenerCasosStream({String uidSolicitante = ''}) {
     if (uidSolicitante.isEmpty) {
       return FirebaseFirestore.instance
-        .collection('casos')
-        .snapshots()
-        .map((QuerySnapshot querySnapshot) {
-      List<Caso> casos = [];
-      querySnapshot.docs.forEach(
-          (doc) => casos.add(Caso.fromMap(doc.data() as Map<String, dynamic>)));
-      log('lista casos: ' + casos[0].descripcion.toString());
-      return casos;
-    });
+          .collection('casos')
+          .snapshots()
+          .map((QuerySnapshot querySnapshot) {
+        List<Caso> casos = [];
+        querySnapshot.docs.forEach((doc) =>
+            casos.add(Caso.fromMap(doc.data() as Map<String, dynamic>)));
+        log('lista casos: ' + casos[0].descripcion.toString());
+        return casos;
+      });
     } else {
       return FirebaseFirestore.instance
-        .collection('casos')
-        .where('uidSolicitante',isEqualTo: uidSolicitante)
-        .snapshots()
-        .map((QuerySnapshot querySnapshot) {
-      List<Caso> casos = [];
-      querySnapshot.docs.forEach(
-          (doc) => casos.add(Caso.fromMap(doc.data() as Map<String, dynamic>)));
-      log('lista casos: ' + casos[0].descripcion.toString());
-      return casos;
-    });
+          .collection('casos')
+          .where('uidSolicitante', isEqualTo: uidSolicitante)
+          .snapshots()
+          .map((QuerySnapshot querySnapshot) {
+        List<Caso> casos = [];
+        querySnapshot.docs.forEach((doc) =>
+            casos.add(Caso.fromMap(doc.data() as Map<String, dynamic>)));
+        log('lista casos: ' + casos[0].descripcion.toString());
+        return casos;
+      });
     }
   }
 
   Stream<int> getTotalCasosCountSolicitante(String uidSolicitante) {
-  // ignore: close_sinks
-  StreamController<int> controller = StreamController<int>();
+    // ignore: close_sinks
+    StreamController<int> controller = StreamController<int>();
 
-  FirebaseFirestore.instance
-      .collection('casos')
-      .where('uidSolicitante', isEqualTo: uidSolicitante)
-      .snapshots()
-      .listen((QuerySnapshot querySnapshot) {
-    int count = querySnapshot.size;
-    controller.add(count);
-  });
+    FirebaseFirestore.instance
+        .collection('casos')
+        .where('uidSolicitante', isEqualTo: uidSolicitante)
+        .where('solucionado',isEqualTo: false)
+        .snapshots()
+        .listen((QuerySnapshot querySnapshot) {
+      int count = querySnapshot.size;
+      controller.add(count);
+    });
 
-  return controller.stream;
-}
-
-
+    return controller.stream;
+  }
 
   Future<Caso?> buscarCasoPorIDactivo(String uidActivo) async {
     try {
@@ -64,6 +64,7 @@ class CasosController {
       if (querySnapshot.size > 0) {
         final docSnapshot = querySnapshot.docs[0];
         final caso = Caso.fromMap(docSnapshot.data());
+
         return caso;
       } else {
         return null;
@@ -94,10 +95,12 @@ class CasosController {
     }
   }
 
-  quitarCaso(Caso caso) async {
+  marcarCasoComoresuelto(Caso caso) async {
     try {
       FirebaseFirestore _db = FirebaseFirestore.instance;
-      await _db.collection('casos').doc(caso.uid).delete().then((value) {
+      Caso casoNuevo = caso;
+      casoNuevo.solucionado = true;
+      await _db.collection('casos').doc(caso.uid).update(casoNuevo.toMap()).then((value) {
         _db
             .collection('dependencias')
             .doc(caso.uidDependencia)

@@ -1,4 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:login2/auth/firebase_auth/auth_helper.dart';
+import 'package:login2/backend/controlador_activo.dart';
+import 'package:login2/backend/controlador_caso.dart';
+import 'package:login2/backend/controlador_chat.dart';
+import 'package:login2/model/activo.dart';
+import 'package:login2/model/caso.dart';
 
+import '../../backend/controlador_dependencias.dart';
+import '../../model/dependencias.dart';
+import '../../model/usuario.dart';
+import '../activo_perfil_page/activo_perfil_page_widget.dart';
+import '../chat/chat_widget.dart';
 import '/backend/backend.dart';
 import '../components/cancel_trip_h_o_s_t_widget.dart';
 import '/flutter_flow/flutter_flow_expanded_image_view.dart';
@@ -13,14 +25,12 @@ import 'detalle_reporte_model.dart';
 export 'detalle_reporte_model.dart';
 
 class DetalleReporteWidget extends StatefulWidget {
-  const DetalleReporteWidget({
+  const DetalleReporteWidget(
+    this.caso, {
     Key? key,
-    this.propertyRef,
-    this.tripRef,
   }) : super(key: key);
 
-  final PropertiesRecord? propertyRef;
-  final TripsRecord? tripRef;
+  final Caso caso;
 
   @override
   _DetalleReporteWidgetState createState() => _DetalleReporteWidgetState();
@@ -47,6 +57,7 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
   @override
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
+    Dependencia? estaDepedencia;
 
     return Scaffold(
       key: scaffoldKey,
@@ -74,7 +85,7 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
         ),
         actions: [
           Visibility(
-            visible: widget.tripRef!.complete!,
+            visible: true,
             child: FlutterFlowIconButton(
               borderColor: Colors.transparent,
               borderRadius: 30.0,
@@ -85,25 +96,7 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                 color: FlutterFlowTheme.of(context).secondaryText,
                 size: 30.0,
               ),
-              onPressed: () async {
-                await showModalBottomSheet(
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                  barrierColor: Color(0xB314181B),
-                  context: context,
-                  builder: (context) {
-                    return Padding(
-                      padding: MediaQuery.of(context).viewInsets,
-                      child: Container(
-                        height: 430.0,
-                        child: CancelTripHOSTWidget(
-                          tripDetails: widget.tripRef,
-                        ),
-                      ),
-                    );
-                  },
-                ).then((value) => setState(() {}));
-              },
+              onPressed: () async {},
             ),
           ),
         ],
@@ -139,8 +132,8 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          dateTimeFormat(
-                              'MMMEd', widget.tripRef!.tripBeginDate!),
+                          DateFormat('MMMM dd, yyyy', 'es')
+                              .format(widget.caso.fecha),
                           style: FlutterFlowTheme.of(context).displaySmall,
                         ),
                         Text(
@@ -154,7 +147,7 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                               ),
                         ),
                         Text(
-                          dateTimeFormat('MMMEd', widget.tripRef!.tripEndDate!),
+                          DateFormat('h:mm a').format(widget.caso.fecha),
                           style: FlutterFlowTheme.of(context).displaySmall,
                         ),
                       ],
@@ -173,17 +166,28 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                           ),
                     ),
                   ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
-                    child: Text(
-                      widget.propertyRef!.propertyNeighborhood
-                          .maybeHandleOverflow(
-                        maxChars: 90,
-                        replacement: '…',
-                      ),
-                      style: FlutterFlowTheme.of(context).headlineMedium,
-                    ),
+                  FutureBuilder<Dependencia?>(
+                    future: ControladorDependencias()
+                        .cargarDependenciaUID(widget.caso.uidDependencia),
+                    builder: (BuildContext context, snapshotDependencia) {
+                      if (snapshotDependencia.hasData) {
+                        estaDepedencia = snapshotDependencia.data;
+                        return Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              24.0, 0.0, 24.0, 0.0),
+                          child: Text(
+                            snapshotDependencia.data!.nombre
+                                .maybeHandleOverflow(
+                              maxChars: 90,
+                              replacement: '…',
+                            ),
+                            style: FlutterFlowTheme.of(context).headlineMedium,
+                          ),
+                        );
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    },
                   ),
                   Padding(
                     padding:
@@ -202,8 +206,7 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                     padding:
                         EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
                     child: Text(
-                      widget.propertyRef!.propertyNeighborhood
-                          .maybeHandleOverflow(
+                      widget.caso.descripcion.maybeHandleOverflow(
                         maxChars: 90,
                         replacement: '…',
                       ),
@@ -223,165 +226,213 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                           ),
                     ),
                   ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          height: 140.0,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFDBE2E7),
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          child: Align(
-                            alignment: AlignmentDirectional(0.0, 0.0),
-                            child: InkWell(
-                              splashColor: Colors.transparent,
-                              focusColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onTap: () async {
-                                await Navigator.push(
-                                  context,
-                                  PageTransition(
-                                    type: PageTransitionType.fade,
-                                    child: FlutterFlowExpandedImageView(
-                                      image: CachedNetworkImage(
-                                        imageUrl: valueOrDefault<String>(
-                                          widget.propertyRef!.mainImage,
+                  if (widget.caso.urlAdjunto.isNotEmpty)
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            height: 340.0,
+                            decoration: BoxDecoration(
+                              color: Color(0xFFDBE2E7),
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            child: Align(
+                              alignment: AlignmentDirectional(0.0, 0.0),
+                              child: InkWell(
+                                splashColor: Colors.transparent,
+                                focusColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () async {
+                                  await Navigator.push(
+                                    context,
+                                    PageTransition(
+                                      type: PageTransitionType.fade,
+                                      child: FlutterFlowExpandedImageView(
+                                        image: CachedNetworkImage(
+                                          imageUrl: valueOrDefault<String>(
+                                            widget.caso.urlAdjunto,
+                                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/st1jx3t60926/r-architecture-TRCJ-87Yoh0-unsplash.jpg',
+                                          ),
+                                          fit: BoxFit.contain,
+                                        ),
+                                        allowRotation: false,
+                                        tag: valueOrDefault<String>(
+                                          widget.caso.urlAdjunto,
                                           'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/st1jx3t60926/r-architecture-TRCJ-87Yoh0-unsplash.jpg',
                                         ),
-                                        fit: BoxFit.contain,
+                                        useHeroAnimation: true,
                                       ),
-                                      allowRotation: false,
-                                      tag: valueOrDefault<String>(
-                                        widget.propertyRef!.mainImage,
+                                    ),
+                                  );
+                                },
+                                child: Hero(
+                                  tag: valueOrDefault<String>(
+                                    widget.caso.urlAdjunto,
+                                    'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/st1jx3t60926/r-architecture-TRCJ-87Yoh0-unsplash.jpg',
+                                  ),
+                                  transitionOnUserGestures: true,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    child: CachedNetworkImage(
+                                      imageUrl: valueOrDefault<String>(
+                                        widget.caso.urlAdjunto,
                                         'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/st1jx3t60926/r-architecture-TRCJ-87Yoh0-unsplash.jpg',
                                       ),
-                                      useHeroAnimation: true,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      fit: BoxFit.cover,
                                     ),
-                                  ),
-                                );
-                              },
-                              child: Hero(
-                                tag: valueOrDefault<String>(
-                                  widget.propertyRef!.mainImage,
-                                  'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/st1jx3t60926/r-architecture-TRCJ-87Yoh0-unsplash.jpg',
-                                ),
-                                transitionOnUserGestures: true,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                  child: CachedNetworkImage(
-                                    imageUrl: valueOrDefault<String>(
-                                      widget.propertyRef!.mainImage,
-                                      'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/st1jx3t60926/r-architecture-TRCJ-87Yoh0-unsplash.jpg',
-                                    ),
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(24.0, 12.0, 0.0, 0.0),
-                    child: Text(
-                      widget.propertyRef!.propertyName,
-                      style: FlutterFlowTheme.of(context).headlineSmall,
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(24.0, 4.0, 24.0, 0.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          widget.propertyRef!.propertyAddress,
-                          style:
-                              FlutterFlowTheme.of(context).bodySmall.override(
-                                    fontFamily: 'Lexend Deca',
-                                    color: Color(0xFF8B97A2),
-                                    fontSize: 12.0,
-                                    fontWeight: FontWeight.normal,
+                  FutureBuilder<Activo?>(
+                    future: ActivoController().cargarActivoUID(
+                        widget.caso.uidDependencia, widget.caso.uidActivo),
+                    builder: (BuildContext context, snapshotActivo) {
+                      if (snapshotActivo.hasData) {
+                        return InkWell(
+                          onTap: () async {
+                            if (estaDepedencia != null) {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ActivoPerfilPageWidget(
+                                    activo: snapshotActivo.data!,
+                                    dependencia: estaDepedencia,
                                   ),
-                        ),
-                        Icon(
-                          Icons.chevron_right_rounded,
-                          color: FlutterFlowTheme.of(context).grayIcon,
-                          size: 24.0,
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (!widget.tripRef!.complete!)
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [],
-                        ),
-                        if (!widget.tripRef!.complete!)
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 12.0, 0.0, 24.0),
-                            child: FFButtonWidget(
-                              onPressed: () async {
-                                final tripsUpdateData = createTripsRecordData(
-                                  complete: true,
-                                  upcoming: false,
-                                );
-                                await widget.tripRef!.reference
-                                    .update(tripsUpdateData);
-                                Navigator.pop(context);
-                              },
-                              text: 'Marcar como atendido',
-                              options: FFButtonOptions(
-                                width: 200.0,
-                                height: 50.0,
+                                ),
+                              );
+                            }
+                          },
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                color: FlutterFlowTheme.of(context).turquoise,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .override(
-                                      fontFamily: 'Lexend Deca',
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                elevation: 3.0,
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1.0,
+                                    24.0, 20.0, 0.0, 0.0),
+                                child: Text(
+                                  'Activo afectado',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodySmall
+                                      .override(
+                                        fontFamily: 'Lexend Deca',
+                                        color: FlutterFlowTheme.of(context)
+                                            .gray600,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                 ),
-                                borderRadius: BorderRadius.circular(30.0),
                               ),
-                            ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    24.0, 4.0, 0.0, 0.0),
+                                child: Text(
+                                  '${snapshotActivo.data!.nombre} marca ${snapshotActivo.data!.marca}',
+                                  style: FlutterFlowTheme.of(context)
+                                      .headlineSmall,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    24.0, 4.0, 24.0, 0.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Toca aquí para obtener más información de este activo',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodySmall
+                                          .override(
+                                            fontFamily: 'Lexend Deca',
+                                            color: Color(0xFF8B97A2),
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                    ),
+                                    Icon(
+                                      Icons.chevron_right_rounded,
+                                      color:
+                                          FlutterFlowTheme.of(context).grayIcon,
+                                      size: 24.0,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                      ],
-                    ),
+                        );
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    },
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [],
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            0.0, 12.0, 0.0, 24.0),
+                        child: FFButtonWidget(
+                          onPressed: () async {
+                            CasosController()
+                                .marcarCasoComoresuelto(widget.caso);
+                            Navigator.pop(context);
+                          },
+                          text: 'Marcar como atendido',
+                          options: FFButtonOptions(
+                            width: 200.0,
+                            height: 50.0,
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            color: FlutterFlowTheme.of(context).turquoise,
+                            textStyle: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .override(
+                                  fontFamily: 'Lexend Deca',
+                                  color: Colors.white,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                            elevation: 3.0,
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
           ),
-          StreamBuilder<UsersRecord>(
-            stream: UsersRecord.getDocument(widget.propertyRef!.userRef!),
+          StreamBuilder<Usuario?>(
+            stream:
+                AuthHelper().getUsuarioStreamUID(widget.caso.uidSolicitante),
             builder: (context, snapshot) {
               // Customize what your widget looks like when it's loading.
               if (!snapshot.hasData) {
@@ -395,7 +446,7 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                   ),
                 );
               }
-              final bottomButtonAreaUsersRecord = snapshot.data!;
+              final snapshotUser = snapshot.data!;
               return Container(
                 width: MediaQuery.of(context).size.width * 1.0,
                 decoration: BoxDecoration(
@@ -433,7 +484,7 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 4.0, 0.0, 0.0),
                                 child: Text(
-                                  'Guest Info',
+                                  'Información del solicitante',
                                   style: FlutterFlowTheme.of(context)
                                       .bodySmall
                                       .override(
@@ -454,7 +505,7 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                                       borderRadius: BorderRadius.circular(40.0),
                                       child: Image.network(
                                         valueOrDefault<String>(
-                                          bottomButtonAreaUsersRecord.photoUrl,
+                                          snapshotUser.urlImagen,
                                           'https://images.unsplash.com/photo-1654537736400-bfae7cd99bac?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHx8&auto=format&fit=crop&w=900&q=60',
                                         ),
                                         width: 40.0,
@@ -466,7 +517,7 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           8.0, 0.0, 12.0, 0.0),
                                       child: Text(
-                                        bottomButtonAreaUsersRecord.displayName
+                                        snapshotUser.nombre!
                                             .maybeHandleOverflow(
                                           maxChars: 90,
                                           replacement: '…',
@@ -493,16 +544,27 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                           Align(
                             alignment: AlignmentDirectional(0.0, 0.0),
                             child: FFButtonWidget(
-                              onPressed: () async {/*
-                                Usuario? usuarioActual = await AuthHelper().cargarUsuarioDeFirebase(getCurrentUser()!.uid);
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ChatWidget(
-                                      chatUser: bottomButtonAreaUsersRecord, usuarioActual: usuarioActual!,
+                              onPressed: () async {
+                                FirebaseAuth _auth = FirebaseAuth.instance;
+                                String? uidRoom = await ControladorChat()
+                                    .buscarChat(_auth.currentUser!.uid,
+                                        snapshotUser.uid!);
+                                if (uidRoom != null) {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ChatWidget(
+                                        nombre: snapshotUser.nombre.toString(),
+                                        otroUsuario: snapshotUser,
+                                        usuarios: [
+                                          _auth.currentUser!.uid,
+                                          snapshotUser.uid!
+                                        ],
+                                        uid: uidRoom.trim(),
+                                      ),
                                     ),
-                                  ),
-                                );*/
+                                  );
+                                }
                               },
                               text: 'Chat',
                               icon: Icon(

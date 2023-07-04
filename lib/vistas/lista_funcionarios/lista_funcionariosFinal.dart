@@ -170,235 +170,222 @@ class _ListaFuncionariossState extends State<ListaFuncionarioss>
 
                   Expanded(
                     flex: 1,
-                    child: LayoutBuilder(builder: (BuildContext context,
-                        BoxConstraints viewportConstraints) {
-                      return SingleChildScrollView(
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minHeight: viewportConstraints.maxHeight,
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 8),
-                            child: FutureBuilder<List<Usuario>>(
-                              future: UserHelper().obtenerUsuarios(),
-                              builder: (BuildContext context, snapshot) {
-                                if (snapshot.connectionState ==
-                                        ConnectionState.done &&
-                                    snapshot.data != null) {
-                                  return ListView.builder(
-                                      scrollDirection: Axis.vertical,
-                                      shrinkWrap: true,
-                                      itemCount: snapshot.data!.length,
-                                      itemBuilder: (context, index) {
-                                        return GestureDetector(
-                                          onTap: () => _navigateToFuncionario(
-                                              context, snapshot.data![index]),
-                                          onLongPress: () async {},
-                                          child: Container(
-                                            padding:
-                                                EdgeInsets.only(bottom: 16),
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  child:
-                                                      '${snapshot.data![index].urlImagen}' ==
-                                                              ''
-                                                          ? Text('No image')
-                                                          : Image.network(
-                                                              '${snapshot.data![index].urlImagen}' +
-                                                                  '?alt=media',
-                                                              width: 70,
-                                                              height: 70,
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                ),
-                                                SizedBox(
-                                                  width: 16,
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    SizedBox(
-                                                      height: 8,
-                                                    ),
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width -
-                                                              136,
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: <Widget>[
-                                                          Text(
-                                                            snapshot
-                                                                .data![index]
-                                                                .nombre
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 17,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
-                                                          ),
-                                                          SizedBox(
-                                                            width: 6,
-                                                          ),
-                                                          /*Row(
-                                                            children: <Widget>[
-                                                              Container(
-                                                                width: 6,
-                                                                height: 6,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  color: Color(
-                                                                      0xffD9B372),
-                                                                ),
+                    child: FutureBuilder<List<Usuario>>(
+                      future: UserHelper().obtenerUsuarios(),
+                      builder: (BuildContext context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done &&
+                            snapshot.data != null) {
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 30),
+                            child: ListView.builder(
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                    
+                                            onTap: () => _navigateToFuncionario(
+                                                context, snapshot.data![index]),
+                                            onLongPress: () async {},
+                                            child: Container(
+                                              padding:
+                                                  EdgeInsets.only(bottom: 16),
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(8),
+                                                    child:
+                                                        '${snapshot.data![index].urlImagen}' ==
+                                                                ''
+                                                            ? Text('No image')
+                                                            : Image.network(
+                                                                '${snapshot.data![index].urlImagen}' +
+                                                                    '?alt=media',
+                                                                width: 70,
+                                                                height: 70,
+                                                                fit: BoxFit.cover,
                                                               ),
-                                                              SizedBox(
-                                                                width: 6,
-                                                              ),
-                                                              Text(
-                                                                snapshot
-                                                                    .data![
-                                                                        index]
-                                                                    .cargo
-                                                                    .toString(),
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        14),
-                                                              ),
-                                                            ],
-                                                            
-                                                          ),
-                                                          **/
-                                                          if (snapshot
+                                                  ),
+                                                  SizedBox(
+                                                    width: 16,
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                    children: <Widget>[
+                                                      SizedBox(
+                                                        height: 8,
+                                                      ),
+                                                      Container(
+                                                        width:
+                                                            MediaQuery.of(context)
+                                                                    .size
+                                                                    .width -
+                                                                136,
+                                                        alignment:
+                                                            Alignment.topLeft,
+                                                        child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: <Widget>[
+                                                            Text(
+                                                              snapshot
                                                                   .data![index]
-                                                                  .uid!
-                                                                  .toLowerCase() !=
-                                                              FirebaseAuth
-                                                                  .instance
-                                                                  .currentUser!
-                                                                  .uid
-                                                                  .toLowerCase())
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      right:
-                                                                          20),
+                                                                  .nombre
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 17,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
                                                             ),
-                                                          IconButton(
-                                                            icon: Icon(
-                                                              Icons
-                                                                  .delete_outline,
-                                                              color: Colors.red,
-                                                              size: 24,
+                                                            SizedBox(
+                                                              width: 6,
                                                             ),
-                                                            onPressed: () =>
-                                                                _showDialog(
-                                                                    snapshot.data![
-                                                                        index],
-                                                                    context),
-                                                          ),
-                                                          IconButton(
+                                                            /*Row(
+                                                              children: <Widget>[
+                                                                Container(
+                                                                  width: 6,
+                                                                  height: 6,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    shape: BoxShape
+                                                                        .circle,
+                                                                    color: Color(
+                                                                        0xffD9B372),
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 6,
+                                                                ),
+                                                                Text(
+                                                                  snapshot
+                                                                      .data![
+                                                                          index]
+                                                                      .cargo
+                                                                      .toString(),
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          14),
+                                                                ),
+                                                              ],
+                                                              
+                                                            ),
+                                                            **/
+                                                            if (snapshot
+                                                                    .data![index]
+                                                                    .uid!
+                                                                    .toLowerCase() !=
+                                                                FirebaseAuth
+                                                                    .instance
+                                                                    .currentUser!
+                                                                    .uid
+                                                                    .toLowerCase())
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        right:
+                                                                            20),
+                                                              ),
+                                                            IconButton(
                                                               icon: Icon(
                                                                 Icons
-                                                                    .mode_edit_outline,
-                                                                color:
-                                                                    Colors.red,
+                                                                    .delete_outline,
+                                                                color: Colors.red,
                                                                 size: 24,
                                                               ),
                                                               onPressed: () =>
-                                                                  _navigateToFuncionarioInformation(
-                                                                      context,
+                                                                  _showDialog(
                                                                       snapshot.data![
-                                                                          index])),
+                                                                          index],
+                                                                      context),
+                                                            ),
+                                                            IconButton(
+                                                                icon: Icon(
+                                                                  Icons
+                                                                      .mode_edit_outline,
+                                                                  color:
+                                                                      Colors.red,
+                                                                  size: 24,
+                                                                ),
+                                                                onPressed: () =>
+                                                                    _navigateToFuncionarioInformation(
+                                                                        context,
+                                                                        snapshot.data![
+                                                                            index])),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 8,
+                                                      ),
+                                                      Row(
+                                                        children: <Widget>[
+                                                          Container(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width -
+                                                                158,
+                                                            child: Text(
+                                                              snapshot
+                                                                  .data![index]
+                                                                  .area
+                                                                  .toString(),
+                                                              maxLines: 3,
+                                                              style: TextStyle(
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          ),
                                                         ],
                                                       ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 8,
-                                                    ),
-                                                    Row(
-                                                      children: <Widget>[
-                                                        Container(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width -
-                                                              158,
-                                                          child: Text(
-                                                            snapshot
-                                                                .data![index]
-                                                                .area
-                                                                .toString(),
-                                                            maxLines: 3,
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                color: Colors
-                                                                    .white),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-
-                                                    //Lineas
-                                                    SizedBox(
-                                                      height: 20,
-                                                    ),
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width -
-                                                              136,
-                                                      height: 0.4,
-                                                      color: Colors.white70,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 8,
-                                                    )
-                                                  ],
-                                                )
-                                              ],
+                          
+                                                      //Lineas
+                                                      SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Container(
+                                                        width:
+                                                            MediaQuery.of(context)
+                                                                    .size
+                                                                    .width -
+                                                                136,
+                                                        height: 0.4,
+                                                        color: Colors.white70,
+                                                      ),
+                                                      SizedBox(
+                                                        height: 8,
+                                                      )
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      });
-                                } else {
-                                  return Center(
-                                      child: Container(
-                                    child: CircularProgressIndicator(),
-                                  ));
-                                }
+                                    );
                               },
                             ),
-                          ),
-                        ),
-                      );
-                    }),
+                          );
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
+                    ),
                   )
                 ],
               ),

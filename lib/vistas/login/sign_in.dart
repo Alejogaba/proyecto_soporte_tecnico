@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:login2/Widgets/snackbar.dart';
 import 'package:login2/main.dart';
+import 'package:login2/vistas/olvido_password/olvido_password_widget.dart';
 import 'package:translator/translator.dart';
 
 import '../../auth/firebase_auth/auth_helper.dart';
@@ -301,7 +302,14 @@ class _SignInState extends State<SignIn> {
           Padding(
             padding: const EdgeInsets.only(top: 10.0),
             child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                   Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                OlvidoContrasenadWidget(email: _emailController.text
+                                                  .trim(),)));
+                  },
                 child: const Text(
                   '¿Olvido su contraseña?',
                   style: TextStyle(

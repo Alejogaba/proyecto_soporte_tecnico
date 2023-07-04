@@ -1,7 +1,5 @@
 import 'dart:developer';
 
-
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +8,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:login2/backend/controlador_caso.dart';
 import 'package:login2/index.dart';
 import 'package:login2/model/dependencias.dart';
 import 'package:login2/vistas/activo_perfil_page/activo_perfil_page_widget.dart';
@@ -19,6 +19,8 @@ import '../../flutter_flow/flutter_flow_icon_button.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../model/activo.dart';
 import 'package:badges/badges.dart' as badges;
+
+import '../../model/caso.dart';
 
 class ListaActivosPageWidget extends StatefulWidget {
   final Dependencia dependencia;
@@ -68,15 +70,18 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => RegistrarEquipoWidget(dependencia: dependencia,)),
-        );
-      },
-      child: Icon(Icons.add),
-      backgroundColor: Colors.green,
-    ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => RegistrarEquipoWidget(
+                      dependencia: dependencia,
+                    )),
+          );
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.green,
+      ),
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: NestedScrollView(
@@ -134,7 +139,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                 ),
                 onPressed: () async {},
               ),
-                FlutterFlowIconButton(
+              FlutterFlowIconButton(
                 borderColor: Colors.transparent,
                 borderRadius: 30,
                 borderWidth: 1,
@@ -144,7 +149,9 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                   color: FlutterFlowTheme.of(context).tertiary,
                   size: 30,
                 ),
-                onPressed: () async { Get.toNamed('/addreporte');},
+                onPressed: () async {
+                  Get.toNamed('/addreporte');
+                },
               ),
             ],
             centerTitle: false,
@@ -278,69 +285,96 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                     0, 12, 0, 44),
                                 child: StreamBuilder<List<Activo?>>(
                                     stream:
-                                        activoController.obtenerActivosStream(dependencia.uid,textControllerBusqueda.text),
+                                        activoController.obtenerActivosStream(
+                                            dependencia.uid,
+                                            textControllerBusqueda.text),
                                     builder: (context, snapshot) {
                                       if (snapshot.data != null &&
-                                          snapshot.data!.isNotEmpty){
-                                            listaActivos.clear();
-                                      return Wrap(
-                                        spacing:
-                                            MediaQuery.of(context).size.width *
-                                                0.01,
-                                        runSpacing: 15,
-                                        alignment: WrapAlignment.start,
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.start,
-                                        direction: Axis.horizontal,
-                                        runAlignment: WrapAlignment.start,
-                                        verticalDirection:
-                                            VerticalDirection.down,
-                                        clipBehavior: Clip.none,
-                                        children: List.generate(
-                                            snapshot.data!.length, (index) {
-                                          return GestureDetector(
-                                              onTap: () async {
-                                                if (selectMode) {
-                                                  final Activo? result =
-                                                      await Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          InterfazPrincipalWidget(),
-                                                    ),
-                                                  );
-                                                } else {
-                                                  final Activo? result =
-                                                      await Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ActivoPerfilPageWidget(activo: snapshot.data![index]!,dependencia: dependencia,),
-                                                    ),
-                                                  );
-                                                  if (result != null) {
-                                                    // ignore: use_build_context_synchronously
-                                                    Navigator.pop(
-                                                        context, result);
+                                          snapshot.data!.isNotEmpty) {
+                                        listaActivos.clear();
+                                        return Wrap(
+                                          spacing: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.01,
+                                          runSpacing: 15,
+                                          alignment: WrapAlignment.start,
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.start,
+                                          direction: Axis.horizontal,
+                                          runAlignment: WrapAlignment.start,
+                                          verticalDirection:
+                                              VerticalDirection.down,
+                                          clipBehavior: Clip.none,
+                                          children: List.generate(
+                                              snapshot.data!.length, (index) {
+                                            return GestureDetector(
+                                                onTap: () async {
+                                                  if (snapshot.data![index]!
+                                                      .casosPendientes) {
+                                                    Caso? caso = await CasosController()
+                                                        .buscarCasoPorIDactivo(
+                                                            snapshot
+                                                                .data![index]!
+                                                                .uid);
+                                                    if(caso!=null){
+                                                     
+                                                      final Activo? result =
+                                                        await Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            DetalleReporteWidget(caso)
+                                                      ),
+                                                    );
+                                                    if (result != null) {
+                                                      // ignore: use_build_context_synchronously
+                                                      Navigator.pop(
+                                                          context, result);
+                                                    } else {
+                                                      setState(() {});
+                                                    }
+                                                    }
+                                                    
                                                   } else {
-                                                    setState(() {});
+                                                    final Activo? result =
+                                                        await Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ActivoPerfilPageWidget(
+                                                          activo: snapshot
+                                                              .data![index]!,
+                                                          dependencia:
+                                                              dependencia,
+                                                        ),
+                                                      ),
+                                                    );
+                                                    if (result != null) {
+                                                      // ignore: use_build_context_synchronously
+                                                      Navigator.pop(
+                                                          context, result);
+                                                    } else {
+                                                      setState(() {});
+                                                    }
                                                   }
-                                                }
-                                              },
-                                              child: tarjetaActivo(
-                                                context,
-                                                snapshot.data![index]!,
-                                                selectMode: selectMode,
-                                              ));
-                                        }),
-                                      );
-
-                                          }else{
-                                             return Center(child: Container(child: CircularProgressIndicator(color: FlutterFlowTheme.of(context).primary,),));
-                                          }
-                                       
-
-                                      
+                                                },
+                                                child: tarjetaActivo(
+                                                  context,
+                                                  snapshot.data![index]!,
+                                                  selectMode: selectMode,
+                                                ));
+                                          }),
+                                        );
+                                      } else {
+                                        return Center(
+                                            child: Container(
+                                          child: CircularProgressIndicator(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primary,
+                                          ),
+                                        ));
+                                      }
                                     }),
                               ),
                             ],
@@ -414,60 +448,54 @@ Widget tarjetaActivo(context, Activo activo,
               style: FlutterFlowTheme.of(context).subtitle1,
             ),
           ),
-          if(activo.casosPendientes)
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-                child: badges.Badge(
-                                                position:
-                                                    badges.BadgePosition.topEnd(
-                                                        top: -10, end: -12),
-                                                showBadge: true,
-                                                ignorePointer: false,
-                                                onTap: () {},
-                                                badgeContent: Icon(Icons.error,color: Colors.white,size: 12,),
-                                                badgeAnimation:
-                                                    badges.BadgeAnimation.fade(
-                                                  animationDuration:
-                                                      Duration(seconds: 2),
-                                                  loopAnimation: true,
-                                                  curve: Curves
-                                                      .fastEaseInToSlowEaseOut,
-                                                  colorChangeAnimationCurve:
-                                                      Curves.easeInCubic,
-                                                ),
-                                                badgeStyle: badges.BadgeStyle(
-                                                  shape:
-                                                      badges.BadgeShape.circle,
-                                                  badgeColor: Colors.redAccent,
-                                                  padding: EdgeInsets.all(3),
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                  borderSide: BorderSide(
-                                                      color: Colors.redAccent,
-                                                      width: 1),
-                                                  elevation: 0,
-                                                ),
-                                              ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(3, 3, 0, 1),
-                child: Text(
-                  'Requiere soporte',
-                  overflow: TextOverflow.ellipsis,
-                  style: FlutterFlowTheme.of(context).bodyText2.override(
-                        fontFamily:
-                            FlutterFlowTheme.of(context).bodyText2Family,
-                        color: FlutterFlowTheme.of(context).error,
-                        useGoogleFonts: GoogleFonts.asMap().containsKey(
-                            FlutterFlowTheme.of(context).bodyText2Family),
-                      ),
+          if (activo.casosPendientes)
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+                  child: badges.Badge(
+                    position: badges.BadgePosition.topEnd(top: -10, end: -12),
+                    showBadge: true,
+                    ignorePointer: false,
+                    onTap: () {},
+                    badgeContent: Icon(
+                      Icons.error,
+                      color: Colors.white,
+                      size: 12,
+                    ),
+                    badgeAnimation: badges.BadgeAnimation.fade(
+                      animationDuration: Duration(seconds: 2),
+                      loopAnimation: true,
+                      curve: Curves.fastEaseInToSlowEaseOut,
+                      colorChangeAnimationCurve: Curves.easeInCubic,
+                    ),
+                    badgeStyle: badges.BadgeStyle(
+                      shape: badges.BadgeShape.circle,
+                      badgeColor: Colors.redAccent,
+                      padding: EdgeInsets.all(3),
+                      borderRadius: BorderRadius.circular(4),
+                      borderSide: BorderSide(color: Colors.redAccent, width: 1),
+                      elevation: 0,
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(3, 3, 0, 1),
+                  child: Text(
+                    'Requiere soporte',
+                    overflow: TextOverflow.ellipsis,
+                    style: FlutterFlowTheme.of(context).bodyText2.override(
+                          fontFamily:
+                              FlutterFlowTheme.of(context).bodyText2Family,
+                          color: FlutterFlowTheme.of(context).error,
+                          useGoogleFonts: GoogleFonts.asMap().containsKey(
+                              FlutterFlowTheme.of(context).bodyText2Family),
+                        ),
+                  ),
+                ),
+              ],
+            ),
           /*
           Row(
             mainAxisSize: MainAxisSize.max,

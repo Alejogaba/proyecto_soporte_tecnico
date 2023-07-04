@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:login2/model/chat_mensajes.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -22,5 +23,28 @@ class ControladorChat {
     }).doOnError((p0, p1) {
       p0.printError();
     });
+  }
+
+  Future<String?> buscarChat(
+      String uidusuarioAdmin, String uidOtroUsuario) async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('rooms')
+          .where('userIds', isEqualTo: [uidOtroUsuario, uidusuarioAdmin])
+          .limit(1)
+          .get();
+
+      if (querySnapshot.size > 0) {
+        final docSnapshot = querySnapshot.docs[0];
+        final uid = docSnapshot.data()['uid'];
+        Logger().i('uid de la Room: $uid');
+        return uid;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error al buscar room: $e');
+      return null;
+    }
   }
 }

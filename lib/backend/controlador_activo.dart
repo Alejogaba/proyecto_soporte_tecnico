@@ -10,7 +10,7 @@ class ActivoController {
   Utilidades util = Utilidades();
   Stream<List<Activo?>> obtenerActivosStream(
       String uidDependencia, String valorBusqueda) {
-          log('Retornando todos los activos - uidDependencia: $uidDependencia - valorBusqueda: $valorBusqueda');
+    log('Retornando todos los activos - uidDependencia: $uidDependencia - valorBusqueda: $valorBusqueda');
     if (valorBusqueda.isEmpty) {
       return FirebaseFirestore.instance
           .collection('dependencias')
@@ -28,8 +28,11 @@ class ActivoController {
           .collection('dependencias')
           .doc(uidDependencia)
           .collection('activos')
-          .where('nombre', isGreaterThanOrEqualTo: util.capitalizarPalabras(valorBusqueda) )
-          .where('nombre', isLessThanOrEqualTo: util.capitalizarPalabras(valorBusqueda) + '\uf8ff')
+          .where('nombre',
+              isGreaterThanOrEqualTo: util.capitalizarPalabras(valorBusqueda))
+          .where('nombre',
+              isLessThanOrEqualTo:
+                  util.capitalizarPalabras(valorBusqueda) + '\uf8ff')
           .snapshots()
           .map((QuerySnapshot querySnapshot) {
         List<Activo> dependencias = [];
@@ -38,6 +41,20 @@ class ActivoController {
         log('lista dependencias: ' + dependencias[0].nombre.toString());
         return dependencias;
       });
+    }
+  }
+
+  Future<Activo> cargarActivoUID(String uidDependencia,String uidActivo) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('dependencias')
+        .doc(uidDependencia)
+        .collection('activos')
+        .doc(uidActivo)
+        .get();
+    if (querySnapshot.data() != null && querySnapshot.data()!.isNotEmpty) {
+      return Activo.fromMap(querySnapshot.data()!);
+    } else {
+      return Activo(nombre: '', detalles: '', casosPendientes: false);
     }
   }
 

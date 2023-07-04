@@ -125,7 +125,7 @@ Future<List<SelectedMedia>?> selectMediaWithSourceBottomSheet({
               ),
             if (!kIsWeb) ...[
               const Divider(),
-              createUploadMediaListTile('Camera', MediaSource.camera),
+              createUploadMediaListTile('Cámara', MediaSource.camera),
               const Divider(),
             ],
             const SizedBox(height: 10),

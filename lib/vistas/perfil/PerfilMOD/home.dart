@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:login2/flutter_flow/flutter_flow_theme.dart';
 import 'package:login2/vistas/login/LoginMOD.dart';
 import 'package:provider/provider.dart';
 
@@ -67,7 +68,14 @@ class _PerfilAdminState extends State<PerfilGeneral> {
       key: scaffoldKey,
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: SingleChildScrollView(
-        child: Column(
+        child: 
+        FutureBuilder<Usuario?>(
+                    future: AuthHelper().cargarUsuarioDeFirebase(
+                        ),
+                    builder: (BuildContext context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done &&
+                          snapshot.hasData) { 
+                           return Column(
           children: [
             Container(
               height: 300.0,
@@ -88,13 +96,8 @@ class _PerfilAdminState extends State<PerfilGeneral> {
                       ),
                     ),
                   ),
-                  FutureBuilder<Usuario?>(
-                    future: AuthHelper().cargarUsuarioDeFirebase(
-                        ),
-                    builder: (BuildContext context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done &&
-                          snapshot.hasData) {
-                        return Padding(
+                  
+                        Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(24, 0, 0, 0),
                           child: Align(
                             alignment: Alignment(0, 1),
@@ -157,20 +160,20 @@ class _PerfilAdminState extends State<PerfilGeneral> {
                               ],
                             ),
                           ),
-                        );
-                      }
-                      return Container();
-                    },
-                  ),
+                        ),
+                      
                   TopBar(),
                 ],
               ),
             ),
             const SizedBox(height: 20),
+            
             const Divider(),
+            
             const SizedBox(height: 10),
 
             /// -- MENU
+            if(snapshot.data!.role=='admin')
             ProfileMenuWidget(
                 title: "Gestión de dependencias",
                 icon: LineAwesomeIcons.info,
@@ -178,6 +181,7 @@ class _PerfilAdminState extends State<PerfilGeneral> {
                   
                    Get.toNamed('/principal');
                 }),
+           
             ProfileMenuWidget(
                 title: "Gestión de reportes",
                 icon: LineAwesomeIcons.wallet,
@@ -185,6 +189,7 @@ class _PerfilAdminState extends State<PerfilGeneral> {
                     Get.toNamed('/listareportes');
                   
                 }),
+            if(snapshot.data!.role=='admin')
             ProfileMenuWidget(
                 title: "Gestión de funcionarios",
                 icon: LineAwesomeIcons.user_check,
@@ -234,8 +239,12 @@ class _PerfilAdminState extends State<PerfilGeneral> {
                   );
                 }),
           ],
-        ),
-      ),
+        );
+      
+                          }else{
+                            return Center(child: CircularProgressIndicator(color: FlutterFlowTheme.of(context).primary,),);
+                          } })
+                          )
     );
   }
 }

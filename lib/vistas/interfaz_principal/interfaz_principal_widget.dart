@@ -521,8 +521,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                 .getTotalCasosCountDependencia(
                                                     listDependencias.uid),
                                             builder: (context, snapshot) {
-                                              if (snapshot.connectionState ==
-                                                      ConnectionState.done &&
+                                              if (
                                                   snapshot.hasData) {
                                                 if (snapshot.data! > 0) {
                                                   return Padding(

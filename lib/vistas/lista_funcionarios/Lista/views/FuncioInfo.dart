@@ -2,6 +2,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import '../../../../backend/controlador_dependencias.dart';
+import '../../../../model/dependencias.dart';
 import '../../../../model/usuario.dart';
 
 class FuncioInfo extends StatefulWidget {
@@ -123,11 +125,27 @@ class _FuncioInfoState extends State<FuncioInfo> {
               SizedBox(
                 height: 16,
               ),
-              Text(
-                "${widget.usuario.area}",
-                style: TextStyle(
-                    color: const Color.fromARGB(255, 0, 0, 0), fontSize: 16),
-              ),
+              FutureBuilder<Dependencia?>(
+                  future: ControladorDependencias()
+                      .cargarDependenciaUID(widget.usuario.area!),
+                  builder: (BuildContext context, snapshotDependencia) {
+                    if (snapshotDependencia.connectionState ==
+                            ConnectionState.done &&
+                        snapshotDependencia.data != null) {
+                      return Text(
+                        snapshotDependencia.data!.nombre.toString(),
+                        maxLines: 3,
+                        style:
+                            TextStyle(color: Color(0xff242424), fontSize: 16),
+                      );
+                    } else {
+                      return Text(
+                        '',
+                        maxLines: 3,
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      );
+                    }
+                  }),
               SizedBox(
                 height: 24,
               ),

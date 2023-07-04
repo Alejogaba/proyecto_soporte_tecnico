@@ -5,9 +5,11 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:login2/vistas/lista_funcionarios/Lista/views/FuncioInfo.dart';
 
 import '../../auth/firebase_auth/auth_helper.dart';
+import '../../backend/controlador_dependencias.dart';
 import '../../backend/diseño_interfaz_app_theme.dart';
 import '../../flutter_flow/flutter_flow_animations.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
+import '../../model/dependencias.dart';
 import '../../model/usuario.dart';
 import 'funcionarioForm.dart';
 import 'funcionario_information.dart';
@@ -339,17 +341,36 @@ class _ListaFuncionariossState extends State<ListaFuncionarioss>
                                                                     .size
                                                                     .width -
                                                                 158,
-                                                            child: Text(
-                                                              snapshot
-                                                                  .data![index]
-                                                                  .area
+                                                            child: FutureBuilder<Dependencia?>(
+                                future: ControladorDependencias()
+                                    .cargarDependenciaUID(snapshot.data![
+                                                                            index].area!),
+                                builder: (BuildContext context,
+                                    snapshotDependencia) {
+                                  if (snapshotDependencia.connectionState ==
+                                          ConnectionState.done &&
+                                      snapshotDependencia.data != null) {
+                                        return Text(
+                                                              snapshotDependencia
+                                                                  .data!.nombre 
                                                                   .toString(),
                                                               maxLines: 3,
                                                               style: TextStyle(
                                                                   fontSize: 14,
                                                                   color: Colors
                                                                       .white),
-                                                            ),
+                                                            );
+                                      }else{
+                                        return Text(
+                                                              '',
+                                                              maxLines: 3,
+                                                              style: TextStyle(
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .white),
+                                                            );
+                                      }
+                                      }),
                                                           ),
                                                         ],
                                                       ),

@@ -210,7 +210,7 @@ class _RegistrarEquipoWidgetState extends State<RegistrarEquipoWidget> {
                                   .bodySmall
                                   .override(
                                     fontFamily: 'Urbanist',
-                                    color: FlutterFlowTheme.of(context).gray600,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.w500,
                                   ),
                             ),
@@ -296,7 +296,7 @@ class _RegistrarEquipoWidgetState extends State<RegistrarEquipoWidget> {
                                   .bodySmall
                                   .override(
                                     fontFamily: 'Urbanist',
-                                    color: FlutterFlowTheme.of(context).gray600,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.w500,
                                   ),
                             ),
@@ -382,7 +382,7 @@ class _RegistrarEquipoWidgetState extends State<RegistrarEquipoWidget> {
                                   .bodySmall
                                   .override(
                                     fontFamily: 'Urbanist',
-                                    color: FlutterFlowTheme.of(context).gray600,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.w500,
                                   ),
                             ),

@@ -171,6 +171,7 @@ flutter:
     - assets/clock.png
     - assets/map.png
     - assets/interfaz/banner.png
+    - assets/diseño_interfaz/useruser.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -920,7 +920,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
     } else {
       return image == null
           ? Image.asset(
-              'assets/diseño_interfaz/User2.jpg',
+              'assets/diseño_interfaz/useruser.png',
               width: 110,
               height: 110,
               fit: BoxFit.cover,

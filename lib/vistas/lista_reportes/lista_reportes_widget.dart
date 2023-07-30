@@ -2,6 +2,7 @@ import 'package:login2/backend/controlador_caso.dart';
 import 'package:login2/model/caso.dart';
 import 'package:login2/model/dependencias.dart';
 
+import '../../backend/controlador_dependencias.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -64,19 +65,12 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
         ),
         title: Text(
           'Reportes',
-          style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Urbanist',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .tertiary,
-                                                        fontSize: 20.0,
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                      ),
+          style: FlutterFlowTheme.of(context).bodyMedium.override(
+                fontFamily: 'Urbanist',
+                color: FlutterFlowTheme.of(context).tertiary,
+                fontSize: 20.0,
+                fontWeight: FontWeight.w800,
+              ),
         ),
         actions: [],
         centerTitle: false,
@@ -128,7 +122,8 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 8.0, 0.0, 0.0),
                             child: StreamBuilder<List<Caso>>(
-                              stream: CasosController().obtenerCasosStreamSinFinalizar(),
+                              stream: CasosController()
+                                  .obtenerCasosStreamSinFinalizar(),
                               builder: (context, snapshot) {
                                 // Customize what your widget looks like when it's loading.
                                 if (!snapshot.hasData) {
@@ -143,8 +138,8 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                     ),
                                   );
                                 }
-                                List<Caso>
-                                    wrapPropertiesRecordList = snapshot.data!;
+                                List<Caso> wrapPropertiesRecordList =
+                                    snapshot.data!;
                                 if (wrapPropertiesRecordList.isEmpty) {
                                   return Center(
                                     child: Image.asset(
@@ -176,7 +171,7 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                 0.45,
                                         height:
                                             MediaQuery.of(context).size.height *
-                                                0.3,
+                                                0.21,
                                         decoration: BoxDecoration(
                                           color: FlutterFlowTheme.of(context)
                                               .secondaryBackground,
@@ -195,7 +190,11 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                           children: [
                                             Hero(
                                               tag: valueOrDefault<String>(
-                                                wrapPropertiesRecord.urlAdjunto.isNotEmpty ? wrapPropertiesRecord.urlAdjunto : null,
+                                                wrapPropertiesRecord
+                                                        .urlAdjunto.isNotEmpty
+                                                    ? wrapPropertiesRecord
+                                                        .urlAdjunto
+                                                    : null,
                                                 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg' +
                                                     '$wrapIndex',
                                               ),
@@ -213,7 +212,12 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                 child: CachedNetworkImage(
                                                   imageUrl:
                                                       valueOrDefault<String>(
-                                                    wrapPropertiesRecord.urlAdjunto.isNotEmpty ? wrapPropertiesRecord.urlAdjunto : null,
+                                                    wrapPropertiesRecord
+                                                            .urlAdjunto
+                                                            .isNotEmpty
+                                                        ? wrapPropertiesRecord
+                                                            .urlAdjunto
+                                                        : null,
                                                     'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
                                                   ),
                                                   width: double.infinity,
@@ -230,8 +234,8 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                 mainAxisSize: MainAxisSize.max,
                                                 children: [
                                                   Text(
-                                                    wrapPropertiesRecord
-                                                        .descripcion,
+                                                    'Problema: ${wrapPropertiesRecord
+                                                        .descripcion}',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .headlineSmall
@@ -267,30 +271,53 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                                   0.0,
                                                                   12.0,
                                                                   0.0),
-                                                      child: Text(
-                                                        wrapPropertiesRecord
-                                                            .uidActivo,
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodySmall
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Lexend Deca',
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .grayIcon,
-                                                                ),
+                                                      child: FutureBuilder<
+                                                          Dependencia>(
+                                                        future: ControladorDependencias()
+                                                            .cargarDependenciaUID(
+                                                                wrapPropertiesRecord
+                                                                    .uidDependencia.trim()),
+                                                        builder: (BuildContext
+                                                                context,
+                            
+                                                                snapshot) {
+                                                          if (snapshot
+                                                                  .hasData &&
+                                                              snapshot.data !=
+                                                                  null) {
+                                                            return Text('Dependencia:${
+                                                              snapshot.data!.nombre}',
+                                                              style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .titleMedium,
+                                                            );
+                                                          }else{
+                                                            return Text('Dependencia no encontrada',
+                                                              style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .titleMedium,
+                                                            );
+                                                          }
+                                                        },
                                                       ),
                                                     ),
                                                   ),
+                                                  
+                                                ],
+                                              ),
+                                              
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(14,10,0,2),
+                                              child: Row(
+                                                children: [
                                                   Text(
-                                                    wrapPropertiesRecord
-                                                            .fecha.toString(),
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .titleMedium,
-                                                  ),
+                                                          'Fecha: ${DateFormat('dd MMMM yyyy - h:mm a','es-CO').format(wrapPropertiesRecord.fecha)}'
+                                                              .toString(),
+                                                          style: FlutterFlowTheme.of(
+                                                                  context)
+                                                              .titleMedium,
+                                                        ),
                                                 ],
                                               ),
                                             ),
@@ -315,7 +342,8 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 8.0, 0.0, 0.0),
                             child: StreamBuilder<List<Caso>>(
-                              stream: CasosController().obtenerCasosStreamFinalizados(),
+                              stream: CasosController()
+                                  .obtenerCasosStreamFinalizados(),
                               builder: (context, snapshot) {
                                 // Customize what your widget looks like when it's loading.
                                 if (!snapshot.hasData) {
@@ -330,10 +358,9 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                     ),
                                   );
                                 }
-                                List<Caso>
-                                    listViewPropertiesRecordList =
+                                List<Caso> wrapPropertiesRecordList =
                                     snapshot.data!;
-                                if (listViewPropertiesRecordList.isEmpty) {
+                                if (wrapPropertiesRecordList.isEmpty) {
                                   return Center(
                                     child: Image.asset(
                                       'assets/images/noProperties@2x.png',
@@ -341,22 +368,30 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                     ),
                                   );
                                 }
-                                return ListView.builder(
-                                  padding: EdgeInsets.zero,
-                                  primary: false,
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.vertical,
-                                  itemCount:
-                                      listViewPropertiesRecordList.length,
-                                  itemBuilder: (context, listViewIndex) {
-                                    final listViewPropertiesRecord =
-                                        listViewPropertiesRecordList[
-                                            listViewIndex];
+                                return Wrap(
+                                  spacing: 0.0,
+                                  runSpacing: 0.0,
+                                  alignment: WrapAlignment.start,
+                                  crossAxisAlignment: WrapCrossAlignment.start,
+                                  direction: Axis.horizontal,
+                                  runAlignment: WrapAlignment.start,
+                                  verticalDirection: VerticalDirection.down,
+                                  clipBehavior: Clip.none,
+                                  children: List.generate(
+                                      wrapPropertiesRecordList.length,
+                                      (wrapIndex) {
+                                    final wrapPropertiesRecord =
+                                        wrapPropertiesRecordList[wrapIndex];
                                     return Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          16.0, 0.0, 16.0, 12.0),
+                                          10.0, 0.0, 0.0, 12.0),
                                       child: Container(
-                                        width: double.infinity,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.45,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.21,
                                         decoration: BoxDecoration(
                                           color: FlutterFlowTheme.of(context)
                                               .secondaryBackground,
@@ -373,23 +408,42 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
-                                            ClipRRect(
-                                              borderRadius: BorderRadius.only(
-                                                bottomLeft:
-                                                    Radius.circular(0.0),
-                                                bottomRight:
-                                                    Radius.circular(0.0),
-                                                topLeft: Radius.circular(8.0),
-                                                topRight: Radius.circular(8.0),
+                                            Hero(
+                                              tag: valueOrDefault<String>(
+                                                wrapPropertiesRecord
+                                                        .urlAdjunto.isNotEmpty
+                                                    ? wrapPropertiesRecord
+                                                        .urlAdjunto
+                                                    : null,
+                                                'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg' +
+                                                    '$wrapIndex',
                                               ),
-                                              child: Image.network(
-                                                valueOrDefault<String>(
-                                                  listViewPropertiesRecord.urlAdjunto.isNotEmpty ? listViewPropertiesRecord.urlAdjunto : null,
-                                                  'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
+                                              transitionOnUserGestures: true,
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(0.0),
+                                                  bottomRight:
+                                                      Radius.circular(0.0),
+                                                  topLeft: Radius.circular(8.0),
+                                                  topRight:
+                                                      Radius.circular(8.0),
                                                 ),
-                                                width: double.infinity,
-                                                height: 140.0,
-                                                fit: BoxFit.cover,
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      valueOrDefault<String>(
+                                                    wrapPropertiesRecord
+                                                            .urlAdjunto
+                                                            .isNotEmpty
+                                                        ? wrapPropertiesRecord
+                                                            .urlAdjunto
+                                                        : null,
+                                                    'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
+                                                  ),
+                                                  width: double.infinity,
+                                                  height: 140.0,
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
                                             Padding(
@@ -400,8 +454,8 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                 mainAxisSize: MainAxisSize.max,
                                                 children: [
                                                   Text(
-                                                    listViewPropertiesRecord
-                                                        .descripcion,
+                                                    'Problema: ${wrapPropertiesRecord
+                                                        .descripcion}',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .headlineSmall
@@ -437,29 +491,53 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                                   0.0,
                                                                   12.0,
                                                                   0.0),
-                                                      child: Text(
-                                                        listViewPropertiesRecord
-                                                            .uid,
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodySmall
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Lexend Deca',
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .grayIcon,
-                                                                ),
+                                                      child: FutureBuilder<
+                                                          Dependencia>(
+                                                        future: ControladorDependencias()
+                                                            .cargarDependenciaUID(
+                                                                wrapPropertiesRecord
+                                                                    .uidDependencia.trim()),
+                                                        builder: (BuildContext
+                                                                context,
+                            
+                                                                snapshot) {
+                                                          if (snapshot
+                                                                  .hasData &&
+                                                              snapshot.data !=
+                                                                  null) {
+                                                            return Text('Dependencia:${
+                                                              snapshot.data!.nombre}',
+                                                              style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .titleMedium,
+                                                            );
+                                                          }else{
+                                                            return Text('Dependencia no encontrada',
+                                                              style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .titleMedium,
+                                                            );
+                                                          }
+                                                        },
                                                       ),
                                                     ),
                                                   ),
+                                                  
+                                                ],
+                                              ),
+                                              
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(14,10,0,2),
+                                              child: Row(
+                                                children: [
                                                   Text(
-                                                    listViewPropertiesRecord.descripcion,
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .titleMedium,
-                                                  ),
+                                                          'Fecha: ${DateFormat('dd MMMM yyyy - h:mm a','es-CO').format(wrapPropertiesRecord.fecha)}'
+                                                              .toString(),
+                                                          style: FlutterFlowTheme.of(
+                                                                  context)
+                                                              .titleMedium,
+                                                        ),
                                                 ],
                                               ),
                                             ),
@@ -467,7 +545,7 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                         ),
                                       ),
                                     );
-                                  },
+                                  }),
                                 );
                               },
                             ),

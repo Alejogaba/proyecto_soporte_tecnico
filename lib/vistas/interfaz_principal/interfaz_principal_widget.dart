@@ -136,9 +136,9 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                               .bodyMedium
                                               .override(
                                                 fontFamily: 'Urbanist',
-                                                color: FlutterFlowTheme.of(
-                                                        context)
-                                                    .tertiary,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .tertiary,
                                                 fontSize: 20.0,
                                                 fontWeight: FontWeight.w800,
                                               ),
@@ -151,9 +151,9 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                               .bodyMedium
                                               .override(
                                                 fontFamily: 'Urbanist',
-                                                color: FlutterFlowTheme.of(
-                                                        context)
-                                                    .tertiary,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .tertiary,
                                                 fontSize: 18.0,
                                                 fontWeight: FontWeight.w600,
                                               ),
@@ -165,23 +165,21 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                               ),
                             ),
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 IconButton(
                                     onPressed: () async {
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              PerfilGeneral(),
+                                          builder: (context) => PerfilGeneral(),
                                         ),
                                       );
                                     },
                                     icon: Icon(
                                       Icons.settings,
-                                      color: FlutterFlowTheme.of(context)
-                                          .tertiary,
+                                      color:
+                                          FlutterFlowTheme.of(context).tertiary,
                                       size: 30,
                                     )),
                               ],
@@ -249,8 +247,8 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                           width: double.infinity,
                           height: 60.0,
                           decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .primaryBackground,
+                            color:
+                                FlutterFlowTheme.of(context).primaryBackground,
                             borderRadius: BorderRadius.circular(30.0),
                           ),
                           alignment: AlignmentDirectional(0.0, 0.0),
@@ -270,9 +268,8 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                           .bodyMedium
                                           .override(
                                             fontFamily: 'Urbanist',
-                                            color:
-                                                FlutterFlowTheme.of(context)
-                                                    .grayIcon,
+                                            color: FlutterFlowTheme.of(context)
+                                                .grayIcon,
                                           ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -337,11 +334,9 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                     height: 40.0,
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 0.0, 0.0, 0.0),
-                                    iconPadding:
-                                        EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 0.0, 0.0),
-                                    color:
-                                        FlutterFlowTheme.of(context).primary,
+                                    iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 0.0),
+                                    color: FlutterFlowTheme.of(context).primary,
                                     textStyle: FlutterFlowTheme.of(context)
                                         .titleSmall
                                         .override(
@@ -368,7 +363,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
                   child: SingleChildScrollView(
                     child: Container(
-                      height: MediaQuery.of(context).size.height-365,
+                      height: MediaQuery.of(context).size.height - 365,
                       child: StreamBuilder<List<Dependencia>>(
                         stream: FirebaseFirestore.instance
                             .collection('dependencias')
@@ -446,13 +441,16 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                             transitionOnUserGestures: true,
                                             child: ClipRRect(
                                               borderRadius: BorderRadius.only(
-                                                bottomLeft: Radius.circular(0.0),
-                                                bottomRight: Radius.circular(0.0),
+                                                bottomLeft:
+                                                    Radius.circular(0.0),
+                                                bottomRight:
+                                                    Radius.circular(0.0),
                                                 topLeft: Radius.circular(8.0),
                                                 topRight: Radius.circular(8.0),
                                               ),
                                               child: CachedNetworkImage(
-                                                imageUrl: valueOrDefault<String>(
+                                                imageUrl:
+                                                    valueOrDefault<String>(
                                                   listDependencias.urlImagen,
                                                   'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
                                                 ),
@@ -511,9 +509,9 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                     maxChars: 90,
                                                     replacement: '…',
                                                   ),
-                                                  style:
-                                                      FlutterFlowTheme.of(context)
-                                                          .bodyMedium,
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium,
                                                 ),
                                               ],
                                             ),
@@ -523,14 +521,16 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                   .getTotalCasosCountDependencia(
                                                       listDependencias.uid),
                                               builder: (context, snapshot) {
-                                                if (
-                                                    snapshot.hasData) {
+                                                if (snapshot.hasData) {
                                                   if (snapshot.data! > 0) {
                                                     return Padding(
                                                       padding:
                                                           EdgeInsetsDirectional
-                                                              .fromSTEB(16.0, 0.0,
-                                                                  16.0, 8.0),
+                                                              .fromSTEB(
+                                                                  16.0,
+                                                                  0.0,
+                                                                  16.0,
+                                                                  8.0),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -545,7 +545,8 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                                     top: -10,
                                                                     end: -12),
                                                             showBadge: true,
-                                                            ignorePointer: false,
+                                                            ignorePointer:
+                                                                false,
                                                             onTap: () {
                                                               print(
                                                                   'Abrir lista reportes');
@@ -553,8 +554,8 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                             badgeContent: Text(
                                                                 snapshot.data
                                                                     .toString(),
-                                                                style: FlutterFlowTheme
-                                                                        .of(context)
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
                                                                     .bodyMedium
                                                                     .override(
                                                                       fontFamily:
@@ -568,29 +569,31 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                                           FontWeight
                                                                               .w500,
                                                                     )),
-                                                            badgeAnimation: badges
-                                                                    .BadgeAnimation
-                                                                .fade(
+                                                            badgeAnimation:
+                                                                badges.BadgeAnimation
+                                                                    .fade(
                                                               animationDuration:
                                                                   Duration(
-                                                                      seconds: 2),
-                                                              loopAnimation: true,
+                                                                      seconds:
+                                                                          2),
+                                                              loopAnimation:
+                                                                  true,
                                                               curve: Curves
                                                                   .fastEaseInToSlowEaseOut,
                                                               colorChangeAnimationCurve:
                                                                   Curves
                                                                       .easeInCubic,
                                                             ),
-                                                            badgeStyle:
-                                                                badges.BadgeStyle(
+                                                            badgeStyle: badges
+                                                                .BadgeStyle(
                                                               shape: badges
                                                                   .BadgeShape
                                                                   .circle,
                                                               badgeColor: Colors
                                                                   .redAccent,
                                                               padding:
-                                                                  EdgeInsets.all(
-                                                                      5),
+                                                                  EdgeInsets
+                                                                      .all(5),
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
@@ -611,7 +614,8 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                               'Solicitudes de soporte técnico'
                                                                   .maybeHandleOverflow(
                                                                 maxChars: 90,
-                                                                replacement: '…',
+                                                                replacement:
+                                                                    '…',
                                                               ),
                                                               style: FlutterFlowTheme
                                                                       .of(context)

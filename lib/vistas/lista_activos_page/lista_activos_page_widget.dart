@@ -114,46 +114,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                         FlutterFlowTheme.of(context).bodyText1Family),
                   ),
             ),
-            actions: [
-              FlutterFlowIconButton(
-                borderColor: Colors.transparent,
-                borderRadius: 30,
-                borderWidth: 1,
-                buttonSize: 60,
-                icon: FaIcon(
-                  FontAwesomeIcons.filePdf,
-                  color: FlutterFlowTheme.of(context).tertiary,
-                  size: 30,
-                ),
-                onPressed: () async {},
-              ),
-              FlutterFlowIconButton(
-                borderColor: Colors.transparent,
-                borderRadius: 30,
-                borderWidth: 1,
-                buttonSize: 60,
-                icon: FaIcon(
-                  FontAwesomeIcons.penToSquare,
-                  color: FlutterFlowTheme.of(context).tertiary,
-                  size: 30,
-                ),
-                onPressed: () async {},
-              ),
-              FlutterFlowIconButton(
-                borderColor: Colors.transparent,
-                borderRadius: 30,
-                borderWidth: 1,
-                buttonSize: 60,
-                icon: FaIcon(
-                  FontAwesomeIcons.add,
-                  color: FlutterFlowTheme.of(context).tertiary,
-                  size: 30,
-                ),
-                onPressed: () async {
-                  Get.toNamed('/addreporte');
-                },
-              ),
-            ],
+          
             centerTitle: false,
             elevation: 4,
           )
@@ -445,7 +406,19 @@ Widget tarjetaActivo(context, Activo activo,
             child: Text(
               activo.nombre,
               overflow: TextOverflow.ellipsis,
-              style: FlutterFlowTheme.of(context).subtitle1,
+              style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Urbanist',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .tertiary,
+                                                        fontSize: 18.0,
+                                                        fontWeight:
+                                                            FontWeight.w800,
+                                                      ),
             ),
           ),
           if (activo.casosPendientes)

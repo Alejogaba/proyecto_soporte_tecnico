@@ -388,10 +388,10 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                       child: Container(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.45,
+                                                0.50,
                                         height:
                                             MediaQuery.of(context).size.height *
-                                                0.21,
+                                                0.29,
                                         decoration: BoxDecoration(
                                           color: FlutterFlowTheme.of(context)
                                               .secondaryBackground,
@@ -457,16 +457,18 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                     'Problema: ${wrapPropertiesRecord
                                                         .descripcion}',
                                                     style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .headlineSmall
-                                                        .override(
-                                                          fontFamily:
-                                                              'Urbanist',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .darkText,
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Urbanist',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .tertiary,
+                                                        fontSize: 16.0,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      
                                                         ),
                                                   ),
                                                 ],
@@ -505,11 +507,21 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                                   .hasData &&
                                                               snapshot.data !=
                                                                   null) {
-                                                            return Text('Dependencia:${
+                                                            return Text('Dependencia: ${
                                                               snapshot.data!.nombre}',
                                                               style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .titleMedium,
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Urbanist',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .tertiary,
+                                                        fontSize: 13.0,
+                                                        fontWeight:
+                                                            FontWeight.w800,
+                                                      ),
                                                             );
                                                           }else{
                                                             return Text('Dependencia no encontrada',
@@ -535,8 +547,18 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                           'Fecha: ${DateFormat('dd MMMM yyyy - h:mm a','es-CO').format(wrapPropertiesRecord.fecha)}'
                                                               .toString(),
                                                           style: FlutterFlowTheme.of(
-                                                                  context)
-                                                              .titleMedium,
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Urbanist',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .tertiary,
+                                                        fontSize: 10.0,
+                                                        fontWeight:
+                                                            FontWeight.w800,
+                                                      ),
                                                         ),
                                                 ],
                                               ),

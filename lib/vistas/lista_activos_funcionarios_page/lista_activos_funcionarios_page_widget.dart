@@ -23,6 +23,7 @@ import '../../model/activo.dart';
 import 'package:badges/badges.dart' as badges;
 
 import '../../model/usuario.dart';
+import '../perfil/PerfilMOD/home.dart';
 
 class ListaActivosFuncionariosPageWidget extends StatefulWidget {
   final Dependencia? dependencia;
@@ -78,19 +79,19 @@ class _ListaActivosFuncionariosPageWidgetState
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).primary,
         centerTitle: true,
-         title: Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[
-      Icon(Icons.computer),
-      SizedBox(width: 8.0), // Espacio entre el icono y el texto
-      Text('Equipos de cómputo'),
-    ],
-  ),
-      
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(Icons.computer),
+            SizedBox(width: 8.0), // Espacio entre el icono y el texto
+            Text('Equipos de cómputo'),
+          ],
+        ),
         actions: [],
         elevation: 0,
       ),
-      floatingActionButton: FloatingActionButton(
+
+      /* floatingActionButton: FloatingActionButton(
         onPressed: () {
          Get.toNamed('/perfilgen');
         },
@@ -99,6 +100,7 @@ class _ListaActivosFuncionariosPageWidgetState
                                                       .tertiary,),
         backgroundColor: Color.fromARGB(255, 39, 128, 42),
       ),
+      **/
       /*floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (dependencia != null) {
@@ -148,7 +150,7 @@ class _ListaActivosFuncionariosPageWidgetState
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                                    4.0, 4.0, 0.0, 0.0),
+                                    4.0, 4.0, 0.0, 0.0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,36 +265,31 @@ class _ListaActivosFuncionariosPageWidgetState
                                     **/
                                   ],
                                 ),
-                                
                               ),
-                             Padding(padding: EdgeInsetsDirectional.fromSTEB(
-                                    16.0, 26.0, 16.0, 0.0),
-                             child: Row(
-                              children: [
-                                             Container(
-                    width: MediaQuery.of(context).size.width - 38,
-                    height: 0.6,
-                    color: Color.fromARGB(179, 235, 229, 229),
-                  ),
-                              ],
-                             ),
-                             
-                             ),
-                              
                               Padding(
-                                
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     16.0, 26.0, 16.0, 0.0),
-                                    
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width -
+                                          38,
+                                      height: 0.6,
+                                      color: Color.fromARGB(179, 235, 229, 229),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16.0, 26.0, 16.0, 0.0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                             
                                     FutureBuilder<Usuario?>(
                                       future: AuthHelper()
-                                          .cargarUsuarioDeFirebase(
-                                              ),
+                                          .cargarUsuarioDeFirebase(),
                                       builder:
                                           (BuildContext context, snapshot) {
                                         if (snapshot.connectionState ==
@@ -303,15 +300,14 @@ class _ListaActivosFuncionariosPageWidgetState
                                             style: FlutterFlowTheme.of(context)
                                                 .displaySmall
                                                 .override(
-                                                  fontFamily: 'Urbanist', fontSize: 22,
+                                                  fontFamily: 'Urbanist',
+                                                  fontSize: 22,
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .tertiary,
                                                 ),
-                                                
                                           );
                                         } else {
-                                         
                                           return Text(
                                             '¡Bienvenid@!',
                                             style: FlutterFlowTheme.of(context)
@@ -422,7 +418,6 @@ class _ListaActivosFuncionariosPageWidgetState
                                   ),
                                 ),
                               ),
-                              
                             ],
                           ),
                         ),
@@ -588,57 +583,62 @@ Widget tarjetaActivo(context, Activo activo,
             child: Text(
               activo.nombre,
               overflow: TextOverflow.ellipsis,
-              style: FlutterFlowTheme.of(context).subtitle1,
+              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                    fontFamily: 'Urbanist',
+                    color: FlutterFlowTheme.of(context).tertiary,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w800,
+                  ),
             ),
           ),
-          if(activo.casosPendientes)
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-                child: badges.Badge(
-                  position: badges.BadgePosition.topEnd(top: -10, end: -12),
-                  showBadge: true,
-                  ignorePointer: false,
-                  onTap: () {},
-                  badgeContent: Icon(
-                    Icons.error,
-                    color: Colors.white,
-                    size: 12,
-                  ),
-                  badgeAnimation: badges.BadgeAnimation.fade(
-                    animationDuration: Duration(seconds: 2),
-                    loopAnimation: true,
-                    curve: Curves.fastEaseInToSlowEaseOut,
-                    colorChangeAnimationCurve: Curves.easeInCubic,
-                  ),
-                  badgeStyle: badges.BadgeStyle(
-                    shape: badges.BadgeShape.circle,
-                    badgeColor: Colors.redAccent,
-                    padding: EdgeInsets.all(3),
-                    borderRadius: BorderRadius.circular(4),
-                    borderSide: BorderSide(color: Colors.redAccent, width: 1),
-                    elevation: 0,
+          if (activo.casosPendientes)
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+                  child: badges.Badge(
+                    position: badges.BadgePosition.topEnd(top: -10, end: -12),
+                    showBadge: true,
+                    ignorePointer: false,
+                    onTap: () {},
+                    badgeContent: Icon(
+                      Icons.error,
+                      color: Colors.white,
+                      size: 12,
+                    ),
+                    badgeAnimation: badges.BadgeAnimation.fade(
+                      animationDuration: Duration(seconds: 2),
+                      loopAnimation: true,
+                      curve: Curves.fastEaseInToSlowEaseOut,
+                      colorChangeAnimationCurve: Curves.easeInCubic,
+                    ),
+                    badgeStyle: badges.BadgeStyle(
+                      shape: badges.BadgeShape.circle,
+                      badgeColor: Colors.redAccent,
+                      padding: EdgeInsets.all(3),
+                      borderRadius: BorderRadius.circular(4),
+                      borderSide: BorderSide(color: Colors.redAccent, width: 1),
+                      elevation: 0,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(3, 3, 0, 1),
-                child: Text(
-                  'Requiere soporte',
-                  overflow: TextOverflow.ellipsis,
-                  style: FlutterFlowTheme.of(context).bodyText2.override(
-                        fontFamily:
-                            FlutterFlowTheme.of(context).bodyText2Family,
-                        color: FlutterFlowTheme.of(context).error,
-                        useGoogleFonts: GoogleFonts.asMap().containsKey(
-                            FlutterFlowTheme.of(context).bodyText2Family),
-                      ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(3, 3, 0, 1),
+                  child: Text(
+                    'Requiere soporte',
+                    overflow: TextOverflow.ellipsis,
+                    style: FlutterFlowTheme.of(context).bodyText2.override(
+                          fontFamily:
+                              FlutterFlowTheme.of(context).bodyText2Family,
+                          color: FlutterFlowTheme.of(context).error,
+                          useGoogleFonts: GoogleFonts.asMap().containsKey(
+                              FlutterFlowTheme.of(context).bodyText2Family),
+                        ),
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
           /*
           Row(
             mainAxisSize: MainAxisSize.max,

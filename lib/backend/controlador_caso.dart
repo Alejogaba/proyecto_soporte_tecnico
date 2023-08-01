@@ -111,6 +111,24 @@ class CasosController {
     return controller.stream;
   }
 
+  Future<int> getTotalCasosCountSolicitanteFuture(String uidSolicitante) async {
+  try {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('casos')
+        .where('uidSolicitante', isEqualTo: uidSolicitante)
+        .where('solucionado', isEqualTo: false)
+        .get();
+
+    int count = querySnapshot.size;
+    return count;
+  } catch (e) {
+    // Manejar cualquier error que pueda ocurrir durante la lectura de Firestore.
+    print('Error al obtener el total de casos para el solicitante: $e');
+    return 0; // o cualquier valor predeterminado que desees devolver en caso de error.
+  }
+}
+
+
   Future<Caso?> buscarCasoPorIDactivo(String uidActivo) async {
     try {
       final querySnapshot = await FirebaseFirestore.instance

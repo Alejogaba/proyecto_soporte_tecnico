@@ -9,6 +9,7 @@ import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:login2/flutter_flow/chat/index.dart';
 import 'package:mime/mime.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
@@ -228,12 +229,16 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
             initialData: [],
             stream: FirebaseChatCore.instance.messages(snapshot.data!),
             builder: (context, snapshot) => Chat(
+              dateLocale: 'es-CO',
+              timeFormat: DateFormat('h:mm a', 'es'),
+              dateFormat: DateFormat('EEEE, d ' 'MMMM', 'es'),
               isAttachmentUploading: _isAttachmentUploading,
               messages: snapshot.data ?? [],
               onAttachmentPressed: _handleAtachmentPressed,
               onMessageTap: _handleMessageTap,
               onPreviewDataFetched: _handlePreviewDataFetched,
               onSendPressed: _handleSendPressed,
+              
               user: types.User(
                 id: FirebaseChatCore.instance.firebaseUser?.uid ?? '',
               ),

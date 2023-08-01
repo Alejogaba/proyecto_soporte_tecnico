@@ -103,8 +103,6 @@ class _ChatWidgetState extends State<ChatWidget> {
                   stream: CasosController().getTotalCasosCountSolicitante(
                       widget.otroUsuario.uid!.trim()),
                   builder: (context, snapshot) {
-                    Logger()
-                        .v('Otro usuario uid' + widget.otroUsuario.uid!.trim());
                     if (snapshot.hasData&&snapshot.data!=0) {
                       return InkWell(
                         onTap: () {

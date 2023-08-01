@@ -40,6 +40,7 @@ class AuthHelper {
     });
   }
 
+
   Future<Usuario?> cargarUsuarioDeFirebase() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     Logger().i('Usuario actual funcion firebase: ${auth.currentUser!.email}');

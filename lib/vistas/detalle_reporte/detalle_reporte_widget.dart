@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
 import 'package:login2/backend/controlador_activo.dart';
 import 'package:login2/backend/controlador_caso.dart';
@@ -7,6 +8,7 @@ import 'package:login2/model/activo.dart';
 import 'package:login2/model/caso.dart';
 
 import '../../backend/controlador_dependencias.dart';
+import '../../model/chat_mensajes.dart';
 import '../../model/dependencias.dart';
 import '../../model/usuario.dart';
 import '../activo_perfil_page/activo_perfil_page_widget.dart';
@@ -23,6 +25,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'detalle_reporte_model.dart';
 export 'detalle_reporte_model.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class DetalleReporteWidget extends StatefulWidget {
   const DetalleReporteWidget(
@@ -394,8 +397,47 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                             0.0, 12.0, 0.0, 24.0),
                         child: FFButtonWidget(
                           onPressed: () async {
+                            FirebaseAuth auth = FirebaseAuth.instance;
                             CasosController()
                                 .marcarCasoComoresuelto(widget.caso);
+                            types.User otheruser = types.User(
+                                id: widget.caso.uidSolicitante.trim());
+                            types.Room room = await FirebaseChatCore.instance
+                                .createRoom(otheruser);
+                            Activo activo = await ActivoController()
+                                .cargarActivoUID(widget.caso.uidDependencia,
+                                    widget.caso.uidActivo);
+
+                            ChatMensajes mensaje1 = ChatMensajes(
+                                authorId: auth.currentUser!.uid.trim(),
+                                updatedAt: DateTime.now(),
+                                mensaje:
+                                    'Se completo el caso de ${activo.nombre}',
+                                tipo: 'text',
+                                fechaHora: DateTime.now());
+                            await FirebaseFirestore.instance
+                                .collection('rooms')
+                                .doc(room.id)
+                                .collection('messages')
+                                .add(mensaje1.toMapText());
+
+                            int totalCasos = await CasosController()
+                                .getTotalCasosCountSolicitanteFuture(
+                                    widget.caso.uidSolicitante);
+                            if(totalCasos == 0){
+                              ChatMensajes mensaje1 = ChatMensajes(
+                                authorId: auth.currentUser!.uid.trim(),
+                                updatedAt: DateTime.now(),
+                                mensaje:
+                                    'No se han encontrado más casos abiertos, el chat se cerrara a continuación',
+                                tipo: 'text',
+                                fechaHora: DateTime.now());
+                            await FirebaseFirestore.instance
+                                .collection('rooms')
+                                .doc(room.id)
+                                .collection('messages')
+                                .add(mensaje1.toMapText());
+                            }
                             Navigator.pop(context);
                           },
                           text: 'Marcar como atendido',

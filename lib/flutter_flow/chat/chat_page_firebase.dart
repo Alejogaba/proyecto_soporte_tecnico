@@ -238,7 +238,6 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
               onMessageTap: _handleMessageTap,
               onPreviewDataFetched: _handlePreviewDataFetched,
               onSendPressed: _handleSendPressed,
-              
               user: types.User(
                 id: FirebaseChatCore.instance.firebaseUser?.uid ?? '',
               ),

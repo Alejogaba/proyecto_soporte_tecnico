@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../backend/controlador_dependencias.dart';
 import '../../../../model/dependencias.dart';
 import '../../../../model/usuario.dart';
@@ -93,13 +94,34 @@ class _FuncioInfoState extends State<FuncioInfo> {
                         ),
                         Row(
                           children: <Widget>[
-                            IconTile(
-                              backColor: Color.fromARGB(255, 9, 92, 53),
-                              imgAssetPath: "assets/email.png",
+                            InkWell(
+                              onTap: () async {
+                                
+                                                                        await launchUrl(Uri(
+                                                                            scheme: 'mailto',
+                                                                            path: widget.usuario.email,
+                                                                            query: {
+                                                                              'subject': 'Asunto',
+                                                                              'body': ' ',
+                                                                            }.entries.map((MapEntry<String, String> e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}').join('&')));
+                              },
+                              child: IconTile(
+                                backColor: Color.fromARGB(255, 9, 92, 53),
+                                imgAssetPath: "assets/email.png",
+                              ),
                             ),
-                            IconTile(
-                              backColor: Color.fromARGB(255, 9, 92, 53),
-                              imgAssetPath: "assets/call.png",
+                            InkWell(
+                              onTap: ()async{
+                                
+                                                            await launchUrl(Uri(
+                                                              scheme: 'tel',
+                                                              path: widget.usuario.telefono,
+                                                            ));
+                              },
+                              child: IconTile(
+                                backColor: Color.fromARGB(255, 9, 92, 53),
+                                imgAssetPath: "assets/call.png",
+                              ),
                             ),
                           ],
                         )

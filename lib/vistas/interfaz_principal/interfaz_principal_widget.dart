@@ -363,7 +363,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
                   child: SingleChildScrollView(
                     child: Container(
-                      height: MediaQuery.of(context).size.height - 365,
+                      height: MediaQuery.of(context).size.height - 379,
                       child: StreamBuilder<List<Dependencia>>(
                         stream: FirebaseFirestore.instance
                             .collection('dependencias')

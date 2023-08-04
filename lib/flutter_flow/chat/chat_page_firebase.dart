@@ -230,7 +230,7 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
             initialData: [],
             stream: FirebaseChatCore.instance.messages(snapshot.data!),
             builder: (context, snapshot) => Chat(
-              theme: DefaultChatTheme(inputBackgroundColor: FlutterFlowTheme.of(context).primary.withAlpha(230),primaryColor: FlutterFlowTheme.of(context).primary, secondaryColor: FlutterFlowTheme.of(context).accent3, backgroundColor: Colors.pink,),
+              theme: DefaultChatTheme(inputBackgroundColor: FlutterFlowTheme.of(context).primary.withAlpha(230),primaryColor: FlutterFlowTheme.of(context).primary, secondaryColor: FlutterFlowTheme.of(context).accent3, backgroundColor: Color.fromARGB(255, 176, 199, 184),),
               showUserAvatars: true,
               dateLocale: 'es-CO',
               timeFormat: DateFormat('h:mm a', 'es'),

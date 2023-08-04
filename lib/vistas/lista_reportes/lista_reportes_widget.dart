@@ -193,9 +193,9 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                     wrapPropertiesRecord
                                                         .uidActivo),
                                             builder: (BuildContext context,
-                                                
-                                                    snapshotActivo) {
-                                              if (snapshotActivo.connectionState ==
+                                                snapshotActivo) {
+                                              if (snapshotActivo
+                                                          .connectionState ==
                                                       ConnectionState.done &&
                                                   snapshotActivo.data != null) {
                                                 return Column(
@@ -210,7 +210,9 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                                 .isNotEmpty
                                                             ? wrapPropertiesRecord
                                                                 .urlAdjunto
-                                                            : snapshotActivo.data!.urlImagen,
+                                                            : snapshotActivo
+                                                                .data!
+                                                                .urlImagen,
                                                         'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg' +
                                                             '$wrapIndex',
                                                       ),
@@ -242,7 +244,9 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                                     .isNotEmpty
                                                                 ? wrapPropertiesRecord
                                                                     .urlAdjunto
-                                                                : snapshotActivo.data!.urlImagen,
+                                                                : snapshotActivo
+                                                                    .data!
+                                                                    .urlImagen,
                                                             'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
                                                           ),
                                                           width:
@@ -265,9 +269,10 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                             MainAxisSize.max,
                                                         children: [
                                                           Text(
-                                                          
                                                             'Problema: ${wrapPropertiesRecord.descripcion}',
-                                                            overflow: TextOverflow.ellipsis,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .clip,
                                                             maxLines: 3,
                                                             style: FlutterFlowTheme
                                                                     .of(context)
@@ -327,14 +332,34 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                                       '${snapshot.data!.nombre}',
                                                                       style: FlutterFlowTheme.of(
                                                                               context)
-                                                                          .titleMedium,
+                                                                          .bodyMedium
+                                                                          .override(
+                                                                            fontFamily:
+                                                                                'Urbanist',
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).primaryText,
+                                                                            fontSize:
+                                                                                16.0,
+                                                                            fontWeight:
+                                                                                FontWeight.w800,
+                                                                          ),
                                                                     );
                                                                   } else {
                                                                     return Text(
                                                                       'Dependencia no encontrada',
                                                                       style: FlutterFlowTheme.of(
                                                                               context)
-                                                                          .titleMedium,
+                                                                          .bodyMedium
+                                                                          .override(
+                                                                            fontFamily:
+                                                                                'Urbanist',
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).primaryText,
+                                                                            fontSize:
+                                                                                18.0,
+                                                                            fontWeight:
+                                                                                FontWeight.w800,
+                                                                          ),
                                                                     );
                                                                   }
                                                                 },
@@ -357,7 +382,19 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                                     .toString(),
                                                                 style: FlutterFlowTheme.of(
                                                                         context)
-                                                                    .titleMedium,
+                                                                    .bodyMedium
+                                                                    .override(
+                                                                      fontFamily:
+                                                                          'Urbanist',
+                                                                      color: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .primaryText,
+                                                                      fontSize:
+                                                                          15.0,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w800,
+                                                                    ),
                                                               ),
                                                             ),
                                                           ),
@@ -437,10 +474,12 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                             child: Container(
                                                               child: Text(
                                                                 'Problema: ${wrapPropertiesRecord.descripcion}',
-                                                                overflow: TextOverflow.ellipsis,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .clip,
                                                                 maxLines: 3,
-                                                                style: FlutterFlowTheme
-                                                                        .of(context)
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
                                                                     .headlineSmall
                                                                     .override(
                                                                       fontFamily:
@@ -628,9 +667,9 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                     wrapPropertiesRecord
                                                         .uidActivo),
                                             builder: (BuildContext context,
-                                                
-                                                    snapshotActivo) {
-                                              if (snapshotActivo.connectionState ==
+                                                snapshotActivo) {
+                                              if (snapshotActivo
+                                                          .connectionState ==
                                                       ConnectionState.done &&
                                                   snapshotActivo.data != null) {
                                                 return Column(
@@ -645,7 +684,9 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                                 .isNotEmpty
                                                             ? wrapPropertiesRecord
                                                                 .urlAdjunto
-                                                            : snapshotActivo.data!.urlImagen,
+                                                            : snapshotActivo
+                                                                .data!
+                                                                .urlImagen,
                                                         'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg' +
                                                             '$wrapIndex',
                                                       ),
@@ -677,7 +718,9 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                                     .isNotEmpty
                                                                 ? wrapPropertiesRecord
                                                                     .urlAdjunto
-                                                                : snapshotActivo.data!.urlImagen,
+                                                                : snapshotActivo
+                                                                    .data!
+                                                                    .urlImagen,
                                                             'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
                                                           ),
                                                           width:
@@ -693,7 +736,7 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                               .fromSTEB(
                                                                   7.0,
                                                                   12.0,
-                                                                 7.0,
+                                                                  7.0,
                                                                   8.0),
                                                       child: Row(
                                                         mainAxisSize:
@@ -703,10 +746,12 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                             child: Container(
                                                               child: Text(
                                                                 'Problema: ${wrapPropertiesRecord.descripcion}',
-                                                                overflow: TextOverflow.ellipsis,
-                                                            maxLines: 3,
-                                                                style: FlutterFlowTheme
-                                                                        .of(context)
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .clip,
+                                                                maxLines: 3,
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
                                                                     .headlineSmall
                                                                     .override(
                                                                       fontFamily:
@@ -765,7 +810,17 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                                       '${snapshot.data!.nombre}',
                                                                       style: FlutterFlowTheme.of(
                                                                               context)
-                                                                          .titleMedium,
+                                                                          .bodyMedium
+                                                                          .override(
+                                                                            fontFamily:
+                                                                                'Urbanist',
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).primaryText,
+                                                                            fontSize:
+                                                                                16.0,
+                                                                            fontWeight:
+                                                                                FontWeight.w800,
+                                                                          ),
                                                                     );
                                                                   } else {
                                                                     return Text(
@@ -795,7 +850,19 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                                     .toString(),
                                                                 style: FlutterFlowTheme.of(
                                                                         context)
-                                                                    .titleMedium,
+                                                                    .bodyMedium
+                                                                    .override(
+                                                                      fontFamily:
+                                                                          'Urbanist',
+                                                                      color: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .primaryText,
+                                                                      fontSize:
+                                                                          14.0,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w800,
+                                                                    ),
                                                               ),
                                                             ),
                                                           ),

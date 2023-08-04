@@ -499,8 +499,18 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                       replacement: '…',
                                                     ),
                                                     style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium,
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Urbanist',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        fontSize: 14.0,
+                                                        fontWeight:
+                                                            FontWeight.w800,
+                                                      ),
                                                   ),
                                                 ),
                                                /**   Text(

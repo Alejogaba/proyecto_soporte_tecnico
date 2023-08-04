@@ -10,6 +10,7 @@ import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:login2/flutter_flow/chat/index.dart';
+import 'package:login2/flutter_flow/flutter_flow_theme.dart';
 import 'package:mime/mime.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
@@ -229,6 +230,8 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
             initialData: [],
             stream: FirebaseChatCore.instance.messages(snapshot.data!),
             builder: (context, snapshot) => Chat(
+              theme: DefaultChatTheme(inputBackgroundColor: FlutterFlowTheme.of(context).primary.withAlpha(230),primaryColor: FlutterFlowTheme.of(context).primary, secondaryColor: FlutterFlowTheme.of(context).accent3, backgroundColor: Colors.pink,),
+              showUserAvatars: true,
               dateLocale: 'es-CO',
               timeFormat: DateFormat('h:mm a', 'es'),
               dateFormat: DateFormat('EEEE, d ' 'MMMM', 'es'),

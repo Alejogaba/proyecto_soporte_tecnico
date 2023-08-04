@@ -361,7 +361,7 @@ Widget tarjetaActivo(context, Activo activo,
     bool estaAsignado = false}) {
   return Container(
     width: 185,
-    height: 195,
+   
     decoration: BoxDecoration(
       color: FlutterFlowTheme.of(context).secondaryBackground,
       boxShadow: [
@@ -405,7 +405,7 @@ Widget tarjetaActivo(context, Activo activo,
             padding: EdgeInsetsDirectional.fromSTEB(5, 6, 0, 0),
             child: Text(
               activo.nombre,
-              overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.clip,
               style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium
@@ -414,7 +414,7 @@ Widget tarjetaActivo(context, Activo activo,
                                                         color:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .tertiary,
+                                                                .primaryText,
                                                         fontSize: 18.0,
                                                         fontWeight:
                                                             FontWeight.w800,

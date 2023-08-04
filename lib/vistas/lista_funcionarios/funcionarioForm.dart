@@ -25,8 +25,8 @@ File? image;
 late String filename;
 
 class FuncionarioFormWidget extends StatefulWidget {
-  final Usuario usuario;
-  FuncionarioFormWidget(this.usuario);
+  final Usuario? usuario;
+  FuncionarioFormWidget({this.usuario});
 
   @override
   _FuncionarioFormState createState() => _FuncionarioFormState();
@@ -119,16 +119,30 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _nombreController = new TextEditingController();
-    _identificacionController = new TextEditingController();
-    _cargoController = new TextEditingController();
-    _areaController = new TextEditingController();
-    _fechanacimientoController = new TextEditingController();
 
-    _emailController = new TextEditingController();
-    _passwordController = new TextEditingController();
-    _confirmPasswordController = TextEditingController(text: "");
-    _telefonoController = new TextEditingController();
+    if (widget.usuario == null) {
+      _nombreController = new TextEditingController();
+      _identificacionController = new TextEditingController();
+      _cargoController = new TextEditingController();
+      _areaController = new TextEditingController();
+      _fechanacimientoController = new TextEditingController();
+
+      _emailController = new TextEditingController();
+      _passwordController = new TextEditingController();
+      _confirmPasswordController = TextEditingController(text: "");
+      _telefonoController = new TextEditingController();
+    }else{
+      _nombreController = new TextEditingController(text: widget.usuario!.nombre);
+      _identificacionController = new TextEditingController(text: widget.usuario!.identificacion);
+      _cargoController = new TextEditingController(text: widget.usuario!.cargo);
+      _areaController = new TextEditingController(text: widget.usuario!.area);
+      _fechanacimientoController = new TextEditingController(text: widget.usuario!.fechaNacimiento);
+
+      _emailController = new TextEditingController(text: widget.usuario!.email);
+      _passwordController = new TextEditingController(text: widget.usuario!.password);
+      _confirmPasswordController = TextEditingController(text: widget.usuario!.password);
+      _telefonoController = new TextEditingController(text: widget.usuario!.telefono);
+    }
   }
 
   @override
@@ -682,7 +696,6 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                                                             207, 0, 0, 0),
                                                       ),
                                                   hintText: 'Area...',
-                                                  
                                                   fillColor: Color(0xFFF1F4F8),
                                                   elevation: 2,
                                                   borderColor:

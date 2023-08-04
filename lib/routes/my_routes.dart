@@ -22,6 +22,6 @@ routes() => [
       GetPage(name: "/loginmod", page: () => LoginPage()),
       GetPage(name: "/loguear", page: () => SignIn()),
       GetPage(
-          name: "/funcionario", page: () => FuncionarioFormWidget(Usuario())),
+          name: "/funcionario", page: () => FuncionarioFormWidget()),
       GetPage(name: "/perfilgen", page: () => PerfilGeneral()),
     ];

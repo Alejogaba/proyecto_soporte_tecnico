@@ -73,6 +73,7 @@ class _ListaFuncionariossState extends State<ListaFuncionarioss>
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth auth = FirebaseAuth.instance;
     return Scaffold(
         floatingActionButton: Padding(
           padding: const EdgeInsets.fromLTRB(40, 0, 20, 80),
@@ -92,7 +93,7 @@ class _ListaFuncionariossState extends State<ListaFuncionarioss>
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              FuncionarioFormWidget(Usuario())),
+                              FuncionarioFormWidget()),
                     ).then((value) {
                       setState(() {});
                     });
@@ -301,6 +302,8 @@ class _ListaFuncionariossState extends State<ListaFuncionarioss>
                                                                         right:
                                                                             20),
                                                               ),
+                                                            if(auth.currentUser!.email!.toLowerCase()!= snapshot.data![
+                                                                          index].email!.toLowerCase())
                                                             IconButton(
                                                               icon: Icon(
                                                                 Icons
@@ -483,7 +486,7 @@ class _ListaFuncionariossState extends State<ListaFuncionarioss>
       BuildContext context, Usuario usuario) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => FuncionarioFormWidget(usuario)),
+      MaterialPageRoute(builder: (context) => FuncionarioFormWidget(usuario:usuario)),
     );
   }
 
@@ -500,7 +503,7 @@ class _ListaFuncionariossState extends State<ListaFuncionarioss>
   void _createNewFuncionario(BuildContext context) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => FuncionarioFormWidget(Usuario())),
+      MaterialPageRoute(builder: (context) => FuncionarioFormWidget()),
     );
   }
 }

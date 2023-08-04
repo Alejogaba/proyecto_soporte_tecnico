@@ -126,7 +126,8 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                               (BuildContext context, snapshotUltimoMensaje) {
                             if (snapshotUltimoMensaje.connectionState ==
                                 ConnectionState.waiting) {
-                              return CircularProgressIndicator();
+                              return SizedBox(width:50,height:50,
+                              child:CircularProgressIndicator(color: FlutterFlowTheme.of(context).primary,));
                             } else if (snapshotUltimoMensaje.connectionState !=
                                     ConnectionState.waiting &&
                                 snapshot.data == null) {
@@ -208,7 +209,7 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                                                                 snapshot.data!
                                                                     .fcmToken,
                                                             nombre:
-                                                                '${snapshot.data!.nombre} - ${snapshot.data!.cargo} ${snapshotDependencia.data!.nombre}',
+                                                                '${snapshot.data!.nombre} - ${snapshot.data!.cargo} de ${snapshotDependencia.data!.nombre}',
                                                             usuarios:
                                                                 listViewChatsRecord
                                                                     .users,
@@ -236,20 +237,22 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                                                   .lastMessageTime,
                                               seen: (snapshotCountCasos.data! >0)? false:true,
                                               title:
-                                                  '${snapshot.data!.nombre} - ${snapshot.data!.cargo} ${snapshotDependencia.data!.nombre}',
+                                                  '${snapshot.data!.nombre} - ${snapshot.data!.cargo} de ${snapshotDependencia.data!.nombre}',
                                               userProfilePic:
                                                   chatInfo.urlImagen,
-                                              color: (snapshotCountCasos.data! >0)?
+                                              color: (snapshotCountCasos.data! >0)? 
                                                   FlutterFlowTheme.of(context)
-                                                      .secondaryBackground:FlutterFlowTheme.of(context).accent3
+                                                      .secondaryBackground:FlutterFlowTheme.of(context).accent3 
                                                       ,
+                                                      
                                               unreadColor: 
-                                                  FlutterFlowTheme.of(context)
-                                                      .primary,
+                                                  Colors.green,
+                                                  
                                               titleTextStyle:
                                                   GoogleFonts.getFont(
                                                 'Urbanist',
-                                                color:
+                                                color:(snapshotCountCasos.data! >0)? FlutterFlowTheme.of(context)
+                                                        .primaryText:
                                                     FlutterFlowTheme.of(context)
                                                         .primaryText.withAlpha(150),
                                                 fontWeight: FontWeight.bold,
@@ -259,6 +262,8 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                                                   GoogleFonts.getFont(
                                                 'Urbanist',
                                                 color:
+                                                    (snapshotCountCasos.data! >0)? FlutterFlowTheme.of(context)
+                                                        .primaryText.withAlpha(200):
                                                     FlutterFlowTheme.of(context)
                                                         .secondaryText,
                                                 fontWeight: FontWeight.normal,
@@ -267,7 +272,8 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                                               previewTextStyle:
                                                   GoogleFonts.getFont(
                                                 'Urbanist',
-                                                color:
+                                                color:(snapshotCountCasos.data! >0)? FlutterFlowTheme.of(context)
+                                                        .primaryText.withAlpha(180):
                                                     FlutterFlowTheme.of(context)
                                                         .grayIcon,
                                                 fontWeight: FontWeight.w500,

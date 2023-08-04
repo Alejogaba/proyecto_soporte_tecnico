@@ -144,19 +144,19 @@ class _ListaActivosFuncionariosPageWidgetState
                               )
                             ],
                           ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column( mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                  
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     4.0, 4.0, 0.0, 0.0),
                                 child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                   mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
+                                
                                     Padding(
                                       padding: const EdgeInsets.only(top: 2.0),
                                       child: Row(
@@ -221,48 +221,34 @@ class _ListaActivosFuncionariosPageWidgetState
                                               ],
                                             ),
                                           ),
+                                         
                                         ],
                                       ),
                                     ),
-                                    /*
+                                    
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        IconButton(
-                                            onPressed: () {
-                                              Get.toNamed('/perfilgen');
-                                            },
-                                            icon: Icon(
-                                              Icons.person,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .tertiary, size: 28,
-                                            )),
-                                       /* IconButton(
-                                            onPressed: () async {
-                                              await authManager.signOut();
-                                              await Navigator
-                                                  .pushAndRemoveUntil(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      LoginPage(),
-                                                ),
-                                                (r) => false,
-                                              );
-                                            },
-                                            icon: Icon(
-                                              Icons.logout,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .tertiary,
-                                            )),
-                                            **/
+                                        Padding(
+                                          padding: const EdgeInsets.only(right:12.0),
+                                          child: IconButton(
+                                              onPressed: () {
+                                                Get.toNamed('/perfilgen');
+                                              },
+                                              icon: Icon(
+                                                Icons.person,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .tertiary, size: 32,
+                                              )),
+                                        ),
+                                        
+                                            
                                             
                                       ],
                                     )
-                                    **/
+                                    
                                   ],
                                 ),
                               ),
@@ -538,7 +524,7 @@ Widget tarjetaActivo(context, Activo activo,
     bool estaAsignado = false}) {
   return Container(
     width: 185,
-    height: 195,
+
     decoration: BoxDecoration(
       color: FlutterFlowTheme.of(context).secondaryBackground,
       boxShadow: [
@@ -582,10 +568,10 @@ Widget tarjetaActivo(context, Activo activo,
             padding: EdgeInsetsDirectional.fromSTEB(5, 6, 0, 0),
             child: Text(
               activo.nombre,
-              overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.clip,
               style: FlutterFlowTheme.of(context).bodyMedium.override(
                     fontFamily: 'Urbanist',
-                    color: FlutterFlowTheme.of(context).tertiary,
+                    color: FlutterFlowTheme.of(context).primaryText,
                     fontSize: 18.0,
                     fontWeight: FontWeight.w800,
                   ),

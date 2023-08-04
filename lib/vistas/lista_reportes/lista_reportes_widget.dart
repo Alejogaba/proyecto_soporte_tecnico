@@ -1,8 +1,10 @@
+import 'package:login2/backend/controlador_activo.dart';
 import 'package:login2/backend/controlador_caso.dart';
 import 'package:login2/model/caso.dart';
 import 'package:login2/model/dependencias.dart';
 
 import '../../backend/controlador_dependencias.dart';
+import '../../model/activo.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -166,164 +168,379 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           10.0, 0.0, 0.0, 12.0),
                                       child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.45,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.21,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              blurRadius: 4.0,
-                                              color: Color(0x32000000),
-                                              offset: Offset(0.0, 2.0),
-                                            )
-                                          ],
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Hero(
-                                              tag: valueOrDefault<String>(
-                                                wrapPropertiesRecord
-                                                        .urlAdjunto.isNotEmpty
-                                                    ? wrapPropertiesRecord
-                                                        .urlAdjunto
-                                                    : null,
-                                                'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg' +
-                                                    '$wrapIndex',
-                                              ),
-                                              transitionOnUserGestures: true,
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.only(
-                                                  bottomLeft:
-                                                      Radius.circular(0.0),
-                                                  bottomRight:
-                                                      Radius.circular(0.0),
-                                                  topLeft: Radius.circular(8.0),
-                                                  topRight:
-                                                      Radius.circular(8.0),
-                                                ),
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      valueOrDefault<String>(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.45,
+                                          decoration: BoxDecoration(
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryBackground,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                blurRadius: 4.0,
+                                                color: Color(0x32000000),
+                                                offset: Offset(0.0, 2.0),
+                                              )
+                                            ],
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          child: FutureBuilder<Activo>(
+                                            future: ActivoController()
+                                                .cargarActivoUID(
                                                     wrapPropertiesRecord
-                                                            .urlAdjunto
-                                                            .isNotEmpty
-                                                        ? wrapPropertiesRecord
-                                                            .urlAdjunto
-                                                        : null,
-                                                    'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
-                                                  ),
-                                                  width: double.infinity,
-                                                  height: 140.0,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      16.0, 12.0, 16.0, 8.0),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Text(
-                                                    'Problema: ${wrapPropertiesRecord
-                                                        .descripcion}',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .headlineSmall
-                                                        .override(
-                                                          fontFamily:
-                                                              'Urbanist',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .darkText,
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                        .uidDependencia,
+                                                    wrapPropertiesRecord
+                                                        .uidActivo),
+                                            builder: (BuildContext context,
+                                                
+                                                    snapshotActivo) {
+                                              if (snapshotActivo.connectionState ==
+                                                      ConnectionState.done &&
+                                                  snapshotActivo.data != null) {
+                                                return Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Hero(
+                                                      tag: valueOrDefault<
+                                                          String>(
+                                                        wrapPropertiesRecord
+                                                                .urlAdjunto
+                                                                .isNotEmpty
+                                                            ? wrapPropertiesRecord
+                                                                .urlAdjunto
+                                                            : snapshotActivo.data!.urlImagen,
+                                                        'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg' +
+                                                            '$wrapIndex',
+                                                      ),
+                                                      transitionOnUserGestures:
+                                                          true,
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  0.0),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  0.0),
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8.0),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  8.0),
                                                         ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      16.0, 0.0, 16.0, 0.0),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    child: Padding(
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl:
+                                                              valueOrDefault<
+                                                                  String>(
+                                                            wrapPropertiesRecord
+                                                                    .urlAdjunto
+                                                                    .isNotEmpty
+                                                                ? wrapPropertiesRecord
+                                                                    .urlAdjunto
+                                                                : snapshotActivo.data!.urlImagen,
+                                                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
+                                                          ),
+                                                          width:
+                                                              double.infinity,
+                                                          height: 140.0,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  0.0,
-                                                                  0.0,
+                                                                  7.0,
                                                                   12.0,
-                                                                  0.0),
-                                                      child: FutureBuilder<
-                                                          Dependencia>(
-                                                        future: ControladorDependencias()
-                                                            .cargarDependenciaUID(
-                                                                wrapPropertiesRecord
-                                                                    .uidDependencia.trim()),
-                                                        builder: (BuildContext
-                                                                context,
-                            
-                                                                snapshot) {
-                                                          if (snapshot
-                                                                  .hasData &&
-                                                              snapshot.data !=
-                                                                  null) {
-                                                            return Text('Dependencia:${
-                                                              snapshot.data!.nombre}',
-                                                              style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .titleMedium,
-                                                            );
-                                                          }else{
-                                                            return Text('Dependencia no encontrada',
-                                                              style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .titleMedium,
-                                                            );
-                                                          }
-                                                        },
+                                                                  7.0,
+                                                                  8.0),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        children: [
+                                                          Text(
+                                                          
+                                                            'Problema: ${wrapPropertiesRecord.descripcion}',
+                                                            overflow: TextOverflow.ellipsis,
+                                                            maxLines: 3,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .headlineSmall
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Urbanist',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .darkText,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
-                                                  ),
-                                                  
-                                                ],
-                                              ),
-                                              
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.fromLTRB(14,10,0,2),
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                          'Fecha: ${DateFormat('dd MMMM yyyy - h:mm a','es-CO').format(wrapPropertiesRecord.fecha)}'
-                                                              .toString(),
-                                                          style: FlutterFlowTheme.of(
-                                                                  context)
-                                                              .titleMedium,
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  7.0,
+                                                                  0.0,
+                                                                  7.0,
+                                                                  0.0),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Expanded(
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          12.0,
+                                                                          0.0),
+                                                              child: FutureBuilder<
+                                                                  Dependencia>(
+                                                                future: ControladorDependencias().cargarDependenciaUID(
+                                                                    wrapPropertiesRecord
+                                                                        .uidDependencia
+                                                                        .trim()),
+                                                                builder: (BuildContext
+                                                                        context,
+                                                                    snapshot) {
+                                                                  if (snapshot
+                                                                          .hasData &&
+                                                                      snapshot.data !=
+                                                                          null) {
+                                                                    return Text(
+                                                                      '${snapshot.data!.nombre}',
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .titleMedium,
+                                                                    );
+                                                                  } else {
+                                                                    return Text(
+                                                                      'Dependencia no encontrada',
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .titleMedium,
+                                                                    );
+                                                                  }
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
+                                                          7, 10, 4, 2),
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: Container(
+                                                              child: Text(
+                                                                'Fecha: ${DateFormat('dd MMMM yyyy - h:mm a', 'es-CO').format(wrapPropertiesRecord.fecha)}'
+                                                                    .toString(),
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .titleMedium,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              } else {
+                                                return Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Hero(
+                                                      tag: valueOrDefault<
+                                                          String>(
+                                                        wrapPropertiesRecord
+                                                                .urlAdjunto
+                                                                .isNotEmpty
+                                                            ? wrapPropertiesRecord
+                                                                .urlAdjunto
+                                                            : null,
+                                                        'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg' +
+                                                            '$wrapIndex',
+                                                      ),
+                                                      transitionOnUserGestures:
+                                                          true,
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  0.0),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  0.0),
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8.0),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  8.0),
                                                         ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl:
+                                                              valueOrDefault<
+                                                                  String>(
+                                                            wrapPropertiesRecord
+                                                                    .urlAdjunto
+                                                                    .isNotEmpty
+                                                                ? wrapPropertiesRecord
+                                                                    .urlAdjunto
+                                                                : null,
+                                                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
+                                                          ),
+                                                          width:
+                                                              double.infinity,
+                                                          height: 140.0,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  7.0,
+                                                                  12.0,
+                                                                  7.0,
+                                                                  8.0),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        children: [
+                                                          Expanded(
+                                                            child: Container(
+                                                              child: Text(
+                                                                'Problema: ${wrapPropertiesRecord.descripcion}',
+                                                                overflow: TextOverflow.ellipsis,
+                                                                maxLines: 3,
+                                                                style: FlutterFlowTheme
+                                                                        .of(context)
+                                                                    .headlineSmall
+                                                                    .override(
+                                                                      fontFamily:
+                                                                          'Urbanist',
+                                                                      color: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .darkText,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  7.0,
+                                                                  0.0,
+                                                                  7.0,
+                                                                  0.0),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Expanded(
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          12.0,
+                                                                          0.0),
+                                                              child: FutureBuilder<
+                                                                  Dependencia>(
+                                                                future: ControladorDependencias().cargarDependenciaUID(
+                                                                    wrapPropertiesRecord
+                                                                        .uidDependencia
+                                                                        .trim()),
+                                                                builder: (BuildContext
+                                                                        context,
+                                                                    snapshot) {
+                                                                  if (snapshot
+                                                                          .hasData &&
+                                                                      snapshot.data !=
+                                                                          null) {
+                                                                    return Text(
+                                                                      '${snapshot.data!.nombre}',
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .titleMedium,
+                                                                    );
+                                                                  } else {
+                                                                    return Text(
+                                                                      'Dependencia no encontrada',
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .titleMedium,
+                                                                    );
+                                                                  }
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
+                                                          7, 10, 4, 2),
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: Container(
+                                                              child: Text(
+                                                                'Fecha: ${DateFormat('dd MMMM yyyy - h:mm a', 'es-CO').format(wrapPropertiesRecord.fecha)}'
+                                                                    .toString(),
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .titleMedium,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              }
+                                            },
+                                          )),
                                     );
                                   }),
                                 );
@@ -386,186 +603,376 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           10.0, 0.0, 0.0, 12.0),
                                       child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.50,
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.29,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              blurRadius: 4.0,
-                                              color: Color(0x32000000),
-                                              offset: Offset(0.0, 2.0),
-                                            )
-                                          ],
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Hero(
-                                              tag: valueOrDefault<String>(
-                                                wrapPropertiesRecord
-                                                        .urlAdjunto.isNotEmpty
-                                                    ? wrapPropertiesRecord
-                                                        .urlAdjunto
-                                                    : null,
-                                                'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg' +
-                                                    '$wrapIndex',
-                                              ),
-                                              transitionOnUserGestures: true,
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.only(
-                                                  bottomLeft:
-                                                      Radius.circular(0.0),
-                                                  bottomRight:
-                                                      Radius.circular(0.0),
-                                                  topLeft: Radius.circular(8.0),
-                                                  topRight:
-                                                      Radius.circular(8.0),
-                                                ),
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      valueOrDefault<String>(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.45,
+                                          decoration: BoxDecoration(
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryBackground,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                blurRadius: 4.0,
+                                                color: Color(0x32000000),
+                                                offset: Offset(0.0, 2.0),
+                                              )
+                                            ],
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          child: FutureBuilder<Activo>(
+                                            future: ActivoController()
+                                                .cargarActivoUID(
                                                     wrapPropertiesRecord
-                                                            .urlAdjunto
-                                                            .isNotEmpty
-                                                        ? wrapPropertiesRecord
-                                                            .urlAdjunto
-                                                        : null,
-                                                    'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
-                                                  ),
-                                                  width: double.infinity,
-                                                  height: 140.0,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      16.0, 12.0, 16.0, 8.0),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Text(
-                                                    'Problema: ${wrapPropertiesRecord
-                                                        .descripcion}',
-                                                    style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Urbanist',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .tertiary,
-                                                        fontSize: 16.0,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      
+                                                        .uidDependencia,
+                                                    wrapPropertiesRecord
+                                                        .uidActivo),
+                                            builder: (BuildContext context,
+                                                
+                                                    snapshotActivo) {
+                                              if (snapshotActivo.connectionState ==
+                                                      ConnectionState.done &&
+                                                  snapshotActivo.data != null) {
+                                                return Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Hero(
+                                                      tag: valueOrDefault<
+                                                          String>(
+                                                        wrapPropertiesRecord
+                                                                .urlAdjunto
+                                                                .isNotEmpty
+                                                            ? wrapPropertiesRecord
+                                                                .urlAdjunto
+                                                            : snapshotActivo.data!.urlImagen,
+                                                        'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg' +
+                                                            '$wrapIndex',
+                                                      ),
+                                                      transitionOnUserGestures:
+                                                          true,
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  0.0),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  0.0),
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8.0),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  8.0),
                                                         ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      16.0, 0.0, 16.0, 0.0),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    child: Padding(
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl:
+                                                              valueOrDefault<
+                                                                  String>(
+                                                            wrapPropertiesRecord
+                                                                    .urlAdjunto
+                                                                    .isNotEmpty
+                                                                ? wrapPropertiesRecord
+                                                                    .urlAdjunto
+                                                                : snapshotActivo.data!.urlImagen,
+                                                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
+                                                          ),
+                                                          width:
+                                                              double.infinity,
+                                                          height: 140.0,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  0.0,
-                                                                  0.0,
+                                                                  7.0,
                                                                   12.0,
-                                                                  0.0),
-                                                      child: FutureBuilder<
-                                                          Dependencia>(
-                                                        future: ControladorDependencias()
-                                                            .cargarDependenciaUID(
-                                                                wrapPropertiesRecord
-                                                                    .uidDependencia.trim()),
-                                                        builder: (BuildContext
-                                                                context,
-                            
-                                                                snapshot) {
-                                                          if (snapshot
-                                                                  .hasData &&
-                                                              snapshot.data !=
-                                                                  null) {
-                                                            return Text('Dependencia: ${
-                                                              snapshot.data!.nombre}',
-                                                              style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Urbanist',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .tertiary,
-                                                        fontSize: 13.0,
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                      ),
-                                                            );
-                                                          }else{
-                                                            return Text('Dependencia no encontrada',
-                                                              style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .titleMedium,
-                                                            );
-                                                          }
-                                                        },
+                                                                 7.0,
+                                                                  8.0),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        children: [
+                                                          Expanded(
+                                                            child: Container(
+                                                              child: Text(
+                                                                'Problema: ${wrapPropertiesRecord.descripcion}',
+                                                                overflow: TextOverflow.ellipsis,
+                                                            maxLines: 3,
+                                                                style: FlutterFlowTheme
+                                                                        .of(context)
+                                                                    .headlineSmall
+                                                                    .override(
+                                                                      fontFamily:
+                                                                          'Urbanist',
+                                                                      color: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .darkText,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
-                                                  ),
-                                                  
-                                                ],
-                                              ),
-                                              
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.fromLTRB(14,10,0,2),
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                          'Fecha: ${DateFormat('dd MMMM yyyy - h:mm a','es-CO').format(wrapPropertiesRecord.fecha)}'
-                                                              .toString(),
-                                                          style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Urbanist',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .tertiary,
-                                                        fontSize: 10.0,
-                                                        fontWeight:
-                                                            FontWeight.w800,
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  7.0,
+                                                                  0.0,
+                                                                  7.0,
+                                                                  0.0),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Expanded(
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          12.0,
+                                                                          0.0),
+                                                              child: FutureBuilder<
+                                                                  Dependencia>(
+                                                                future: ControladorDependencias().cargarDependenciaUID(
+                                                                    wrapPropertiesRecord
+                                                                        .uidDependencia
+                                                                        .trim()),
+                                                                builder: (BuildContext
+                                                                        context,
+                                                                    snapshot) {
+                                                                  if (snapshot
+                                                                          .hasData &&
+                                                                      snapshot.data !=
+                                                                          null) {
+                                                                    return Text(
+                                                                      '${snapshot.data!.nombre}',
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .titleMedium,
+                                                                    );
+                                                                  } else {
+                                                                    return Text(
+                                                                      'Dependencia no encontrada',
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .titleMedium,
+                                                                    );
+                                                                  }
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
+                                                          7, 10, 4, 2),
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: Container(
+                                                              child: Text(
+                                                                'Fecha: ${DateFormat('dd MMMM yyyy - h:mm a', 'es-CO').format(wrapPropertiesRecord.fecha)}'
+                                                                    .toString(),
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .titleMedium,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              } else {
+                                                return Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Hero(
+                                                      tag: valueOrDefault<
+                                                          String>(
+                                                        wrapPropertiesRecord
+                                                                .urlAdjunto
+                                                                .isNotEmpty
+                                                            ? wrapPropertiesRecord
+                                                                .urlAdjunto
+                                                            : null,
+                                                        'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg' +
+                                                            '$wrapIndex',
+                                                      ),
+                                                      transitionOnUserGestures:
+                                                          true,
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  0.0),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  0.0),
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8.0),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  8.0),
                                                         ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl:
+                                                              valueOrDefault<
+                                                                  String>(
+                                                            wrapPropertiesRecord
+                                                                    .urlAdjunto
+                                                                    .isNotEmpty
+                                                                ? wrapPropertiesRecord
+                                                                    .urlAdjunto
+                                                                : null,
+                                                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg',
+                                                          ),
+                                                          width:
+                                                              double.infinity,
+                                                          height: 140.0,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  7.0,
+                                                                  12.0,
+                                                                  7.0,
+                                                                  8.0),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        children: [
+                                                          Text(
+                                                            'Problema: ${wrapPropertiesRecord.descripcion}',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .headlineSmall
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Urbanist',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .darkText,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  7.0,
+                                                                  0.0,
+                                                                  7.0,
+                                                                  0.0),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Expanded(
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          12.0,
+                                                                          0.0),
+                                                              child: FutureBuilder<
+                                                                  Dependencia>(
+                                                                future: ControladorDependencias().cargarDependenciaUID(
+                                                                    wrapPropertiesRecord
+                                                                        .uidDependencia
+                                                                        .trim()),
+                                                                builder: (BuildContext
+                                                                        context,
+                                                                    snapshot) {
+                                                                  if (snapshot
+                                                                          .hasData &&
+                                                                      snapshot.data !=
+                                                                          null) {
+                                                                    return Text(
+                                                                      '${snapshot.data!.nombre}',
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .titleMedium,
+                                                                    );
+                                                                  } else {
+                                                                    return Text(
+                                                                      'Dependencia no encontrada',
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .titleMedium,
+                                                                    );
+                                                                  }
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
+                                                          7, 10, 4, 2),
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: Container(
+                                                              child: Text(
+                                                                'Fecha: ${DateFormat('dd MMMM yyyy - h:mm a', 'es-CO').format(wrapPropertiesRecord.fecha)}'
+                                                                    .toString(),
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .titleMedium,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              }
+                                            },
+                                          )),
                                     );
                                   }),
                                 );

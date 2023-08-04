@@ -15,6 +15,7 @@ import '../../../backend/schema/util/custom_clipper.dart';
 import '../../../flutter_flow/flutter_flow_animations.dart';
 import '../../../flutter_flow/flutter_flow_model.dart';
 import '../../../model/usuario.dart';
+import '../../olvido_password/olvido_password_widget.dart';
 import '../perfil_model.dart';
 import 'ProfileMenuWidget.dart';
 
@@ -200,9 +201,17 @@ class _PerfilAdminState extends State<PerfilGeneral> {
             const Divider(),
             const SizedBox(height: 10),
             ProfileMenuWidget(
-                title: "Editar perfil",
+                title: "Restablecer Contraseña",
                 icon: LineAwesomeIcons.cog,
-                onPress: () {}),
+                onPress: () {
+                  FirebaseAuth auth = FirebaseAuth.instance;
+                   Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                OlvidoContrasenadWidget(email: auth.currentUser!.email??''
+                                                  .trim(),)));
+                }),
             ProfileMenuWidget(
                 title: "Cerrar sesión",
                 icon: LineAwesomeIcons.alternate_sign_out,
@@ -231,7 +240,7 @@ class _PerfilAdminState extends State<PerfilGeneral> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.redAccent,
                             side: BorderSide.none),
-                        child: const Text("Si, a la vrga"),
+                        child: const Text("Si"),
                       ),
                     ),
                     cancel: OutlinedButton(

@@ -493,7 +493,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                               children: [
                                                 Expanded(
                                                   child: Text(
-                                                    'Correo. ${listDependencias.correo}'
+                                                    'Correo: ${listDependencias.correo}'
                                                         .maybeHandleOverflow(
                                                       maxChars: 90,
                                                       replacement: '…',
@@ -503,7 +503,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                         .bodyMedium,
                                                   ),
                                                 ),
-                                                Text(
+                                               /**   Text(
                                                   'Teléfono. ${listDependencias.telefono}'
                                                       .maybeHandleOverflow(
                                                     maxChars: 90,
@@ -513,6 +513,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                           context)
                                                       .bodyMedium,
                                                 ),
+                                                */
                                               ],
                                             ),
                                           ),

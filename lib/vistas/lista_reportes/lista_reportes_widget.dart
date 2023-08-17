@@ -151,14 +151,14 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                   );
                                 }
                                 return Wrap(
-                                  spacing: 0.0,
+                                  spacing: 4.0,
                                   runSpacing: 0.0,
-                                  alignment: WrapAlignment.start,
+                                  alignment: WrapAlignment.center,
                                   crossAxisAlignment: WrapCrossAlignment.start,
                                   direction: Axis.horizontal,
                                   runAlignment: WrapAlignment.start,
                                   verticalDirection: VerticalDirection.down,
-                                  clipBehavior: Clip.none,
+                                  clipBehavior: Clip.hardEdge,
                                   children: List.generate(
                                       wrapPropertiesRecordList.length,
                                       (wrapIndex) {
@@ -268,25 +268,27 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                         mainAxisSize:
                                                             MainAxisSize.max,
                                                         children: [
-                                                          Text(
-                                                            'Problema: ${wrapPropertiesRecord.descripcion}',
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .clip,
-                                                            maxLines: 3,
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .headlineSmall
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Urbanist',
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .darkText,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              'Problema: ${wrapPropertiesRecord.descripcion}',
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              maxLines: 2,
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .headlineSmall
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Urbanist',
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .darkText,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                            ),
                                                           ),
                                                         ],
                                                       ),
@@ -938,21 +940,23 @@ class _ListaReportesWidgetState extends State<ListaReportesWidget> {
                                                         mainAxisSize:
                                                             MainAxisSize.max,
                                                         children: [
-                                                          Text(
-                                                            'Problema: ${wrapPropertiesRecord.descripcion}',
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .headlineSmall
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Urbanist',
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .darkText,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
+                                                          Expanded(
+                                                            child: Text(
+                                                              'Problema: ${wrapPropertiesRecord.descripcion}',
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .headlineSmall
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Urbanist',
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .darkText,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                            ),
                                                           ),
                                                         ],
                                                       ),

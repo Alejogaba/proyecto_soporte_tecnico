@@ -671,7 +671,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                                 children: [
                                   Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 30, 0, 0),
+                                          10, 30, 10, 0),
                                       child: Row(
                                         children: [
                                           Expanded(

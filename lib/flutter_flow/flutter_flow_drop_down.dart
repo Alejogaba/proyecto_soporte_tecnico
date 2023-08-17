@@ -58,6 +58,7 @@ class _FlutterFlowDropDownState<T> extends State<FlutterFlowDropDown<T>> {
   @override
   Widget build(BuildContext context) {
     final dropdownWidget = DropdownButton<T>(
+      style: widget.textStyle,
       
       value: widget.value,
       hint: widget.hintText != null

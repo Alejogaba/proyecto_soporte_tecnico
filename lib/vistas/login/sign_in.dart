@@ -15,7 +15,6 @@ import '../../theme.dart';
 import '../cambiar_password/cambiar_password_widget.dart';
 import '../perfil/PerfilMOD/home.dart';
 
-
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
 
@@ -245,56 +244,49 @@ class _SignInState extends State<SignIn> {
                       ),
                     ),
                     onPressed: () async {
-                        try {
-                                      Usuario? user =
-                                          await AuthHelper.signInWithEmail(
-                                              email: _emailController.text
-                                                  .trim()
-                                                  .toLowerCase(),
-                                              password:
-                                                  _passwordController.text);
-                                     if (user != null) {
-                                          print("Ingreso Exitoso");
-                                          bool esNuevoUsuario =
-                                              await AuthHelper()
-                                                  .checkPasswordMatch(user.uid!,
-                                                      _passwordController.text);
-                                          if (esNuevoUsuario) {
-                                             Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        CambiarPasswordWidget()));
-                                          } else {
-                                            if (user.role == 'admin') {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        NuevaNavBar()));
-                                          } else {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                         NuevaNavBarFuncionario()));
-                                          }
-                                          }
-                                        }
-                                    } on FirebaseException catch (e) {
-                                      Logger().e(e.message);
-                                      var errorTraducido =
-                                          await traducir(e.message.toString());
-                                      Get.snackbar('Error', errorTraducido,
-                                          icon: Icon(
-                                            Icons.error_outline,
-                                            color: Colors.red,
-                                          ),
-                                          colorText:
-                                              Color.fromARGB(255, 114, 14, 7));
-                                    } catch (e) {
-                                      Logger().e(e);
-                                    }
+                      try {
+                        Usuario? user = await AuthHelper.signInWithEmail(
+                            email: _emailController.text.trim().toLowerCase(),
+                            password: _passwordController.text);
+                        if (user != null) {
+                          print("Ingreso Exitoso");
+                          bool esNuevoUsuario = await AuthHelper()
+                              .checkPasswordMatch(
+                                  user.uid!, _passwordController.text);
+                          if (esNuevoUsuario) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        CambiarPasswordWidget()));
+                          } else {
+                            if (user.role == 'admin') {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => NuevaNavBar()));
+                            } else {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          NuevaNavBarFuncionario()));
+                            }
+                          }
+                        }
+                      } on FirebaseException catch (e) {
+                        Logger().e(e.message);
+                        var errorTraducido =
+                            await traducir(e.message.toString());
+                        Get.snackbar('Error', errorTraducido,
+                            icon: Icon(
+                              Icons.error_outline,
+                              color: Colors.red,
+                            ),
+                            colorText: Color.fromARGB(255, 114, 14, 7));
+                      } catch (e) {
+                        Logger().e(e);
+                      }
                     }),
               )
             ],
@@ -303,13 +295,13 @@ class _SignInState extends State<SignIn> {
             padding: const EdgeInsets.only(top: 10.0),
             child: TextButton(
                 onPressed: () {
-                   Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                OlvidoContrasenadWidget(email: _emailController.text
-                                                  .trim(),)));
-                  },
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => OlvidoContrasenadWidget(
+                                email: _emailController.text.trim(),
+                              )));
+                },
                 child: const Text(
                   '¿Olvido su contraseña?',
                   style: TextStyle(
@@ -339,16 +331,6 @@ class _SignInState extends State<SignIn> {
                   width: 100.0,
                   height: 1.0,
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                  child: Text(
-                    'Or',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                        fontFamily: 'WorkSansMedium'),
-                  ),
-                ),
                 Container(
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -367,54 +349,9 @@ class _SignInState extends State<SignIn> {
               ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 10.0, right: 40.0),
-                child: GestureDetector(
-                  onTap: () => CustomSnackBar(
-                      context, const Text('Facebook button pressed')),
-                  child: Container(
-                    padding: const EdgeInsets.all(15.0),
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: const Icon(
-                      FontAwesomeIcons.facebookF,
-                      color: Color(0xFF0084ff),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: GestureDetector(
-                  onTap: () => CustomSnackBar(
-                      context, const Text('Google button pressed')),
-                  child: Container(
-                    padding: const EdgeInsets.all(15.0),
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: const Icon(
-                      FontAwesomeIcons.google,
-                      color: Color(0xFF0084ff),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
         ],
       ),
     );
-  }
-
-  void _toggleSignInButton() {
-    CustomSnackBar(context, const Text('Login button pressed'));
   }
 
   void _toggleLogin() {
@@ -433,6 +370,4 @@ class _SignInState extends State<SignIn> {
       return "Ha ocurrido un error inesperado, revise su conexión a internet";
     }
   }
-  
 }
-

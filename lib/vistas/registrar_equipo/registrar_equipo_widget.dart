@@ -469,7 +469,7 @@ class _RegistrarEquipoWidgetState extends State<RegistrarEquipoWidget> {
                                   .bodySmall
                                   .override(
                                     fontFamily: 'Urbanist',
-                                    color: FlutterFlowTheme.of(context).gray600,
+                                    color: FlutterFlowTheme.of(context).primaryText,
                                     fontWeight: FontWeight.w500,
                                   ),
                             ),
@@ -484,7 +484,13 @@ class _RegistrarEquipoWidgetState extends State<RegistrarEquipoWidget> {
                           obscureText: false,
                           decoration: InputDecoration(
                             hintText: 'Caracteristicas adicionales',
-                            hintStyle: FlutterFlowTheme.of(context).bodyMedium,
+                            hintStyle: FlutterFlowTheme.of(context)
+                                .headlineMedium
+                                .override(
+                                  fontFamily: 'Urbanist',
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryText,
+                                ),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
                                 color: Color(0x00000000),

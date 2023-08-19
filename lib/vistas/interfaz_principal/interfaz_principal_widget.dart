@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
 import 'package:login2/backend/controlador_dependencias.dart';
 import 'package:login2/vistas/lista_activos_page/lista_activos_page_widget.dart';
@@ -33,6 +34,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
   final double radius = 15;
   final Color circleColor = Colors.red;
   final Color fadeColor = Colors.green;
+  late TextEditingController textControllerBusqueda;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -40,14 +42,14 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => InterfazPrincipalModel());
-
+    textControllerBusqueda = TextEditingController();
     _model.textController ??= TextEditingController();
   }
 
   @override
   void dispose() {
     _model.dispose();
-
+    textControllerBusqueda.dispose();
     super.dispose();
   }
 
@@ -260,7 +262,12 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       4.0, 0.0, 4.0, 0.0),
                                   child: TextFormField(
-                                    controller: _model.textController,
+                                    controller: textControllerBusqueda,
+                                    onChanged: (_) => EasyDebounce.debounce(
+                                      'textController',
+                                      Duration(milliseconds: 2000),
+                                      () => setState(() {}),
+                                    ),
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Buscar dependencia...',
@@ -499,21 +506,21 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                                       replacement: '…',
                                                     ),
                                                     style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Urbanist',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 14.0,
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                      ),
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Urbanist',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 14.0,
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                        ),
                                                   ),
                                                 ),
-                                               /**   Text(
+                                                /**   Text(
                                                   'Teléfono. ${listDependencias.telefono}'
                                                       .maybeHandleOverflow(
                                                     maxChars: 90,

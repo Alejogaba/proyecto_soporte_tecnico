@@ -36,7 +36,7 @@ class ControladorDependencias {
 Stream<List<Dependencia>> getDependenciasStream(String searchString) {
   Query query = FirebaseFirestore.instance.collection('dependencias');
   
-  if (searchString.isNotEmpty) {
+  if (searchString.trim().length>2) {
     query = query.where('nombre', isGreaterThanOrEqualTo: searchString);
   }
 

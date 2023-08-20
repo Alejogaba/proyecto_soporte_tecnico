@@ -265,7 +265,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                     controller: textControllerBusqueda,
                                     onChanged: (_) => EasyDebounce.debounce(
                                       'textController',
-                                      Duration(milliseconds: 2000),
+                                      Duration(milliseconds: 1000),
                                       () => setState(() {}),
                                     ),
                                     obscureText: false,
@@ -372,16 +372,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                     child: Container(
                       height: MediaQuery.of(context).size.height - 379,
                       child: StreamBuilder<List<Dependencia>>(
-                        stream: FirebaseFirestore.instance
-                            .collection('dependencias')
-                            .snapshots()
-                            .map((QuerySnapshot querySnapshot) {
-                          List<Dependencia> dependencias = [];
-                          querySnapshot.docs.forEach((doc) => dependencias.add(
-                              Dependencia.fromMap(
-                                  doc.data() as Map<String, dynamic>)));
-                          return dependencias;
-                        }),
+                        stream: ControladorDependencias().getDependenciasStream(textControllerBusqueda.text),
                         builder: (context, snapshot) {
                           // Customize what your widget looks like when it's loading.
                           if (!snapshot.hasData) {

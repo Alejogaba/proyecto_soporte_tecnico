@@ -32,6 +32,24 @@ class ControladorDependencias {
     }
   }
 
+
+Stream<List<Dependencia>> getDependenciasStream(String searchString) {
+  Query query = FirebaseFirestore.instance.collection('dependencias');
+  
+  if (searchString.isNotEmpty) {
+    query = query.where('nombre', isGreaterThanOrEqualTo: searchString);
+  }
+
+  return query.snapshots().map((QuerySnapshot querySnapshot) {
+    List<Dependencia> dependencias = [];
+    querySnapshot.docs.forEach((doc) {
+      dependencias.add(Dependencia.fromMap(doc as Map<String, dynamic>));
+    });
+    return dependencias;
+  });
+}
+
+
   Stream<int> getTotalCasosCountDependencia(String uidDependencia) {
     // ignore: close_sinks
     StreamController<int> controller = StreamController<int>();

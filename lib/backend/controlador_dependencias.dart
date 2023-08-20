@@ -4,6 +4,8 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:login2/model/dependencias.dart';
 
+import '../utils/utilidades.dart';
+
 class ControladorDependencias {
   Future<List<Dependencia>> cargarDependencias() async {
     List<Dependencia> DependenciaList = [];
@@ -32,23 +34,39 @@ class ControladorDependencias {
     }
   }
 
-
-Stream<List<Dependencia>> getDependenciasStream(String searchString) {
-  Query query = FirebaseFirestore.instance.collection('dependencias');
+  Utilidades util = Utilidades();
+  Stream<List<Dependencia?>> getDependenciasStream(String valorBusqueda) {
   
-  if (searchString.trim().length>2) {
-    query = query.where('nombre', isGreaterThanOrEqualTo: searchString);
+    if (valorBusqueda.length<3) {
+      log('Retornando todos las depedencncias - valorBusqueda: $valorBusqueda');
+      return FirebaseFirestore.instance
+          .collection('dependencias')
+          .snapshots()
+          .map((QuerySnapshot querySnapshot) {
+        List<Dependencia> dependencias = [];
+        querySnapshot.docs.forEach((doc) => dependencias
+            .add(Dependencia.fromMap(doc.data() as Map<String, dynamic>)));
+        return dependencias;
+      });
+    } else {
+      log('busqueda dependencia: ' +
+          util.capitalizarPalabras(valorBusqueda) +
+          '\uf8ff');
+      return FirebaseFirestore.instance
+          .collection('dependencias')
+          .snapshots()
+          .map((QuerySnapshot querySnapshot) {
+        List<Dependencia> dependencias = [];
+        querySnapshot.docs.forEach((doc) => dependencias
+            .add(Dependencia.fromMap(doc.data() as Map<String, dynamic>)));
+        dependencias = dependencias.where((dependencia) {
+          return dependencia.nombre.toLowerCase().contains(valorBusqueda.toLowerCase());
+        }).toList();
+        log('lista dependencias: ' + dependencias[0].nombre.toString());
+        return dependencias;
+      });
+    }
   }
-
-  return query.snapshots().map((QuerySnapshot querySnapshot) {
-    List<Dependencia> dependencias = [];
-    querySnapshot.docs.forEach((doc) {
-      dependencias.add(Dependencia.fromMap(doc as Map<String, dynamic>));
-    });
-    return dependencias;
-  });
-}
-
 
   Stream<int> getTotalCasosCountDependencia(String uidDependencia) {
     // ignore: close_sinks

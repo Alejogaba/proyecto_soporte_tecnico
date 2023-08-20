@@ -1,3 +1,7 @@
+
+
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
@@ -263,11 +267,18 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                       4.0, 0.0, 4.0, 0.0),
                                   child: TextFormField(
                                     controller: textControllerBusqueda,
-                                    onChanged: (_) => EasyDebounce.debounce(
-                                      'textController',
-                                      Duration(milliseconds: 1000),
-                                      () => setState(() {}),
-                                    ),
+                                  onChanged: (value) {
+                                    if(value.trim().isEmpty){
+                                      setState(() {
+                                        
+                                      });
+                                    }
+                                  },
+                                  onFieldSubmitted: (value) {
+                                    setState(() {
+                                      
+                                    });
+                                  },
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       labelText: 'Buscar dependencia...',
@@ -276,7 +287,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                           .override(
                                             fontFamily: 'Urbanist',
                                             color: FlutterFlowTheme.of(context)
-                                                .grayIcon,
+                                                .primaryText,
                                           ),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -321,7 +332,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                         .override(
                                           fontFamily: 'Urbanist',
                                           color: FlutterFlowTheme.of(context)
-                                              .tertiary,
+                                              .primaryText,
                                         ),
                                     validator: _model.textControllerValidator
                                         .asValidator(context),
@@ -333,7 +344,9 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                     0.0, 0.0, 8.0, 0.0),
                                 child: FFButtonWidget(
                                   onPressed: () {
-                                    print('Button pressed ...');
+                                    setState(() {
+                                      
+                                    });
                                   },
                                   text: 'Buscar',
                                   options: FFButtonOptions(
@@ -371,12 +384,14 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                   child: SingleChildScrollView(
                     child: Container(
                       height: MediaQuery.of(context).size.height - 379,
-                      child: StreamBuilder<List<Dependencia>>(
+                      child: StreamBuilder<List<Dependencia?>>(
                         stream: ControladorDependencias().getDependenciasStream(textControllerBusqueda.text),
                         builder: (context, snapshot) {
                           // Customize what your widget looks like when it's loading.
+                          log('ESTADO CONEXION DEPENDENCIAS:'+snapshot.connectionState.toString());
                           if (!snapshot.hasData) {
-                            return Center(
+                            if (snapshot.connectionState==ConnectionState.waiting) {
+                              return Center(
                               child: SizedBox(
                                 width: 50.0,
                                 height: 50.0,
@@ -385,8 +400,20 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                 ),
                               ),
                             );
+                            } else {
+                              return Center(
+                              child: SizedBox(
+                                height: 50.0,
+                                child: Text(
+                                  'No se encontraron dependencias...',
+                                  style: FlutterFlowTheme.of(context).bodyMedium,
+                                ),
+                              ),
+                            );
+                            }
+                            
                           }
-                          List<Dependencia> listViewPropertiesRecordList =
+                          List<Dependencia?> listViewPropertiesRecordList =
                               snapshot.data!;
                           return ListView.builder(
                             padding: EdgeInsets.zero,
@@ -407,7 +434,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             ListaActivosPageWidget(
-                                                dependencia: listDependencias),
+                                                dependencia: listDependencias!),
                                       ),
                                     );
                                   },
@@ -432,7 +459,7 @@ class _InterfazPrincipalWidgetState extends State<InterfazPrincipalWidget> {
                                         children: [
                                           Hero(
                                             tag: valueOrDefault<String>(
-                                              listDependencias.urlImagen,
+                                              listDependencias!.urlImagen,
                                               'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/jyeiyll24v90/pixasquare-4ojhpgKpS68-unsplash.jpg' +
                                                   '$listViewIndex',
                                             ),

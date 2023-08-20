@@ -7,7 +7,6 @@ import '../login/theme.dart';
 import '../../utils/bubble_indicator_painter.dart';
 import 'login_model.dart';
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -17,7 +16,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
-
   late LoginModel _model;
   final _formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -39,12 +37,12 @@ class _LoginPageState extends State<LoginPage>
     super.dispose();
   }
 
-   late TextEditingController _nombreController;
+  late TextEditingController _nombreController;
   late TextEditingController _identificacionController;
   late TextEditingController _cargoController;
   late TextEditingController _areaController;
   late TextEditingController _fechanacimientoController;
-  
+
   late TextEditingController _confirmPasswordController;
   late TextEditingController _telefonoController;
 
@@ -60,7 +58,7 @@ class _LoginPageState extends State<LoginPage>
 
     _emailController = new TextEditingController();
     _passwordController = new TextEditingController();
-   _confirmPasswordController = TextEditingController(text: "");
+    _confirmPasswordController = TextEditingController(text: "");
     _telefonoController = new TextEditingController();
     _emailController = TextEditingController(text: "");
     _passwordController = TextEditingController(text: "");
@@ -101,9 +99,26 @@ class _LoginPageState extends State<LoginPage>
                     fit: BoxFit.fill,
                     image: const AssetImage('assets/img/login_logo.png')),
               ),
+          Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        4.0, 4.0, 0.0, 0.0),
+                                    child: Image.asset(
+                                      'assets/images/chimichagua-removebg-preview-transformed.png',
+                                      width: 55.1,
+                                      height: 55.0,
+                                      fit: BoxFit.fitHeight,
+                                    ),
+                                  ),
+              
               Padding(
-                padding: const EdgeInsets.only(top: 20.0),
+                padding: const EdgeInsets.only(top: 1.0),
                 child: _buildMenuBar(context),
+              ),
+               //Lineas
+              Container(
+                width: MediaQuery.of(context).size.width - 45,
+                height: 0.4,
+                color: Color.fromARGB(179, 0, 0, 0),
               ),
               Expanded(
                 flex: 2,
@@ -119,8 +134,8 @@ class _LoginPageState extends State<LoginPage>
                       });
                     } else if (i == 1) {
                       setState(() {
-                        right = Colors.black;
-                        left = Colors.white;
+                        right = const Color.fromARGB(255, 255, 255, 255);
+                        left = const Color.fromARGB(255, 0, 0, 0);
                       });
                     }
                   },
@@ -129,10 +144,11 @@ class _LoginPageState extends State<LoginPage>
                       constraints: const BoxConstraints.expand(),
                       child: const SignIn(),
                     ),
-                    ConstrainedBox(
+                    /* ConstrainedBox(
                       constraints: const BoxConstraints.expand(),
                       child:  SignUp(),
                     ),
+                    **/
                   ],
                 ),
               ),
@@ -144,16 +160,27 @@ class _LoginPageState extends State<LoginPage>
   }
 
   Widget _buildMenuBar(BuildContext context) {
+    
     return Container(
-      width: 300.0,
-      height: 50.0,
-      decoration: const BoxDecoration(
-        color: Color(0x552B2B2B),
-        borderRadius: BorderRadius.all(Radius.circular(25.0)),
-      ),
-      child: CustomPaint(
-        painter: BubbleIndicatorPainter(pageController: _pageController),
-        child: Row(
+      margin: const EdgeInsets.only(top: 6.0),
+      
+      child: MaterialButton(
+        highlightColor: Colors.transparent,
+        splashColor: Color.fromARGB(255, 9, 85, 32),
+        child: const Padding(
+          
+          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
+          child: Text(
+            'Soporte Técnico',
+            style: TextStyle(
+                color: Color.fromARGB(255, 6, 68, 25),
+                fontSize: 25.0,
+                fontFamily: 'WorkSansBold'),
+          ),
+        ),
+        onPressed: () {},
+
+        /* child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Expanded(
@@ -172,7 +199,7 @@ class _LoginPageState extends State<LoginPage>
               ),
             ),
             //Container(height: 33.0, width: 1.0, color: Colors.white),
-            Expanded(
+            /*Expanded(
               child: TextButton(
                 style: ButtonStyle(
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
@@ -187,8 +214,11 @@ class _LoginPageState extends State<LoginPage>
                 ),
               ),
             ),
+            **/
           ],
         ),
+
+        **/
       ),
     );
   }

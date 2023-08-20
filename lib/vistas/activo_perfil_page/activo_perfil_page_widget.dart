@@ -7,6 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:logger/logger.dart';
 import 'package:login2/index.dart';
 
+import '../../auth/firebase_auth/auth_helper.dart';
 import '../../backend/controlador_activo.dart';
 import '../../flutter_flow/flutter_flow_animations.dart';
 import '../../flutter_flow/flutter_flow_expanded_image_view.dart';
@@ -344,287 +345,341 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                       children: [
                         Expanded(
                           child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Align(
-                                  alignment: AlignmentDirectional(0, 0),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        20, 15, 0, 0),
-                                    child: Row(
+                            child: FutureBuilder<Usuario?>(
+                                future: AuthHelper().cargarUsuarioDeFirebase(),
+                                builder: (BuildContext context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                          ConnectionState.done &&
+                                      snapshot.hasData) {
+                                    return Column(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 24, 0),
-                                          child: Container(
-                                            width: 40,
-                                            height: 40,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryBackground,
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              border: Border.all(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryText,
-                                                width: 1,
-                                              ),
-                                            ),
-                                            child: FlutterFlowIconButton(
-                                              borderColor: Colors.transparent,
-                                              borderRadius: 30,
-                                              buttonSize: 46,
-                                              icon: Icon(
-                                                Icons.close_rounded,
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                size: 20,
-                                              ),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
+                                        Align(
+                                          alignment: AlignmentDirectional(0, 0),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    20, 15, 0, 0),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 24, 0),
+                                                  child: Container(
+                                                    width: 40,
+                                                    height: 40,
+                                                    decoration: BoxDecoration(
+                                                      color: FlutterFlowTheme
+                                                              .of(context)
+                                                          .primaryBackground,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      border: Border.all(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryText,
+                                                        width: 1,
+                                                      ),
+                                                    ),
+                                                    child:
+                                                        FlutterFlowIconButton(
+                                                      borderColor:
+                                                          Colors.transparent,
+                                                      borderRadius: 30,
+                                                      buttonSize: 46,
+                                                      icon: Icon(
+                                                        Icons.close_rounded,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        size: 20,
+                                                      ),
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                                if (widget.dependencia != null)
+                                                  Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      if (snapshot.data!.role ==
+                                                          'admin')
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(0,
+                                                                      0, 24, 0),
+                                                          child: Container(
+                                                            width: 40,
+                                                            height: 40,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .primaryBackground,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8),
+                                                              border:
+                                                                  Border.all(
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryText,
+                                                                width: 1,
+                                                              ),
+                                                            ),
+                                                            child:
+                                                                FlutterFlowIconButton(
+                                                              borderColor: Colors
+                                                                  .transparent,
+                                                              borderRadius: 30,
+                                                              buttonSize: 46,
+                                                              fillColor: Color(
+                                                                  0x00F1F4F8),
+                                                              icon: Icon(
+                                                                Icons.edit,
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryText,
+                                                                size: 16,
+                                                              ),
+                                                              onPressed:
+                                                                  () async {
+                                                                final Activo?
+                                                                    result =
+                                                                    await Navigator
+                                                                        .push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            RegistrarEquipoWidget(
+                                                                      dependencia:
+                                                                          widget
+                                                                              .dependencia!,
+                                                                      activoEdit:
+                                                                          activo,
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                                if (result !=
+                                                                    null) {
+                                                                  setState(() {
+                                                                    activo =
+                                                                        result;
+                                                                  });
+                                                                }
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      if (snapshot.data!.role ==
+                                                          'admin')
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(0,
+                                                                      0, 24, 0),
+                                                          child: Container(
+                                                            width: 40,
+                                                            height: 40,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .primaryBackground,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8),
+                                                              border:
+                                                                  Border.all(
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryText,
+                                                                width: 1,
+                                                              ),
+                                                            ),
+                                                            child:
+                                                                FlutterFlowIconButton(
+                                                              borderColor: Colors
+                                                                  .transparent,
+                                                              borderRadius: 30,
+                                                              buttonSize: 46,
+                                                              fillColor: Color(
+                                                                  0x00F1F4F8),
+                                                              icon: Icon(
+                                                                Icons
+                                                                    .delete_outlined,
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryText,
+                                                                size: 20,
+                                                              ),
+                                                              onPressed:
+                                                                  () async {
+                                                                setState(() {
+                                                                  blur = true;
+                                                                });
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                    ],
+                                                  ),
+                                              ],
                                             ),
                                           ),
                                         ),
-                                        if (widget.dependencia != null)
-                                          Row(
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 20, 0, 0),
+                                          child: Row(
                                             mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 0, 24, 0),
-                                                child: Container(
-                                                  width: 40,
-                                                  height: 40,
-                                                  decoration: BoxDecoration(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryBackground,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    border: Border.all(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondaryText,
-                                                      width: 1,
-                                                    ),
-                                                  ),
-                                                  child: FlutterFlowIconButton(
-                                                    borderColor:
-                                                        Colors.transparent,
-                                                    borderRadius: 30,
-                                                    buttonSize: 46,
-                                                    fillColor:
-                                                        Color(0x00F1F4F8),
-                                                    icon: Icon(
-                                                      Icons.edit,
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
-                                                      size: 16,
-                                                    ),
-                                                    onPressed: () async {
-                                                      final Activo? result =
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.9,
+                                                height: 500,
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xFFDBE2E7),
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                ),
+                                                child: Stack(
+                                                  children: [
+                                                    Align(
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                              0, 0),
+                                                      child: InkWell(
+                                                        onTap: () async {
                                                           await Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              RegistrarEquipoWidget(
-                                                            dependencia: widget
-                                                                .dependencia!,
-                                                            activoEdit: activo,
+                                                            context,
+                                                            PageTransition(
+                                                              type:
+                                                                  PageTransitionType
+                                                                      .fade,
+                                                              child:
+                                                                  FlutterFlowExpandedImageView(
+                                                                image:
+                                                                    CachedNetworkImage(
+                                                                  imageUrl: (activo.urlImagen ==
+                                                                              null ||
+                                                                          activo
+                                                                              .urlImagen!
+                                                                              .isEmpty)
+                                                                      ? 'https://cderma.com.co/wp-content/uploads/2022/04/IMAGEN-NO-DISPONIBLE.png'
+                                                                      : activo
+                                                                          .urlImagen!,
+                                                                  fit: BoxFit
+                                                                      .contain,
+                                                                  errorWidget: (context,
+                                                                      exception,
+                                                                      stacktrace) {
+                                                                    return Image
+                                                                        .asset(
+                                                                      'assets/images/nodisponible.png',
+                                                                      width: double
+                                                                          .infinity,
+                                                                      height:
+                                                                          125,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    );
+                                                                  },
+                                                                ),
+                                                                allowRotation:
+                                                                    false,
+                                                                tag:
+                                                                    'mainImage',
+                                                                useHeroAnimation:
+                                                                    true,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: Hero(
+                                                          tag: 'mainImage',
+                                                          transitionOnUserGestures:
+                                                              true,
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        16),
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              imageUrl: (activo
+                                                                              .urlImagen ==
+                                                                          null ||
+                                                                      activo
+                                                                          .urlImagen!
+                                                                          .isEmpty)
+                                                                  ? 'https://cderma.com.co/wp-content/uploads/2022/04/IMAGEN-NO-DISPONIBLE.png'
+                                                                  : activo
+                                                                      .urlImagen!,
+                                                              width: double
+                                                                  .infinity,
+                                                              height: double
+                                                                  .infinity,
+                                                              fit: BoxFit.cover,
+                                                            ),
                                                           ),
                                                         ),
-                                                      );
-                                                      if (result != null) {
-                                                        setState(() {
-                                                          activo = result;
-                                                        });
-                                                      }
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 0, 24, 0),
-                                                child: Container(
-                                                  width: 40,
-                                                  height: 40,
-                                                  decoration: BoxDecoration(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryBackground,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    border: Border.all(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondaryText,
-                                                      width: 1,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  child: FlutterFlowIconButton(
-                                                    borderColor:
-                                                        Colors.transparent,
-                                                    borderRadius: 30,
-                                                    buttonSize: 46,
-                                                    fillColor:
-                                                        Color(0x00F1F4F8),
-                                                    icon: Icon(
-                                                      Icons.delete_outlined,
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
-                                                      size: 20,
-                                                    ),
-                                                    onPressed: () async {
-                                                      setState(() {
-                                                        blur = true;
-                                                      });
-                                                    },
-                                                  ),
+                                                  ],
                                                 ),
                                               ),
                                             ],
                                           ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 20, 0, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.9,
-                                        height: 500,
-                                        decoration: BoxDecoration(
-                                          color: Color(0xFFDBE2E7),
-                                          borderRadius:
-                                              BorderRadius.circular(16),
                                         ),
-                                        child: Stack(
-                                          children: [
-                                            Align(
-                                              alignment:
-                                                  AlignmentDirectional(0, 0),
-                                              child: InkWell(
-                                                onTap: () async {
-                                                  await Navigator.push(
-                                                    context,
-                                                    PageTransition(
-                                                      type: PageTransitionType
-                                                          .fade,
-                                                      child:
-                                                          FlutterFlowExpandedImageView(
-                                                        image:
-                                                            CachedNetworkImage(
-                                                          imageUrl: (activo
-                                                                          .urlImagen ==
-                                                                      null ||
-                                                                  activo
-                                                                      .urlImagen!
-                                                                      .isEmpty)
-                                                              ? 'https://cderma.com.co/wp-content/uploads/2022/04/IMAGEN-NO-DISPONIBLE.png'
-                                                              : activo
-                                                                  .urlImagen!,
-                                                          fit: BoxFit.contain,
-                                                          errorWidget: (context,
-                                                              exception,
-                                                              stacktrace) {
-                                                            return Image.asset(
-                                                              'assets/images/nodisponible.png',
-                                                              width: double
-                                                                  .infinity,
-                                                              height: 125,
-                                                              fit: BoxFit.cover,
-                                                            );
-                                                          },
-                                                        ),
-                                                        allowRotation: false,
-                                                        tag: 'mainImage',
-                                                        useHeroAnimation: true,
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  24, 12, 24, 0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  '${activo.nombre} marca ${activo.marca}',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .title1
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        useGoogleFonts: GoogleFonts
+                                                                .asMap()
+                                                            .containsKey(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .title1Family),
                                                       ),
-                                                    ),
-                                                  );
-                                                },
-                                                child: Hero(
-                                                  tag: 'mainImage',
-                                                  transitionOnUserGestures:
-                                                      true,
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            16),
-                                                    child: CachedNetworkImage(
-                                                      imageUrl: (activo
-                                                                      .urlImagen ==
-                                                                  null ||
-                                                              activo.urlImagen!
-                                                                  .isEmpty)
-                                                          ? 'https://cderma.com.co/wp-content/uploads/2022/04/IMAGEN-NO-DISPONIBLE.png'
-                                                          : activo.urlImagen!,
-                                                      width: double.infinity,
-                                                      height: double.infinity,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                ),
+                                                ).animateOnPageLoad(animationsMap[
+                                                    'textOnPageLoadAnimation1']!),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24, 12, 24, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          '${activo.nombre} marca ${activo.marca}',
-                                          style: FlutterFlowTheme.of(context)
-                                              .title1
-                                              .override(
-                                                fontFamily: 'Poppins',
-                                                useGoogleFonts:
-                                                    GoogleFonts.asMap()
-                                                        .containsKey(
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .title1Family),
-                                              ),
-                                        ).animateOnPageLoad(animationsMap[
-                                            'textOnPageLoadAnimation1']!),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                /*Padding(
+                                        /*Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       24, 10, 24, 0),
                                   child: Row(
@@ -665,80 +720,99 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                   ).animateOnPageLoad(animationsMap[
                                       'rowOnPageLoadAnimation1']!),
                                 ),*/
-                                Row(),
+                                        Row(),
 
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24, 0, 24, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Text(
-                                        'Detalles: ',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText2
-                                            .override(
-                                              fontFamily: 'Poppins',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              useGoogleFonts:
-                                                  GoogleFonts.asMap()
-                                                      .containsKey(
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyText2Family),
-                                            ),
-                                      ),
-                                    ],
-                                  ).animateOnPageLoad(animationsMap[
-                                      'rowOnPageLoadAnimation4']!),
-                                ),
-
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24, 16, 0, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.9,
-                                        child: Text(
-                                          activo.detalles,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText2
-                                              .override(
-                                                fontFamily: 'Lexend Deca',
-                                                color: Color(0xFF8B97A2),
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.normal,
-                                                useGoogleFonts:
-                                                    GoogleFonts.asMap()
-                                                        .containsKey(
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyText2Family),
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  24, 0, 24, 0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Text(
+                                                'Detalles: ',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText2
+                                                        .override(
+                                                          fontFamily: 'Poppins',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          useGoogleFonts: GoogleFonts
+                                                                  .asMap()
+                                                              .containsKey(
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyText2Family),
+                                                        ),
                                               ),
-                                          maxLines: 4,
+                                            ],
+                                          ).animateOnPageLoad(animationsMap[
+                                              'rowOnPageLoadAnimation4']!),
                                         ),
+
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  24, 16, 0, 0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.9,
+                                                child: Text(
+                                                  activo.detalles,
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyText2
+                                                      .override(
+                                                        fontFamily:
+                                                            'Lexend Deca',
+                                                        color:
+                                                            Color(0xFF8B97A2),
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        useGoogleFonts: GoogleFonts
+                                                                .asMap()
+                                                            .containsKey(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText2Family),
+                                                      ),
+                                                  maxLines: 4,
+                                                ),
+                                              ),
+                                            ],
+                                          ).animateOnPageLoad(animationsMap[
+                                              'rowOnPageLoadAnimation6']!),
+                                        ),
+                                        //TituloListafFuncionariosAsignados(animationsMap: animationsMap),
+                                        //ListaFuncionariosAsignados(animationsMap: animationsMap)
+                                        Padding(
+                                          padding: EdgeInsets.all(30),
+                                          child: Container(),
+                                        )
+                                      ],
+                                    );
+                                  } else {
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primary,
                                       ),
-                                    ],
-                                  ).animateOnPageLoad(animationsMap[
-                                      'rowOnPageLoadAnimation6']!),
-                                ),
-                                //TituloListafFuncionariosAsignados(animationsMap: animationsMap),
-                                //ListaFuncionariosAsignados(animationsMap: animationsMap)
-                                Padding(
-                                  padding: EdgeInsets.all(30),
-                                  child: Container(),
-                                )
-                              ],
-                            ),
+                                    );
+                                  }
+                                }),
                           ),
                         ),
                       ],

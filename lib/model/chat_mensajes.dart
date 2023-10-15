@@ -13,6 +13,7 @@ class ChatMensajes {
   int? height;
   int? width;
   int? size;
+  int? turno;
   String? uri;
 
   ChatMensajes({
@@ -24,6 +25,7 @@ class ChatMensajes {
     this.size = 0,
     this.uri = '',
     this.tipo = '',
+    this.turno= 999,
     required this.fechaHora,
   });
 
@@ -34,6 +36,7 @@ class ChatMensajes {
       'text': mensaje,
       'type': 'text',
       'createdAt': Timestamp.fromDate(fechaHora),
+      
     };
   }
 
@@ -58,6 +61,7 @@ class ChatMensajes {
       mensaje: map['text'] ?? '',
       tipo: map['type'],
       fechaHora: (map['createdAt'] as Timestamp).toDate(),
+      turno: map['turno'],
     );
   }
 

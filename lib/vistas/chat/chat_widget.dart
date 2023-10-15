@@ -25,7 +25,8 @@ class ChatWidget extends StatefulWidget {
       this.esAdmin = false,
       this.currentUserToken,
       this.otherUserToken,
-      required this.otroUsuario})
+      required this.otroUsuario,
+      this.msjChatBot})
       : super(key: key);
   final List<String> usuarios;
   final String? currentUserToken;
@@ -35,6 +36,7 @@ class ChatWidget extends StatefulWidget {
   final String nombre;
   final bool esAdmin;
   final Usuario otroUsuario;
+  final String? msjChatBot;
   @override
   _ChatWidgetState createState() => _ChatWidgetState(usuarios);
 }
@@ -103,7 +105,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                   stream: CasosController().getTotalCasosCountSolicitante(
                       widget.otroUsuario.uid!.trim()),
                   builder: (context, snapshot) {
-                    if (snapshot.hasData&&snapshot.data!=0) {
+                    if (snapshot.hasData && snapshot.data != 0) {
                       return InkWell(
                         onTap: () {
                           Navigator.push(
@@ -166,8 +168,8 @@ class _ChatWidgetState extends State<ChatWidget> {
                                         .bodyMedium
                                         .override(
                                           fontFamily: 'Urbanist',
-                                          color:
-                                              FlutterFlowTheme.of(context).error,
+                                          color: FlutterFlowTheme.of(context)
+                                              .error,
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -178,7 +180,8 @@ class _ChatWidgetState extends State<ChatWidget> {
                           ),
                         ),
                       );
-                    } else if (snapshot.hasData && snapshot.data.toString()=='0') {
+                    } else if (snapshot.hasData &&
+                        snapshot.data.toString() == '0') {
                       return Center(
                         child: Padding(
                           padding: const EdgeInsets.only(right: 10.0),
@@ -187,13 +190,14 @@ class _ChatWidgetState extends State<ChatWidget> {
                               maxChars: 90,
                               replacement: '…',
                             ),
-                            style:
-                                FlutterFlowTheme.of(context).bodyMedium.override(
-                                      fontFamily: 'Urbanist',
-                                      color: FlutterFlowTheme.of(context).grayIcon,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Urbanist',
+                                  color: FlutterFlowTheme.of(context).grayIcon,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
                           ),
                         ),
                       );
@@ -219,6 +223,7 @@ class _ChatWidgetState extends State<ChatWidget> {
             otherUserToken: widget.otherUserToken,
             chatUid: widget.uid,
             room: types.Room(
-                id: widget.uid, type: types.RoomType.direct, users: users)));
+                id: widget.uid, type: types.RoomType.direct, users: users),
+            msjChatBot: widget.msjChatBot));
   }
 }

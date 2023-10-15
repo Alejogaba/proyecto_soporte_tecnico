@@ -97,6 +97,7 @@ dependencies:
   fast_cached_network_image: ^1.2.0
   flutter_spinkit: ^5.2.0
   dotted_border: ^2.0.0+3
+  fl_chart: ^0.64.0
   
 
 dev_dependencies:
@@ -136,7 +137,6 @@ flutter:
     - assets/rive_animations/
     - assets/pdfs/
     - assets/diseño_interfaz/user.png
-    - assets/diseño_interfaz/User2.jpg
     - assets/image/ban11.jpg
     - assets/image_02.png
     - assets/img/login_logo.png

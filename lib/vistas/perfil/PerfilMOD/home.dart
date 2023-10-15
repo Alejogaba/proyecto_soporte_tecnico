@@ -405,7 +405,8 @@ class _PerfilAdminState extends State<PerfilGeneral>
                                                                         .cover,
                                                                   )
                                                                 : Image.asset(
-                                                                    'assets/diseño_interfaz/User2.jpg',
+                                                                    'assets/diseño_interfaz/User.jpg',
+              
                                                                     fit: BoxFit
                                                                         .fitHeight,
                                                                   ),

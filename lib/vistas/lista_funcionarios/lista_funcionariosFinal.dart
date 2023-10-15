@@ -303,7 +303,8 @@ class _ListaFuncionariossState extends State<ListaFuncionarioss>
                                                                             20),
                                                               ),
                                                             if(auth.currentUser!.email!.toLowerCase()!= snapshot.data![
-                                                                          index].email!.toLowerCase())
+                                                                          index].email!.toLowerCase()&&snapshot.data![
+                                                                          index].email!.toLowerCase()!="noresponder@chimicagua-cesar.gov.co")
                                                             IconButton(
                                                               icon: Icon(
                                                                 Icons

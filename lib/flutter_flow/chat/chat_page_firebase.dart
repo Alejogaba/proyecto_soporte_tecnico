@@ -28,18 +28,28 @@ class ChatPageFirebase extends StatefulWidget {
     this.currentUserToken,
     this.otherUserToken,
     required this.nombre,
+    this.msjChatBot,
   });
   final String? nombre;
   final String? currentUserToken;
   final String? otherUserToken;
   final types.Room room;
   final String chatUid;
+  final String? msjChatBot;
 
   @override
   State<ChatPageFirebase> createState() => _ChatPageFirebaseState();
 }
 
 class _ChatPageFirebaseState extends State<ChatPageFirebase> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.msjChatBot != null) {
+      secuenciaChatBot(widget.msjChatBot!);
+    }
+  }
+
   List<String> _intents = ["pc no enciende"];
   List<String> _responses = [
     "Entiendo que estás experimentando problemas para encender tu computadora. Aquí tienes algunos pasos básicos que puedes seguir para intentar solucionar el problema:\n\n1. ¿Tu computadora está conectada a una toma de corriente que funciona y el cable de alimentación está correctamente enchufado? 🔌",
@@ -217,6 +227,16 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
       message,
       widget.room.id,
     );
+    await secuenciaChatBot(message.text);
+
+    if (widget.otherUserToken != null) {
+      print('Token otro usuario: ' + widget.otherUserToken.toString());
+      await sendNotification(
+          widget.otherUserToken!, widget.nombre!, message.text);
+    }
+  }
+
+  Future<void> secuenciaChatBot(String message) async {
     final prefs = await SharedPreferences.getInstance();
     FirebaseAuth auth = FirebaseAuth.instance;
     bool chatBot = prefs.getBool('chatBot-${widget.room.id}') ?? true;
@@ -227,9 +247,9 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
     log("Esperando respuesta: " + esperandoRespuesta.toString());
     log("codigoRespuesta: " + codigoRespuestaProceso.toString());
     if (esperandoRespuesta && codigoRespuestaProceso != null) {
-      if (message.text.toLowerCase().contains('si') ||
-          message.text.toLowerCase().contains('no')) {
-        if (message.text.toLowerCase().contains('no')) {
+      if (message.toLowerCase().contains('si') ||
+          message.toLowerCase().contains('no')) {
+        if (message.toLowerCase().contains('no')) {
           late String respuesta;
           String? img;
           switch (codigoRespuestaProceso) {
@@ -247,24 +267,28 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
               "Ok, entonces llamare a un técnico para que se haga cargo.") {
             Future.delayed(Duration(seconds: 1), () async {
               ChatBot chatBotRespuesta =
-                  await handleMessageChatBot(message.text);
+                  await handleMessageChatBot(message);
               print("id respuesta: " + chatBotRespuesta.id.toString());
-              enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,respuesta,0);
+              enviarMensajeChatBot(
+                  auth, prefs, codigoRespuestaProceso, respuesta, 0);
               if (img != null) {
-                enviarImagenChatBot(auth, img,1);
+                enviarImagenChatBot(auth, img, 1);
               }
-              enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,"¿Soluciono tu problema? (Responde ✅Si/❌No)",3);
+              enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
+                  "¿Soluciono tu problema? (Responde ✅Si/❌No)", 3);
             });
           } else {
-            enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,respuesta,1);
+            enviarMensajeChatBot(
+                auth, prefs, codigoRespuestaProceso, respuesta, 1);
           }
         } else {
-           enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,"Ha sido un gusto poder ayudarte 😁",1);
-          
+          enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
+              "Ha sido un gusto poder ayudarte 😁", 1);
         }
       } else {
         Future.delayed(Duration(seconds: 2), () async {
-           enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,"Responde ✅Si o ❌No",0);
+          enviarMensajeChatBot(
+              auth, prefs, codigoRespuestaProceso, "Responde ✅Si o ❌No", 0);
           await prefs.setBool('esperandoRespuesta-${widget.room.id}', true);
           codigoRespuestaProceso =
               prefs.getString('codigoProceso-${widget.room.id}');
@@ -277,16 +301,21 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
       }
     } else {
       Future.delayed(Duration(seconds: 1), () async {
-        ChatBot chatBotRespuesta = await handleMessageChatBot(message.text);
+        ChatBot chatBotRespuesta = await handleMessageChatBot(message);
         print("id respuesta: " + chatBotRespuesta.id.toString());
-         enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,chatBotRespuesta.respuesta,0);
+        enviarMensajeChatBot(
+            auth, prefs, codigoRespuestaProceso, chatBotRespuesta.respuesta, 0);
         if (chatBotRespuesta.id >= 1 && chatBotRespuesta.id <= 2) {
           //Valida en que rango entra la respuesta
           Future.delayed(Duration(seconds: 1), () async {
-           enviarImagenChatBot(auth, "https://firebasestorage.googleapis.com/v0/b/proyecto-soporte-tecnico.appspot.com/o/scaled_1000000034.jpg?alt=media&token=8d158359-636d-4c92-97e0-8decf0f97061", 0)
+            enviarImagenChatBot(
+                auth,
+                "https://firebasestorage.googleapis.com/v0/b/proyecto-soporte-tecnico.appspot.com/o/scaled_1000000034.jpg?alt=media&token=8d158359-636d-4c92-97e0-8decf0f97061",
+                0);
 
             Future.delayed(Duration(seconds: 3), () async {
-               enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,"¿Soluciono tu problema? (Responde ✅Si/❌No)",0);
+              enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
+                  "¿Soluciono tu problema? (Responde ✅Si/❌No)", 0);
 
               await prefs.setBool('esperandoRespuesta-${widget.room.id}', true);
               codigoRespuestaProceso =
@@ -301,15 +330,9 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
         }
       });
     }
-
-    if (widget.otherUserToken != null) {
-      print('Token otro usuario: ' + widget.otherUserToken.toString());
-      await sendNotification(
-          widget.otherUserToken!, widget.nombre!, message.text);
-    }
   }
 
-  void enviarImagenChatBot(FirebaseAuth auth, String? img,int tiempo) {
+  void enviarImagenChatBot(FirebaseAuth auth, String? img, int tiempo) {
     Future.delayed(Duration(seconds: tiempo), () async {
       ChatMensajes mensaje1 = ChatMensajes(
           //envia la imagen
@@ -332,7 +355,8 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
     });
   }
 
-  void enviarMensajeChatBot(FirebaseAuth auth, SharedPreferences prefs, String? codigoRespuestaProceso,String mensaje, int tiempo) {
+  void enviarMensajeChatBot(FirebaseAuth auth, SharedPreferences prefs,
+      String? codigoRespuestaProceso, String mensaje, int tiempo) {
     Future.delayed(Duration(seconds: tiempo), () async {
       ChatMensajes mensaje1 = ChatMensajes(
           //Pregunta si soluciono su problema

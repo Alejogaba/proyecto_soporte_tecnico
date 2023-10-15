@@ -36,6 +36,26 @@ class CasosController {
     }
   }
 
+  Future<List<Caso>> obtenerCasosFuture({String uidSolicitante = ''}) async {
+  QuerySnapshot querySnapshot;
+
+  if (uidSolicitante.isEmpty) {
+    querySnapshot = await FirebaseFirestore.instance.collection('casos').get();
+  } else {
+    querySnapshot = await FirebaseFirestore.instance
+        .collection('casos')
+        .where('uidSolicitante', isEqualTo: uidSolicitante)
+        .get();
+  }
+
+  List<Caso> casos = querySnapshot.docs
+      .map((doc) => Caso.fromMap(doc.data() as Map<String, dynamic>))
+      .toList();
+
+  return casos;
+}
+
+
   Stream<List<Caso>> obtenerCasosStreamSinFinalizar({String uidSolicitante = ''}) {
     if (uidSolicitante.isEmpty) {
       return FirebaseFirestore.instance
@@ -110,6 +130,24 @@ class CasosController {
 
     return controller.stream;
   }
+
+  Future<int> contarCasosPorDependencia(String miUidDependencia) async {
+  // Obtén una referencia a la colección 'casos' en Firestore
+  final CollectionReference casosCollection = FirebaseFirestore.instance.collection('casos');
+
+  try {
+    // Realiza una consulta para contar los casos que cumplan con la condición
+    QuerySnapshot querySnapshot = await casosCollection.where('uidDependencia', isEqualTo: miUidDependencia).get();
+
+    // El número de casos se obtiene del tamaño de la lista de documentos
+    int cantidadCasos = querySnapshot.docs.length;
+
+    return cantidadCasos;
+  } catch (e) {
+    print('Error al contar casos: $e');
+    return 0; // Manejo de errores, puedes cambiar esto según tus necesidades
+  }
+}
 
   Future<int> getTotalCasosCountSolicitanteFuture(String uidSolicitante) async {
   try {

@@ -120,14 +120,18 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                       log('chatInfo: ${chatInfo}');
                       if (chatInfo != null) {
                         return StreamBuilder<ChatMensajes?>(
-                          stream: ControladorChat().ObtenerUltimoMensajeChat(
+                          stream: ControladorChat().obtenerUltimoMensajeChat(
                               listViewChatsRecord.roomUid),
                           builder:
                               (BuildContext context, snapshotUltimoMensaje) {
                             if (snapshotUltimoMensaje.connectionState ==
                                 ConnectionState.waiting) {
-                              return SizedBox(width:50,height:50,
-                              child:CircularProgressIndicator(color: FlutterFlowTheme.of(context).primary,));
+                              return SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: CircularProgressIndicator(
+                                    color: FlutterFlowTheme.of(context).primary,
+                                  ));
                             } else if (snapshotUltimoMensaje.connectionState !=
                                     ConnectionState.waiting &&
                                 snapshot.data == null) {
@@ -142,7 +146,7 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                                       .getTotalCasosCountSolicitante(
                                           snapshot.data!.uid.toString().trim()),
                                   builder: (context, snapshotCountCasos) {
-                                    if (snapshotCountCasos.hasData  ) {
+                                    if (snapshotCountCasos.hasData) {
                                       return FutureBuilder<Dependencia?>(
                                         future: ControladorDependencias()
                                             .cargarDependenciaUID(
@@ -232,29 +236,36 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                                                           lastMessage.mensaje,
                                                           lastMessage.tipo)
                                                       : " ",
-                                              
                                               lastChatTime: listViewChatsRecord
                                                   .lastMessageTime,
-                                              seen: (snapshotCountCasos.data! >0)? false:true,
+                                              seen:
+                                                  (snapshotCountCasos.data! > 0)
+                                                      ? false
+                                                      : true,
                                               title:
                                                   '${snapshot.data!.nombre} - ${snapshot.data!.cargo} de ${snapshotDependencia.data!.nombre}',
                                               userProfilePic:
                                                   chatInfo.urlImagen,
-                                              color: (snapshotCountCasos.data! >0)? 
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryBackground:FlutterFlowTheme.of(context).accent3 
-                                                      ,
-                                                      
-                                              unreadColor: 
-                                                  Colors.green,
-                                                  
+                                              color: (snapshotCountCasos.data! >
+                                                      0)
+                                                  ? FlutterFlowTheme.of(context)
+                                                      .secondaryBackground
+                                                  : FlutterFlowTheme.of(context)
+                                                      .accent3,
+                                              unreadColor: Colors.green,
                                               titleTextStyle:
                                                   GoogleFonts.getFont(
                                                 'Urbanist',
-                                                color:(snapshotCountCasos.data! >0)? FlutterFlowTheme.of(context)
-                                                        .primaryText:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText.withAlpha(150),
+                                                color:
+                                                    (snapshotCountCasos.data! >
+                                                            0)
+                                                        ? FlutterFlowTheme.of(
+                                                                context)
+                                                            .primaryText
+                                                        : FlutterFlowTheme.of(
+                                                                context)
+                                                            .primaryText
+                                                            .withAlpha(150),
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 18.0,
                                               ),
@@ -262,20 +273,31 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                                                   GoogleFonts.getFont(
                                                 'Urbanist',
                                                 color:
-                                                    (snapshotCountCasos.data! >0)? FlutterFlowTheme.of(context)
-                                                        .primaryText.withAlpha(200):
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryText,
+                                                    (snapshotCountCasos.data! >
+                                                            0)
+                                                        ? FlutterFlowTheme.of(
+                                                                context)
+                                                            .primaryText
+                                                            .withAlpha(200)
+                                                        : FlutterFlowTheme.of(
+                                                                context)
+                                                            .secondaryText,
                                                 fontWeight: FontWeight.normal,
                                                 fontSize: 14.0,
                                               ),
                                               previewTextStyle:
                                                   GoogleFonts.getFont(
                                                 'Urbanist',
-                                                color:(snapshotCountCasos.data! >0)? FlutterFlowTheme.of(context)
-                                                        .primaryText.withAlpha(180):
-                                                    FlutterFlowTheme.of(context)
-                                                        .grayIcon,
+                                                color:
+                                                    (snapshotCountCasos.data! >
+                                                            0)
+                                                        ? FlutterFlowTheme.of(
+                                                                context)
+                                                            .primaryText
+                                                            .withAlpha(180)
+                                                        : FlutterFlowTheme.of(
+                                                                context)
+                                                            .grayIcon,
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 14.0,
                                               ),

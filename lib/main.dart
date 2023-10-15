@@ -9,6 +9,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:login2/vistas/Estadisticas/interfaz_estadisticas.dart';
 import 'package:login2/vistas/lista_activos_funcionarios_page/lista_activos_funcionarios_page_widget.dart';
 import 'package:login2/vistas/login/LoginMOD.dart';
 import 'package:login2/vistas/perfil/PerfilMOD/home.dart';
@@ -132,7 +133,7 @@ class PrincipalPagina extends StatelessWidget {
                       Usuario usuario =
                           Usuario.mapeo(user as Map<String, dynamic>);
                       if (usuario.role == 'admin') {
-                        return NuevaNavBar();
+                        return NavBarPage();
                       } else if (usuario.role == 'funcionario') {
                         return NuevaNavBarFuncionario();
                       } else {

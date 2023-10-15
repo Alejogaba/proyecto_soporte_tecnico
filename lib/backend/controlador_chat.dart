@@ -7,7 +7,7 @@ import 'package:login2/model/chat_mensajes.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ControladorChat {
-  Stream<ChatMensajes?> ObtenerUltimoMensajeChat(String uidChat) {
+  Stream<ChatMensajes?> obtenerUltimoMensajeChat(String uidChat) {
     return FirebaseFirestore.instance
         .collection('rooms')
         .doc(uidChat)
@@ -22,8 +22,35 @@ class ControladorChat {
       return result;
     }).doOnError((p0, p1) {
       p0.printError();
+      return null;
     });
   }
+
+  Future<ChatMensajes?> obtenerUltimoEnCola(String uidChat) async {
+  try {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('rooms')
+        .doc(uidChat)
+        .collection('messages').where('finalizado', isEqualTo: false)
+        .orderBy('turno', descending: true)
+        .limit(1)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      final data = snapshot.docs[0].data();
+      final result = ChatMensajes.fromMap(data);
+      log('ultimo mensaje: $result');
+      return result;
+    } else {
+      return null; // No se encontraron mensajes
+    }
+  } catch (e) {
+    log('Error al obtener el último mensaje: $e');
+    return null;
+  }
+}
+
+
 
   Future<String?> buscarChat(
       String uidusuarioAdmin, String uidOtroUsuario) async {

@@ -74,7 +74,7 @@ class FFChatWidget extends StatelessWidget {
                         room: types.Room(
                             id: 'Llk8BwZJpgM3ORkbk66F',
                             type: types.RoomType.direct,
-                            users: users))),
+                            users: users), otroUsuario: Usuario(),)),
               ),
               if (messages.isEmpty && emptyChatWidget != null)
                 Center(child: emptyChatWidget),

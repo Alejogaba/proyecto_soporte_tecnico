@@ -15,19 +15,22 @@ class ChatMensajes {
   int? size;
   int? turno;
   String? uri;
+  int prioridad;
+  String uidRoom;
 
-  ChatMensajes({
-    required this.authorId,
-    required this.updatedAt,
-    this.mensaje = '',
-    this.height = 0,
-    this.width = 0,
-    this.size = 0,
-    this.uri = '',
-    this.tipo = '',
-    this.turno= 999,
-    required this.fechaHora,
-  });
+  ChatMensajes(
+      {required this.authorId,
+      required this.updatedAt,
+      this.mensaje = '',
+      this.height = 0,
+      this.width = 0,
+      this.size = 0,
+      this.uri = '',
+      this.tipo = '',
+      this.turno = 999,
+      required this.fechaHora,
+      this.prioridad = 1,
+      this.uidRoom=''});
 
   Map<String, dynamic> toMapText() {
     return {
@@ -36,7 +39,6 @@ class ChatMensajes {
       'text': mensaje,
       'type': 'text',
       'createdAt': Timestamp.fromDate(fechaHora),
-      
     };
   }
 
@@ -62,6 +64,8 @@ class ChatMensajes {
       tipo: map['type'],
       fechaHora: (map['createdAt'] as Timestamp).toDate(),
       turno: map['turno'],
+      prioridad: map['prioridad'] ?? 1,
+      uidRoom: map['uid'],
     );
   }
 

@@ -224,6 +224,7 @@ class _ChatWidgetState extends State<ChatWidget> {
             chatUid: widget.uid,
             room: types.Room(
                 id: widget.uid, type: types.RoomType.direct, users: users),
-            msjChatBot: widget.msjChatBot));
+            msjChatBot: widget.msjChatBot,
+            otroUsuario: widget.otroUsuario));
   }
 }

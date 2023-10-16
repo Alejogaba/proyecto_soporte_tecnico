@@ -52,6 +52,13 @@ class NuevoReporteWidget extends StatefulWidget {
 
 class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
     with TickerProviderStateMixin {
+  String _prioridadSeleccionada = 'Urgencias Críticas';
+
+  Map<String, int> prioridadMap = {
+    'Urgencias Críticas': 1,
+    'Solicitudes Regulares': 2,
+    'Solicitudes Generales': 3,
+  };
   late NuevoReporteModel _model;
   TextEditingController dependenciaController = TextEditingController();
   TextEditingController activoController = TextEditingController();
@@ -419,6 +426,31 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                         ),
                       ),
                       Text(
+                        'PRIORIDAD (OPCIONAL)',
+                        style: FlutterFlowTheme.of(context).bodySmall.override(
+                              fontFamily: 'Urbanist',
+                              color: Color.fromARGB(255, 0, 0, 0),
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
+                      DropdownButton<String>(
+                        value: _prioridadSeleccionada,
+                        items: prioridadMap.keys.map((String key) {
+                          return DropdownMenuItem<String>(
+                            value: key,
+                            child: Text(key),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          if (newValue != null) {
+                            setState(() {
+                              _prioridadSeleccionada = newValue;
+                            });
+                            print(prioridadMap[_prioridadSeleccionada]);
+                          }
+                        },
+                      ),
+                      Text(
                         'SUBIR FOTO (OPCIONAL)',
                         style: FlutterFlowTheme.of(context).bodySmall.override(
                               fontFamily: 'Urbanist',
@@ -636,6 +668,7 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                         log('Current user: ' +
                             auth.currentUser!.uid.toString());
                         Caso casoAregistrar = Caso(
+                            prioridad: 1,
                             fecha: DateTime.now(),
                             uidDependencia: widget.dependencia!.uid,
                             uidSolicitante: auth.currentUser!.uid,
@@ -713,27 +746,59 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                                 .collection('messages')
                                 .add(mensaje3.toMapImage());
                           }
-                          ChatMensajes? chatTurno = await ControladorChat()
-                              .obtenerUltimoEnCola(room.id);
-                          if (chatTurno == null) {
-                            await collectionRef.update({
-                              'uid': room.id,
-                              'sinRespuesta': true,
-                              'finalizado': false,
-                              'turno': 1
-                            });
+                          if (_prioridadSeleccionada == 'Urgencia Crítica') {
+                            ChatMensajes? chatTurno = await ControladorChat()
+                                .obtenerUltimoEnColaUrgente(room.id);
+                            await ControladorChat().aumentarTurno();
+                            List<ChatMensajes> listaRooms = await
+                                ControladorChat().obetnerRoomsSinFinalizar();
+                            for (var element in listaRooms) {
+                              await chatBotAdvertencia(element.uidRoom);
+                            }
+                            
+                            if (chatTurno == null) {
+                              await collectionRef.update({
+                                'uid': room.id,
+                                'sinRespuesta': true,
+                                'finalizado': false,
+                                'turno': 1,
+                                'prioridad': _prioridadSeleccionada
+                              });
+                            } else {
+                              await collectionRef.update({
+                                'uid': room.id,
+                                'sinRespuesta': true,
+                                'finalizado': false,
+                                'turno': chatTurno.turno! + 1,
+                                'prioridad': _prioridadSeleccionada
+                              });
+                            }
                           } else {
-                            await collectionRef.update({
-                              'uid': room.id,
-                              'sinRespuesta': true,
-                              'finalizado': false,
-                              'turno': chatTurno.turno!+1
-                            });
+                            ChatMensajes? chatTurno = await ControladorChat()
+                                .obtenerUltimoEnCola(room.id);
+
+                            if (chatTurno == null) {
+                              await collectionRef.update({
+                                'uid': room.id,
+                                'sinRespuesta': true,
+                                'finalizado': false,
+                                'turno': 1,
+                                'prioridad': _prioridadSeleccionada
+                              });
+                            } else {
+                              await collectionRef.update({
+                                'uid': room.id,
+                                'sinRespuesta': true,
+                                'finalizado': false,
+                                'turno': chatTurno.turno! + 1,
+                                'prioridad': _prioridadSeleccionada
+                              });
+                            }
                           }
                         }
                         List<String> usuarios = [
+                          auth.currentUser!.uid,
                           'PaAQ6DjhL1Yl45h1bloNerwPFt82',
-                          auth.currentUser!.uid
                         ];
                         String? token =
                             await FirebaseMessaging.instance.getToken();
@@ -741,13 +806,18 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ChatPageFirebase(
+                            builder: (context) => ChatWidget(
                               currentUserToken: token,
                               otherUserToken: null,
                               nombre: 'Asistente Virtual',
                               msjChatBot: descripcionController.text,
-                              room: room,
-                              chatUid: room.id.trim(),
+                              usuarios: usuarios,
+                              uid: room.id.trim(),
+                              otroUsuario: Usuario(
+                                  nombre: 'Asistente Virtual',
+                                  uid: 'PaAQ6DjhL1Yl45h1bloNerwPFt82',
+                                  urlImagen:
+                                      'https://firebasestorage.googleapis.com/v0/b/proyecto-soporte-tecnico.appspot.com/o/Funcionarios%2F1000000000.jpg?alt=media&token=39c258f1-feae-43fa-b89e-de16b9513ffc1000000000.jpg'),
                             ),
                           ),
                         );
@@ -782,5 +852,20 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
         ),
       ),
     );
+  }
+
+  Future<void> chatBotAdvertencia(String room) async {
+    ChatMensajes mensaje1 = ChatMensajes(
+        //Pregunta si soluciono su problema
+        authorId: 'PaAQ6DjhL1Yl45h1bloNerwPFt82',
+        updatedAt: DateTime.now().add(Duration(seconds: 1)),
+        mensaje: 'Disculpa el retraso de 1 turno, este se debe a que surgio un caso urgente. Estamos trabajando para resolverlo lo antes posible. Gracias por tu paciencia',
+        tipo: 'text',
+        fechaHora: DateTime.now().add(Duration(seconds: 1)));
+    await FirebaseFirestore.instance
+        .collection('rooms')
+        .doc(room)
+        .collection('messages')
+        .add(mensaje1.toMapText());
   }
 }

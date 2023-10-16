@@ -398,8 +398,9 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                         child: FFButtonWidget(
                           onPressed: () async {
                             FirebaseAuth auth = FirebaseAuth.instance;
-                            CasosController()
-                                .marcarCasoComoresuelto(widget.caso);
+                            CasosController().marcarCasoComoresuelto(
+                                widget.caso,
+                                auth.currentUser!.uid.toString().trim());
                             types.User otheruser = types.User(
                                 id: widget.caso.uidSolicitante.trim());
                             types.Room room = await FirebaseChatCore.instance
@@ -424,19 +425,24 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                             int totalCasos = await CasosController()
                                 .getTotalCasosCountSolicitanteFuture(
                                     widget.caso.uidSolicitante);
-                            if(totalCasos == 0){
+                            if (totalCasos == 0) {
                               ChatMensajes mensaje1 = ChatMensajes(
-                                authorId: auth.currentUser!.uid.trim(),
-                                updatedAt: DateTime.now(),
-                                mensaje:
-                                    'No se han encontrado más casos abiertos, el chat se cerrara a continuación',
-                                tipo: 'text',
-                                fechaHora: DateTime.now());
-                            await FirebaseFirestore.instance
-                                .collection('rooms')
-                                .doc(room.id)
-                                .collection('messages')
-                                .add(mensaje1.toMapText());
+                                  authorId: auth.currentUser!.uid.trim(),
+                                  updatedAt: DateTime.now(),
+                                  mensaje:
+                                      'No se han encontrado más casos abiertos, el chat se cerrara a continuación',
+                                  tipo: 'text',
+                                  fechaHora: DateTime.now());
+                              await FirebaseFirestore.instance
+                                  .collection('rooms')
+                                  .doc(room.id)
+                                  .collection('messages')
+                                  .add(mensaje1.toMapText());
+                              await FirebaseFirestore.instance
+                                  .collection('rooms')
+                                  .doc(room.id)
+                                  .update({'finalizado': true});
+                              await ControladorChat().disminuirTurno();
                             }
                             Navigator.pop(context);
                           },

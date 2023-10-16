@@ -9,6 +9,8 @@ class Caso {
   bool solucionado;
   String urlAdjunto;
   DateTime fecha;
+  int prioridad;
+  DateTime? fechaFinalizado;
 
   Caso({
     this.uid = '',
@@ -19,6 +21,8 @@ class Caso {
     required this.descripcion,
     this.solucionado = false,
     required this.urlAdjunto,
+    required this.prioridad,
+    this.fechaFinalizado,
   });
 
   factory Caso.fromMap(Map<String, dynamic> map) {
@@ -30,7 +34,9 @@ class Caso {
       descripcion: map['descripcion'] ?? '',
       solucionado: map['solucionado'] ?? false,
       urlAdjunto: map['urlAdjunto'] ?? '',
-      uidDependencia: map['uidDependencia'] ?? '',
+      uidDependencia: map['uidDependencia'] ?? '', 
+      prioridad: map['prioridad'] ?? 3,
+      fechaFinalizado: (map['fechaFinalizado'] as Timestamp).toDate(),
     );
   }
 
@@ -44,6 +50,8 @@ class Caso {
       'solucionado': solucionado,
       'urlAdjunto': urlAdjunto,
       'uidDependencia': uidDependencia,
+      'prioridad': prioridad,
+      'fechaFinalizado': fechaFinalizado
     };
   }
 }

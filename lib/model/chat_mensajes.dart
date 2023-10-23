@@ -39,6 +39,7 @@ class ChatMensajes {
       'text': mensaje,
       'type': 'text',
       'createdAt': Timestamp.fromDate(fechaHora),
+      
     };
   }
 

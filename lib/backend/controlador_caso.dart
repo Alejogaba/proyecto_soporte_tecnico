@@ -37,6 +37,26 @@ class CasosController {
   }
 
   Future<List<Caso>> obtenerCasosFuture({String uidSolicitante = ''}) async {
+  QuerySnapshot querySnapshot;
+
+  if (uidSolicitante.isEmpty) {
+    querySnapshot = await FirebaseFirestore.instance.collection('casos').get();
+  } else {
+    querySnapshot = await FirebaseFirestore.instance
+        .collection('casos')
+        .where('uidSolicitante', isEqualTo: uidSolicitante)
+        .get();
+  }
+
+  List<Caso> casos = querySnapshot.docs
+      .map((doc) => Caso.fromMap(doc.data() as Map<String, dynamic>))
+      .toList();
+
+  return casos;
+}
+
+
+  Future<List<Caso>> obtenerCasosFuture({String uidSolicitante = ''}) async {
     QuerySnapshot querySnapshot;
 
     if (uidSolicitante.isEmpty) {

@@ -21,12 +21,41 @@ class ControladorChat {
         .map((snapshot) {
       final data = snapshot.docs[0].data();
       final result = ChatMensajes.fromMap(data);
-      log('ultimo mensaje: $result');
+      log('ultimo mensaje obtenerUltimoMensajeChat: ${result.mensaje}');
       return result;
     }).doOnError((p0, p1) {
+      log('obtenerUltimoMensajeChat Error: ${p0.toString()}');
       p0.printError();
       return null;
     });
+  }
+
+
+
+  Stream<ChatMensajes?> obtenerRoom(String uidChat) {
+    try {
+      return FirebaseFirestore.instance
+          .collection('rooms')
+          .doc(uidChat.trim())
+          .snapshots()
+          .map((snapshot) {
+        if (snapshot.exists) {
+          final data = snapshot.data();
+          if (data != null) {
+            final result = ChatMensajes.fromMap(data);
+            debugPrint('ultimo mensaje obtenerRoom: ${result.uidRoom}');
+            return result;
+          } else {
+            return null;
+          }
+        } else {
+          return null;
+        }
+      });
+    } catch (e) {
+      debugPrint('Error: $e');
+      return Stream.value(null);
+    }
   }
 
   Future<ChatMensajes?> obtenerUltimoEnCola(String uidChat) async {
@@ -41,7 +70,7 @@ class ControladorChat {
       if (snapshot.docs.isNotEmpty) {
         final data = snapshot.docs[0].data();
         final result = ChatMensajes.fromMap(data);
-        log('ultimo mensaje: $result');
+        log('ultimo mensaje ObtenerUltimoenCola: $result');
         return result;
       } else {
         return null; // No se encontraron mensajes
@@ -51,13 +80,13 @@ class ControladorChat {
       return null;
     }
   }
-  
+
   Future<ChatMensajes?> obtenerUltimoEnColaUrgente(String uidChat) async {
     try {
       final snapshot = await FirebaseFirestore.instance
           .collection('rooms')
           .where('finalizado', isEqualTo: false)
-          .where('prioridad', isEqualTo: 'Urgencia Crítica')
+          .where('prioridad', isEqualTo: true)
           .orderBy('turno', descending: true)
           .limit(1)
           .get();
@@ -65,7 +94,7 @@ class ControladorChat {
       if (snapshot.docs.isNotEmpty) {
         final data = snapshot.docs[0].data();
         final result = ChatMensajes.fromMap(data);
-        log('ultimo mensaje: $result');
+        log('ultimo mensaje obtenerUltimoEnColaUrgente: $result');
         return result;
       } else {
         return null; // No se encontraron mensajes
@@ -109,35 +138,39 @@ class ControladorChat {
         .map((snapshot) {
       final data = snapshot.docs[0].data();
       final result = ChatMensajes.fromMap(data);
-      log('ultimo mensaje: $result');
+      log('ultimo mensaje obtenerPuestoEnColaById: $result');
       return result;
     }).doOnError((p0, p1) {
+      log('Error obtenerPuestoEnColaById: ${p0.toString()}');
       p0.printError();
       return null;
     });
   }
-  Future<ChatMensajes?> obtenerPuestoEnColaByIdFuture(String uidUsuario) async {
-  try {
-    var snapshot = await FirebaseFirestore.instance
-        .collection('rooms')
-        .where('userIds', arrayContains: uidUsuario.trim())
-        .orderBy('turno', descending: true)
-        .limit(1)
-        .get();
 
-    if (snapshot.docs.isNotEmpty) {
-      final data = snapshot.docs[0].data();
-      final result = ChatMensajes.fromMap(data);
-      debugPrint('ultimo mensaje: $result'); // Utiliza debugPrint en lugar de log para imprimir mensajes en la consola durante el desarrollo
-      return result;
-    } else {
+  Future<ChatMensajes?> obtenerPuestoEnColaByIdFuture(String uidUsuario) async {
+    try {
+      var snapshot = await FirebaseFirestore.instance
+          .collection('rooms')
+          .where('userIds', arrayContains: uidUsuario.trim())
+          .orderBy('turno', descending: true)
+          .limit(1)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        final data = snapshot.docs[0].data();
+        final result = ChatMensajes.fromMap(data);
+        debugPrint(
+            'ultimo mensaje obtenerPuestoEnColaByIdFuture: $result'); // Utiliza debugPrint en lugar de log para imprimir mensajes en la consola durante el desarrollo
+        return result;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      debugPrint(
+          'Error: $e'); // Utiliza debugPrint en lugar de log para imprimir mensajes en la consola durante el desarrollo
       return null;
     }
-  } catch (e) {
-    debugPrint('Error: $e'); // Utiliza debugPrint en lugar de log para imprimir mensajes en la consola durante el desarrollo
-    return null;
   }
-}
 
   Future<void> disminuirTurno() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -154,7 +187,7 @@ class ControladorChat {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('rooms')
         .where('resuelto', isEqualTo: false)
-        .where('prioridad', isNotEqualTo: 'Urgencia Crítica')
+        .where('prioridad', isNotEqualTo: true)
         .get();
     for (QueryDocumentSnapshot document in querySnapshot.docs) {
       int turno = document.get('turno') ?? 0;
@@ -185,7 +218,32 @@ class ControladorChat {
     }
   }
 
-  Future<List<ChatMensajes>> obetnerRoomsSinFinalizar({String uidSolicitante = ''}) async {
+  Future<String?> buscarChatFinalizado(
+      String uidusuarioAdmin, String uidOtroUsuario) async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('rooms')
+          .where('userIds', isEqualTo: [uidOtroUsuario, uidusuarioAdmin])
+          .where('finalizado', isEqualTo: true)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.size > 0) {
+        final docSnapshot = querySnapshot.docs[0];
+        final uid = docSnapshot.data()['uid'];
+        Logger().i('uid de la Room: $uid');
+        return uid;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error al buscar room: $e');
+      return null;
+    }
+  }
+
+  Future<List<ChatMensajes>> obetnerRoomsSinFinalizar(
+      {String uidSolicitante = ''}) async {
     QuerySnapshot querySnapshot;
 
     if (uidSolicitante.isEmpty) {
@@ -195,7 +253,7 @@ class ControladorChat {
       querySnapshot = await FirebaseFirestore.instance
           .collection('casos')
           .where('finalizado', isEqualTo: false)
-          .where('prioridad', isNotEqualTo: 'Urgencia Crítica')
+          .where('prioridad', isNotEqualTo: true)
           .get();
     }
 
@@ -206,29 +264,29 @@ class ControladorChat {
     return rooms;
   }
 
-  Future<String> removerConversacionesRepetidas(String roomUID, String userUID) async {
-  try {
-    ChatMensajes? chatMensajes = await obtenerUltimoEnCola(userUID);
-    if (chatMensajes != null) {
-      FirebaseFirestore _db = FirebaseFirestore.instance;
-      await _db
-          .collection("rooms")
-          .where('uid', isNotEqualTo: roomUID)
-          .where('turno', isEqualTo: chatMensajes.turno)
-          .get()
-          .then((QuerySnapshot querySnapshot) {
-        querySnapshot.docs.forEach((doc) {
-          doc.reference.delete();
+  Future<String> removerConversacionesRepetidas(
+      String roomUID, String userUID) async {
+    try {
+      ChatMensajes? chatMensajes = await obtenerUltimoEnCola(userUID);
+      if (chatMensajes != null) {
+        FirebaseFirestore _db = FirebaseFirestore.instance;
+        await _db
+            .collection("rooms")
+            .where('uid', isNotEqualTo: roomUID)
+            .where('turno', isEqualTo: chatMensajes.turno)
+            .get()
+            .then((QuerySnapshot querySnapshot) {
+          querySnapshot.docs.forEach((doc) {
+            doc.reference.delete();
+          });
         });
-      });
-      return 'ok';
-    } else {
-      return 'No chatMensajes found';
+        return 'ok';
+      } else {
+        return 'No chatMensajes found';
+      }
+    } catch (e) {
+      // Aquí puedes manejar el error según sea necesario
+      return 'error';
     }
-  } catch (e) {
-    // Aquí puedes manejar el error según sea necesario
-    return 'error';
   }
-}
-
 }

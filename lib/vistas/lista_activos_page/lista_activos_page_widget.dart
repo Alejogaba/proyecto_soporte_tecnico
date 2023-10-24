@@ -9,18 +9,24 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:login2/auth/firebase_auth/auth_helper.dart';
 import 'package:login2/backend/controlador_caso.dart';
+import 'package:login2/flutter_flow/chat/index.dart';
 import 'package:login2/index.dart';
 import 'package:login2/model/dependencias.dart';
+import 'package:login2/model/usuario.dart';
 import 'package:login2/vistas/activo_perfil_page/activo_perfil_page_widget.dart';
 
 import '../../backend/controlador_activo.dart';
 import '../../flutter_flow/flutter_flow_icon_button.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../model/activo.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:badges/badges.dart' as badges;
 
 import '../../model/caso.dart';
+import '../resgistrar_activo_page/resgistrar_activo_computo_page_widget.dart';
 
 class ListaActivosPageWidget extends StatefulWidget {
   final Dependencia dependencia;
@@ -69,18 +75,101 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => RegistrarEquipoWidget(
-                      dependencia: dependencia,
-                    )),
-          );
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.green,
+      floatingActionButton: SpeedDial(
+        //Speed dial menu
+        //margin bottom
+        icon: Icons.menu, //icon on Floating action button
+        activeIcon: Icons.close, //icon when menu is expanded on button
+        backgroundColor: FlutterFlowTheme.of(context)
+            .primaryColor, //background color of button
+        foregroundColor: Colors.white, //font color, icon color in button
+        activeBackgroundColor: FlutterFlowTheme.of(context)
+            .primaryColor, //background color when menu is expanded
+        activeForegroundColor: Colors.white,
+        buttonSize: const Size(56.0, 56), //button size
+        visible: true,
+        closeManually: false,
+        curve: Curves.bounceIn,
+        overlayColor: Colors.black,
+        overlayOpacity: 0.5,
+        onOpen: () => print('OPENING DIAL'), // action when menu opens
+        onClose: () => print('DIAL CLOSED'), //action when menu closes
+
+        elevation: 8.0, //shadow elevation of button
+        shape: CircleBorder(), //shape of button
+
+        children: [
+          SpeedDialChild(
+            //speed dial child
+            child: Icon(FontAwesomeIcons.barcode),
+            backgroundColor: Color.fromARGB(255, 7, 133, 36),
+            foregroundColor: Colors.white,
+            label: 'Buscar por código de barras',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () async {
+              await FlutterBarcodeScanner.scanBarcode(
+                      '#C62828', // scanning line color
+                      'Cancelar', // cancel button text
+                      true, // whether to show the flash icon
+                      ScanMode.BARCODE)
+                  .then((value) async {
+                if (value != null && value != '-1') {
+                  ActivoController activoController = ActivoController();
+                  Activo? res =
+                      await activoController.buscarActivoPorCodigoBarra(
+                          widget.dependencia.uid, value);
+                  log('Codigo de barras leido: $value');
+                  if (res != null &&
+                      res.barcode != null &&
+                      res.barcode!.length < 4) {
+                    // ignore: use_build_context_synchronously
+                    final e = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ResgistrarActivoPageWidget(
+                          barcdode: res.barcode!,
+                          idDependencia: widget.dependencia.uid,
+                        ),
+                      ),
+                    ).then((value) {
+                      Future.delayed(Duration(milliseconds: 500), () {
+                        setState(() {});
+                      });
+                    });
+                  } else {
+                    final e = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RegistrarEquipoWidget(
+                          dependencia: widget.dependencia,
+                          barcode: value,
+                        ),
+                      ),
+                    ).then((value) {
+                      Future.delayed(Duration(milliseconds: 500), () {
+                        setState(() {});
+                      });
+                    });
+                  }
+                  setState(() {});
+                }
+              });
+            },
+          ),
+          SpeedDialChild(
+              child: Icon(Icons.add),
+              backgroundColor: Color.fromARGB(255, 7, 133, 107),
+              foregroundColor: Colors.white,
+              label: 'Registrar nuevo activo',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RegistrarEquipoWidget(
+                              dependencia: dependencia,
+                            )),
+                  )),
+        ],
       ),
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -114,7 +203,6 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                         FlutterFlowTheme.of(context).bodyText1Family),
                   ),
             ),
-          
             centerTitle: false,
             elevation: 4,
           )
@@ -273,31 +361,46 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                 onTap: () async {
                                                   if (snapshot.data![index]!
                                                       .casosPendientes) {
-                                                    Caso? caso = await CasosController()
-                                                        .buscarCasoPorIDactivo(
-                                                            snapshot
-                                                                .data![index]!
-                                                                .uid);
-                                                    if(caso!=null){
-                                                     
+                                                    Caso? caso =
+                                                        await CasosController()
+                                                            .buscarCasoPorCodigoBarras(
+                                                                snapshot
+                                                                    .data![
+                                                                        index]!
+                                                                    .uid);
+                                                    if (caso != null) {
                                                       final Activo? result =
-                                                        await Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            DetalleReporteWidget(caso)
-                                                      ),
-                                                    );
-                                                    if (result != null) {
-                                                      // ignore: use_build_context_synchronously
-                                                      Navigator.pop(
-                                                          context, result);
-                                                    } else {
-                                                      setState(() {});
+                                                          await Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                DetalleReporteWidget(
+                                                                    caso)),
+                                                      );
+                                                      if (result != null) {
+                                                        // ignore: use_build_context_synchronously
+                                                        Navigator.pop(
+                                                            context, result);
+                                                      } else {
+                                                        setState(() {});
+                                                      }
                                                     }
-                                                    }
-                                                    
                                                   } else {
+                                                    Usuario usuario =
+                                                        await AuthHelper()
+                                                                .cargarUsuarioDeFirebase() ??
+                                                            Usuario();
+                                                    late bool esadmin;
+                                                    if (usuario.cargo != null) {
+                                                      if (usuario.cargo ==
+                                                          'admin') {
+                                                        esadmin = true;
+                                                      } else {
+                                                        esadmin = false;
+                                                      }
+                                                    }else{
+                                                      esadmin = false;
+                                                    }
                                                     final Activo? result =
                                                         await Navigator.push(
                                                       context,
@@ -308,6 +411,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                               .data![index]!,
                                                           dependencia:
                                                               dependencia,
+                                                              esadmin: esadmin,
                                                         ),
                                                       ),
                                                     );
@@ -361,7 +465,6 @@ Widget tarjetaActivo(context, Activo activo,
     bool estaAsignado = false}) {
   return Container(
     width: 185,
-   
     decoration: BoxDecoration(
       color: FlutterFlowTheme.of(context).secondaryBackground,
       boxShadow: [
@@ -406,19 +509,12 @@ Widget tarjetaActivo(context, Activo activo,
             child: Text(
               activo.nombre,
               overflow: TextOverflow.clip,
-              style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Urbanist',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 18.0,
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                      ),
+              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                    fontFamily: 'Urbanist',
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w800,
+                  ),
             ),
           ),
           if (activo.casosPendientes)

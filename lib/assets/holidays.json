@@ -1,0 +1,208 @@
+{
+    "years": [
+      {
+        "year": 2022,
+        "holidays": [
+          { "date": "01/01/2022", "name": "Año Nuevo", "static": false },
+          {
+            "date": "10/01/2022",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "21/03/2022", "name": "Día de San José", "static": true },
+          { "date": "14/04/2022", "name": "Jueves Santo", "static": false },
+          { "date": "15/04/2022", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2022", "name": "Día del Trabajo", "static": false },
+          { "date": "30/05/2022", "name": "Ascensión del Señor", "static": true },
+          { "date": "20/06/2022", "name": "Corphus Christi", "static": true },
+          {
+            "date": "27/06/2022",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "04/07/2022",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2022",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2022", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "15/08/2022",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "17/10/2022", "name": "Día de la Raza", "static": true },
+          { "date": "07/11/2022", "name": "Todos los Santos", "static": true },
+          {
+            "date": "14/11/2022",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2022",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2022", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2023,
+        "holidays": [
+          { "date": "01/01/2023", "name": "Año Nuevo", "static": false },
+          {
+            "date": "09/01/2023",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "20/03/2023", "name": "Día de San José", "static": true },
+          { "date": "06/04/2023", "name": "Jueves Santo", "static": false },
+          { "date": "07/04/2023", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2023", "name": "Día del Trabajo", "static": false },
+          { "date": "22/05/2023", "name": "Ascensión del Señor", "static": true },
+          { "date": "12/06/2023", "name": "Corphus Christi", "static": true },
+          {
+            "date": "19/06/2023",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "03/07/2023",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2023",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2023", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "21/08/2023",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "16/10/2023", "name": "Día de la Raza", "static": true },
+          { "date": "06/11/2023", "name": "Todos los Santos", "static": true },
+          {
+            "date": "13/11/2023",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2023",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2023", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2024,
+        "holidays": [
+          { "date": "01/01/2024", "name": "Año Nuevo", "static": false },
+          {
+            "date": "08/01/2024",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "25/03/2024", "name": "Día de San José", "static": true },
+          { "date": "28/03/2024", "name": "Jueves Santo", "static": false },
+          { "date": "29/03/2024", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2024", "name": "Día del Trabajo", "static": false },
+          { "date": "13/05/2024", "name": "Ascensión del Señor", "static": true },
+          { "date": "03/06/2024", "name": "Corphus Christi", "static": true },
+          {
+            "date": "10/06/2024",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "01/07/2024",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2024",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2024", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "19/08/2024",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "14/10/2024", "name": "Día de la Raza", "static": true },
+          { "date": "04/11/2024", "name": "Todos los Santos", "static": true },
+          {
+            "date": "11/11/2024",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2024",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2024", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2025,
+        "holidays": [
+          { "date": "01/01/2025", "name": "Año Nuevo", "static": false },
+          {
+            "date": "06/01/2025",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "24/03/2025", "name": "Día de San José", "static": true },
+          { "date": "17/04/2025", "name": "Jueves Santo", "static": false },
+          { "date": "18/04/2025", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2025", "name": "Día del Trabajo", "static": false },
+          { "date": "02/06/2025", "name": "Ascensión del Señor", "static": true },
+          { "date": "23/06/2025", "name": "Corphus Christi", "static": true },
+          {
+            "date": "30/06/2025",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "30/06/2025",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2025",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2025", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "18/08/2025",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "13/10/2025", "name": "Día de la Raza", "static": true },
+          { "date": "03/11/2025", "name": "Todos los Santos", "static": true },
+          {
+            "date": "17/11/2025",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2025",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2025", "name": "Día de Navidad", "static": false }
+        ]
+      }
+    ]
+  }

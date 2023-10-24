@@ -107,4 +107,49 @@ class ActivoController {
       return 'error';
     }
   }
+
+  Future<Activo> buscarActivo(String uidDependencia, String idSerial) async {
+  Activo activoVacio = Activo(nombre: '', detalles: '', casosPendientes: false);
+  try {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('dependencias')
+        .doc(uidDependencia)
+        .collection('activos')
+        .doc(idSerial)
+        .get();
+
+    if (!documentSnapshot.exists) {
+      return activoVacio;
+    } else {
+      Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+      return Activo.fromMap(data);
+    }
+  } catch (e) {
+    print(e.toString());
+    return activoVacio;
+  }
+}
+Future<Activo?> buscarActivoPorCodigoBarra(String uidDependencia,String barcode) async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('dependencias')
+        .doc(uidDependencia)
+        .collection('activos')
+          .where('barcode', isEqualTo: barcode)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.size > 0) {
+        final docSnapshot = querySnapshot.docs[0];
+        final caso = Activo.fromMap(docSnapshot.data());
+
+        return caso;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error al cargar el caso individual: $e');
+      return null;
+    }
+  }
 }

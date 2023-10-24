@@ -76,23 +76,47 @@ class CasosController {
     return casos;
   }
 
-  Future<Duration> calcularTiempoPromedio() async {
-  List<Caso> casos = await obtenerCasosFuture();
-  List<Duration> tiempos = [];
+  Future<List<Caso>> obtenerCasoSolucionadosRangoFecha(
+      DateTime fechaInicial, DateTime fechaFinal) async {
+    QuerySnapshot querySnapshot;
+    List<Caso> casos = [];
 
-  casos.where((caso) => caso.solucionado).forEach((caso) {
-    if (caso.fechaFinalizado != null) {
-      tiempos.add(caso.fechaFinalizado!.difference(caso.fecha));
+    querySnapshot = await FirebaseFirestore.instance
+        .collection('casos')
+        .where('solucionado', isEqualTo: true)
+        .get();
+
+    List<Caso> temp = querySnapshot.docs
+        .map((doc) => Caso.fromMap(doc.data() as Map<String, dynamic>))
+        .toList();
+
+    for (var element in temp) {
+      if (element.fecha.isBefore(fechaFinal.add(Duration(minutes: 1))) &&
+          element.fecha.isAfter(fechaInicial.subtract(Duration(minutes: 1)))) {
+        casos.add(element);
+      }
     }
-  });
 
-  if (tiempos.isEmpty) {
-    return Duration.zero;
+    return casos;
   }
 
-  Duration sumTiempos = tiempos.reduce((value, element) => value + element);
-  return Duration(milliseconds: sumTiempos.inMilliseconds ~/ tiempos.length);
-}
+  Future<Duration> calcularTiempoPromedio() async {
+    List<Caso> casos = await obtenerCasosFuture();
+    List<Duration> tiempos = [];
+
+    casos.where((caso) => caso.solucionado).forEach((caso) {
+      if (caso.fechaFinalizado != null) {
+        tiempos.add(caso.fechaFinalizado!.difference(caso.fecha));
+      }
+    });
+
+    if (tiempos.isEmpty) {
+      return Duration.zero;
+    }
+
+    Duration sumTiempos = tiempos.reduce((value, element) => value + element);
+    return Duration(milliseconds: sumTiempos.inMilliseconds ~/ tiempos.length);
+  }
 
   Stream<List<Caso>> obtenerCasosStreamSinFinalizar(
       {String uidSolicitante = ''}) {
@@ -192,6 +216,28 @@ class CasosController {
     }
   }
 
+  Future<int> contarCasosPorFuncionario(String miUidFuncionario) async {
+    // Obtén una referencia a la colección 'casos' en Firestore
+    final CollectionReference casosCollection =
+        FirebaseFirestore.instance.collection('casos');
+
+    try {
+      // Realiza una consulta para contar los casos que cumplan con la condición
+      QuerySnapshot querySnapshot = await casosCollection
+          .where('solucionado', isEqualTo: true)
+          .where('finalizadoPor', isEqualTo: miUidFuncionario)
+          .get();
+
+      // El número de casos se obtiene del tamaño de la lista de documentos
+      int cantidadCasos = querySnapshot.docs.length;
+
+      return cantidadCasos;
+    } catch (e) {
+      print('Error al contar casos: $e');
+      return 0; // Manejo de errores, puedes cambiar esto según tus necesidades
+    }
+  }
+
   Future<int> getTotalCasosCountSolicitanteFuture(String uidSolicitante) async {
     try {
       final querySnapshot = await FirebaseFirestore.instance
@@ -209,7 +255,7 @@ class CasosController {
     }
   }
 
-  Future<Caso?> buscarCasoPorIDactivo(String uidActivo) async {
+  Future<Caso?> buscarCasoPorCodigoBarras(String uidActivo) async {
     try {
       final querySnapshot = await FirebaseFirestore.instance
           .collection('casos')
@@ -256,6 +302,7 @@ class CasosController {
       FirebaseFirestore _db = FirebaseFirestore.instance;
       Caso casoNuevo = caso;
       casoNuevo.solucionado = true;
+      casoNuevo.finalizadoPor = usuario;
       DateTime tiempoResolucion = DateTime.fromMicrosecondsSinceEpoch(
           (DateTime.now().millisecondsSinceEpoch) -
               (caso.fecha.millisecondsSinceEpoch));
@@ -270,7 +317,11 @@ class CasosController {
             .doc(caso.uidDependencia)
             .collection('activos')
             .doc(caso.uidActivo)
-            .update({'casosPendientes': false, 'finalizadoPor': usuario,'fechaFinalizado': Timestamp.fromDate(DateTime.now())});
+            .update({
+          'casosPendientes': false,
+          'finalizadoPor': usuario,
+          'fechaFinalizado': Timestamp.fromDate(DateTime.now())
+        });
       });
       return 'ok';
     } catch (e) {

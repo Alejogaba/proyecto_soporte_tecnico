@@ -98,6 +98,9 @@ dependencies:
   flutter_spinkit: ^5.2.0
   dotted_border: ^2.0.0+3
   fl_chart: ^0.64.0
+  flutter_barcode_scanner: ^2.0.0
+  syncfusion_flutter_datepicker: ^23.1.41
+  colombia_holidays: ^2.0.2
   
 
 dev_dependencies:

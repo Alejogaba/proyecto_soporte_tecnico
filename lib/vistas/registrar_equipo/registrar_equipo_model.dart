@@ -18,6 +18,7 @@ class RegistrarEquipoModel extends FlutterFlowModel {
   String? Function(BuildContext, String?)? propertyAddressControllerValidator;
   // State field(s) for propertyNeighborhood widget.
   TextEditingController? dependenciaController;
+  TextEditingController? barcodeController;
   String? Function(BuildContext, String?)?
       propertyNeighborhoodControllerValidator;
   // State field(s) for propertyDescription widget.

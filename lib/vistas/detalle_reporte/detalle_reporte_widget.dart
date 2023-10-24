@@ -1,3 +1,6 @@
+
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
@@ -306,6 +309,21 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                       if (snapshotActivo.hasData) {
                         return InkWell(
                           onTap: () async {
+                             Usuario usuario =
+                                                        await AuthHelper()
+                                                                .cargarUsuarioDeFirebase() ??
+                                                            Usuario();
+                                                    late bool esadmin;
+                                                    if (usuario.cargo != null) {
+                                                      if (usuario.cargo ==
+                                                          'admin') {
+                                                        esadmin = true;
+                                                      } else {
+                                                        esadmin = false;
+                                                      }
+                                                    }else{
+                                                      esadmin = false;
+                                                    }
                             if (estaDepedencia != null) {
                               await Navigator.push(
                                 context,
@@ -313,6 +331,7 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                                   builder: (context) => ActivoPerfilPageWidget(
                                     activo: snapshotActivo.data!,
                                     dependencia: estaDepedencia,
+                                    esadmin: esadmin,
                                   ),
                                 ),
                               );
@@ -424,7 +443,9 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
 
                             int totalCasos = await CasosController()
                                 .getTotalCasosCountSolicitanteFuture(
-                                    widget.caso.uidSolicitante);
+                                    widget.caso.uidSolicitante.trim());
+
+                            log('TotalCasos: $totalCasos');
                             if (totalCasos == 0) {
                               ChatMensajes mensaje1 = ChatMensajes(
                                   authorId: auth.currentUser!.uid.trim(),
@@ -443,6 +464,14 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                                   .doc(room.id)
                                   .update({'finalizado': true});
                               await ControladorChat().disminuirTurno();
+                              await FirebaseFirestore.instance
+                                  .collection('rooms')
+                                  .doc(room.id)
+                                  .update({
+                                'uid': room.id,
+                                'sinRespuesta': false,
+                                'finalizado': true,
+                              });
                             }
                             Navigator.pop(context);
                           },
@@ -609,6 +638,36 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                                           snapshotUser.uid!
                                         ],
                                         uid: uidRoom.trim(),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  types.Room room = await FirebaseChatCore
+                                      .instance
+                                      .createRoom(types.User(
+                                          id: snapshotUser.uid!,
+                                          firstName: snapshotUser.nombre!,
+                                          imageUrl: snapshotUser.urlImagen));
+                                  await FirebaseFirestore.instance
+                                      .collection('rooms')
+                                      .doc(room.id)
+                                      .update({
+                                    'uid': room.id,
+                                    'sinRespuesta': false,
+                                    'finalizado': false,
+                                  });
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ChatWidget(
+                                        nombre: snapshotUser.nombre.toString(),
+                                        otroUsuario: snapshotUser,
+                                        usuarios: [
+                                          _auth.currentUser!.uid,
+                                          snapshotUser.uid!
+                                        ],
+                                        uid: room.id,
+                                        caso: widget.caso,
                                       ),
                                     ),
                                   );

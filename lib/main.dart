@@ -133,7 +133,7 @@ class PrincipalPagina extends StatelessWidget {
                       Usuario usuario =
                           Usuario.mapeo(user as Map<String, dynamic>);
                       if (usuario.role == 'admin') {
-                        return NavBarPage();
+                        return NuevaNavBarAdmin();
                       } else if (usuario.role == 'funcionario') {
                         return NuevaNavBarFuncionario();
                       } else {
@@ -393,6 +393,94 @@ class _NuevaNavBarStateFuncionario extends State<NuevaNavBarFuncionario> {
             GButton(
               icon: Icons.computer,
               text: 'Equipos',
+            ),
+          ],
+          selectedIndex: _selectedIndex,
+          onTabChange: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class NuevaNavBarAdmin extends StatefulWidget {
+  const NuevaNavBarAdmin({Key? key}) : super(key: key);
+  @override
+  _NuevaNavBarStateAdmin createState() => _NuevaNavBarStateAdmin();
+}
+
+class _NuevaNavBarStateAdmin extends State<NuevaNavBarAdmin> {
+  int _selectedIndex = 0;
+
+  _NuevaNavBarStateAdmin();
+
+  static const List<Widget> _widgetOptions = <Widget>[
+    ConversacionesWidget(),
+    InterfazPrincipalWidget(),
+    InterfazEstadisticas()
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: FlutterFlowTheme.of(context).primary,
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black.withOpacity(.1),
+            )
+          ],
+        ),
+        child: GNav(
+          haptic: false, // haptic feedback
+          tabBorderRadius: 6,
+          tabActiveBorder: Border.all(
+              color: FlutterFlowTheme.of(context).primary,
+              width: 1), // tab button border
+          backgroundColor: FlutterFlowTheme.of(context).primary,
+          tabShadow: [
+            BoxShadow(
+                color: FlutterFlowTheme.of(context).primary.withOpacity(0.5),
+                blurRadius: 8)
+          ], // tab button shadow
+          curve: Curves.easeOutExpo, // tab animation curves
+          duration: Duration(milliseconds: 600), // tab animation duration
+          gap: 2, // the tab button gap between icon and text
+          color: FlutterFlowTheme.of(context)
+              .tertiary
+              .withOpacity(0.7), // unselected icon color
+          activeColor: FlutterFlowTheme.of(context)
+              .tertiary, // selected icon and text color
+          iconSize: 28, // tab button icon size
+          tabBackgroundColor: FlutterFlowTheme.of(context)
+              .tertiary
+              .withOpacity(0.1), // selected tab background color
+          padding: EdgeInsets.symmetric(
+              horizontal: MediaQuery.of(context).size.width * 0.0917,
+              vertical: 15), // navigation bar padding
+          mainAxisAlignment: MainAxisAlignment.center,
+          tabs: [
+            GButton(
+              icon: LineIcons.comment,
+              text: 'Chats',
+            ),
+            GButton(
+              icon: LineIcons.home,
+              text: 'Dependencias',
+            ),
+            GButton(
+              icon: LineIcons.barChart,
+              text: 'Estadísticas',
             ),
           ],
           selectedIndex: _selectedIndex,

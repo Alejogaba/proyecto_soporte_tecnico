@@ -34,6 +34,7 @@ class ResgistrarActivoPageWidget extends StatefulWidget {
   final String? idSerial;
   final String idDependencia;
   final Activo? activoEditar;
+  final String? barcdode;
   final List<Activo>? listComponentesExActivos;
   const ResgistrarActivoPageWidget({
     Key? key,
@@ -42,6 +43,7 @@ class ResgistrarActivoPageWidget extends StatefulWidget {
     required this.idDependencia,
     this.activoEditar,
     this.listComponentesExActivos,
+    this.barcdode
   }) : super(key: key);
 
   @override
@@ -52,6 +54,7 @@ class ResgistrarActivoPageWidget extends StatefulWidget {
         this.idDependencia,
         this.activoEditar,
         this.listComponentesExActivos,
+        
       );
 }
 

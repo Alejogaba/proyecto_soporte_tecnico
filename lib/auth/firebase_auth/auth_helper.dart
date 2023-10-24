@@ -35,10 +35,32 @@ class AuthHelper {
         .snapshots()
         .map((snapshot) {
       final result = Usuario.mapeo(snapshot.data()!);
-      log('ultimo mensaje: $result');
+      log('ultimo mensaje getUsuarioStream: $result');
       return result;
     });
   }
+
+  Future<Usuario?> getUsuarioFutureUID(String uidusuario) async {
+  try {
+    var snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uidusuario)
+        .get();
+    if (snapshot.exists) {
+      final result = Usuario.mapeo(snapshot.data()!);
+      print('último mensaje getUsuarioFuture: $result');
+      return result;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    // Manejar cualquier excepción potencial aquí
+    print('Error: $e');
+    return null;
+  }
+}
+
+
 
 
   Future<Usuario?> cargarUsuarioDeFirebase() async {

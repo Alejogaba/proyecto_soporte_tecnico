@@ -23,8 +23,9 @@ export 'registrar_equipo_model.dart';
 class RegistrarEquipoWidget extends StatefulWidget {
   final Dependencia dependencia;
   final Activo? activoEdit;
+  final String? barcode;
   const RegistrarEquipoWidget(
-      {Key? key, required this.dependencia, this.activoEdit})
+      {Key? key, required this.dependencia, this.activoEdit,this.barcode})
       : super(key: key);
 
   @override
@@ -44,6 +45,7 @@ class _RegistrarEquipoWidgetState extends State<RegistrarEquipoWidget> {
     _model.nombreController ??= TextEditingController();
     _model.marcaController ??= TextEditingController();
     _model.dependenciaController ??= TextEditingController();
+    _model.barcodeController ??= TextEditingController();
     _model.detallesController ??= TextEditingController();
     _model.dependenciaController.text = widget.dependencia.nombre;
     if (widget.activoEdit != null) {
@@ -51,6 +53,11 @@ class _RegistrarEquipoWidgetState extends State<RegistrarEquipoWidget> {
       _model.marcaController.text = widget.activoEdit!.marca;
       _model.detallesController.text = widget.activoEdit!.detalles;
       _model.uploadedFileUrl = widget.activoEdit!.urlImagen!;
+      _model.barcodeController.text = widget.activoEdit!.barcode??'';
+    }else{
+      if(widget.barcode!=null){
+        _model.barcodeController.text = widget.barcode!;
+      }
     }
   }
 
@@ -398,6 +405,74 @@ class _RegistrarEquipoWidgetState extends State<RegistrarEquipoWidget> {
                           readOnly: true,
                           decoration: InputDecoration(
                             hintText: 'Dependencia',
+                            hintStyle: FlutterFlowTheme.of(context)
+                                .headlineSmall
+                                .override(
+                                  fontFamily: 'Urbanist',
+                                  color: FlutterFlowTheme.of(context).grayIcon,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1.0,
+                              ),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(4.0),
+                                topRight: Radius.circular(4.0),
+                              ),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1.0,
+                              ),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(4.0),
+                                topRight: Radius.circular(4.0),
+                              ),
+                            ),
+                            errorBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1.0,
+                              ),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(4.0),
+                                topRight: Radius.circular(4.0),
+                              ),
+                            ),
+                            focusedErrorBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1.0,
+                              ),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(4.0),
+                                topRight: Radius.circular(4.0),
+                              ),
+                            ),
+                            contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 24.0, 0.0, 24.0),
+                          ),
+                          style: FlutterFlowTheme.of(context).headlineSmall,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'No deje este campo vacio';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                        child: TextFormField(
+                          controller: _model.barcodeController,
+                          obscureText: false,
+                          readOnly: true,
+                          decoration: InputDecoration(
+                            hintText: 'Número de serial',
                             hintStyle: FlutterFlowTheme.of(context)
                                 .headlineSmall
                                 .override(

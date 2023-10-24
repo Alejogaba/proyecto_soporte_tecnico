@@ -65,6 +65,7 @@ class Usuario {
   }
 
   Stream<Usuario>? getUsuarioStreamchatRecords(ChatsRecord? chatsrecords) {
+    
     if (chatsrecords != null) {
       FirebaseAuth auth = FirebaseAuth.instance;
       log('GetUsuarioStream: chatsrecord encontrado');

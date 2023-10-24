@@ -2,6 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:logger/logger.dart';
 import 'package:login2/backend/controlador_caso.dart';
+import 'package:login2/model/activo.dart';
+import 'package:login2/model/caso.dart';
+import 'package:login2/model/chat_mensajes.dart';
+import 'package:login2/model/dependencias.dart';
 import 'package:login2/model/usuario.dart';
 import 'package:login2/vistas/lista_reportes/lista_reportes_widget.dart';
 import '../../flutter_flow/chat/chat_page_firebase.dart';
@@ -26,7 +30,11 @@ class ChatWidget extends StatefulWidget {
       this.currentUserToken,
       this.otherUserToken,
       required this.otroUsuario,
-      this.msjChatBot})
+      this.msjChatBot,
+      this.caso,
+      this.mensajeImagen,
+      this.activo,
+      this.dependencia})
       : super(key: key);
   final List<String> usuarios;
   final String? currentUserToken;
@@ -37,6 +45,10 @@ class ChatWidget extends StatefulWidget {
   final bool esAdmin;
   final Usuario otroUsuario;
   final String? msjChatBot;
+  final Caso? caso;
+  final ChatMensajes? mensajeImagen;
+  final Activo? activo;
+  final Dependencia? dependencia;
   @override
   _ChatWidgetState createState() => _ChatWidgetState(usuarios);
 }
@@ -225,6 +237,10 @@ class _ChatWidgetState extends State<ChatWidget> {
             room: types.Room(
                 id: widget.uid, type: types.RoomType.direct, users: users),
             msjChatBot: widget.msjChatBot,
-            otroUsuario: widget.otroUsuario));
+            otroUsuario: widget.otroUsuario,
+            caso: widget.caso,
+            mensajeImagen: widget.mensajeImagen,
+            activo: widget.activo,
+            dependencia: widget.dependencia,));
   }
 }

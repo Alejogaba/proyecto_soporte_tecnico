@@ -445,6 +445,21 @@ class _ListaActivosFuncionariosPageWidgetState
                                                   ),
                                                 );
                                               } else {
+                                                 Usuario usuario =
+                                                        await AuthHelper()
+                                                                .cargarUsuarioDeFirebase() ??
+                                                            Usuario();
+                                                    late bool esadmin;
+                                                    if (usuario.cargo != null) {
+                                                      if (usuario.cargo ==
+                                                          'admin') {
+                                                        esadmin = true;
+                                                      } else {
+                                                        esadmin = false;
+                                                      }
+                                                    }else{
+                                                      esadmin = false;
+                                                    }
                                                 final Activo? result =
                                                     await Navigator.push(
                                                   context,
@@ -454,6 +469,7 @@ class _ListaActivosFuncionariosPageWidgetState
                                                       activo: snapshot
                                                           .data![index]!,
                                                       dependencia: dependencia,
+                                                      esadmin: esadmin,
                                                     ),
                                                   ),
                                                 );

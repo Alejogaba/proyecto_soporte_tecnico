@@ -32,13 +32,15 @@ class ActivoPerfilPageWidget extends StatefulWidget {
   final bool selectMode;
   final bool esPrestamo;
   final bool escogerComponente;
+  final bool esadmin;
   const ActivoPerfilPageWidget(
       {Key? key,
       required this.activo,
       this.selectMode = false,
       this.esPrestamo = false,
       this.escogerComponente = false,
-      this.dependencia})
+      this.dependencia,
+      this.esadmin=false})
       : super(key: key);
 
   @override
@@ -316,7 +318,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
       right: false,
       bottom: false,
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: (widget.esadmin)? Container() : FloatingActionButton(
           onPressed: () {
             Navigator.push(
               context,

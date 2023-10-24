@@ -1,8 +1,9 @@
-
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
 import 'package:login2/backend/controlador_activo.dart';
 import 'package:login2/backend/controlador_caso.dart';
@@ -43,6 +44,7 @@ class DetalleReporteWidget extends StatefulWidget {
 
 class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
   late DetalleReporteModel _model;
+  bool blur = false;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -108,609 +110,902 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
         centerTitle: false,
         elevation: 0.0,
       ),
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
+      body: Stack(
         children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 0.0, 0.0),
-                    child: Text(
-                      'Fecha',
-                      style: FlutterFlowTheme.of(context).bodySmall.override(
-                            fontFamily: 'Lexend Deca',
-                            color: FlutterFlowTheme.of(context).gray600,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(24.0, 4.0, 16.0, 0.0),
-                    child: Row(
+          GestureDetector(
+            onTap: () {
+              if (blur)
+                setState(() {
+                  blur = false;
+                });
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
                       mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          DateFormat('MMMM dd, yyyy', 'es')
-                              .format(widget.caso.fecha),
-                          style: FlutterFlowTheme.of(context).displaySmall,
-                        ),
-                        Text(
-                          ' - ',
-                          style: FlutterFlowTheme.of(context)
-                              .headlineSmall
-                              .override(
-                                fontFamily: 'Urbanist',
-                                color: FlutterFlowTheme.of(context).darkText,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                        Text(
-                          DateFormat('h:mm a').format(widget.caso.fecha),
-                          style: FlutterFlowTheme.of(context).displaySmall,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(24.0, 8.0, 24.0, 4.0),
-                    child: Text(
-                      'Dependencia',
-                      style: FlutterFlowTheme.of(context).bodySmall.override(
-                            fontFamily: 'Lexend Deca',
-                            color: FlutterFlowTheme.of(context).gray600,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w500,
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              24.0, 0.0, 0.0, 0.0),
+                          child: Text(
+                            'Fecha',
+                            style: FlutterFlowTheme.of(context)
+                                .bodySmall
+                                .override(
+                                  fontFamily: 'Lexend Deca',
+                                  color: FlutterFlowTheme.of(context).gray600,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
                           ),
-                    ),
-                  ),
-                  FutureBuilder<Dependencia?>(
-                    future: ControladorDependencias()
-                        .cargarDependenciaUID(widget.caso.uidDependencia),
-                    builder: (BuildContext context, snapshotDependencia) {
-                      if (snapshotDependencia.hasData) {
-                        estaDepedencia = snapshotDependencia.data;
-                        return Padding(
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              24.0, 4.0, 16.0, 0.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                DateFormat('MMMM dd, yyyy', 'es')
+                                    .format(widget.caso.fecha),
+                                style:
+                                    FlutterFlowTheme.of(context).displaySmall,
+                              ),
+                              Text(
+                                ' - ',
+                                style: FlutterFlowTheme.of(context)
+                                    .headlineSmall
+                                    .override(
+                                      fontFamily: 'Urbanist',
+                                      color:
+                                          FlutterFlowTheme.of(context).darkText,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                              Text(
+                                DateFormat('h:mm a').format(widget.caso.fecha),
+                                style:
+                                    FlutterFlowTheme.of(context).displaySmall,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              24.0, 8.0, 24.0, 4.0),
+                          child: Text(
+                            'Dependencia',
+                            style: FlutterFlowTheme.of(context)
+                                .bodySmall
+                                .override(
+                                  fontFamily: 'Lexend Deca',
+                                  color: FlutterFlowTheme.of(context).gray600,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                        ),
+                        FutureBuilder<Dependencia?>(
+                          future: ControladorDependencias()
+                              .cargarDependenciaUID(widget.caso.uidDependencia),
+                          builder: (BuildContext context, snapshotDependencia) {
+                            if (snapshotDependencia.hasData) {
+                              estaDepedencia = snapshotDependencia.data;
+                              return Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    24.0, 0.0, 24.0, 0.0),
+                                child: Text(
+                                  snapshotDependencia.data!.nombre
+                                      .maybeHandleOverflow(
+                                    maxChars: 90,
+                                    replacement: '…',
+                                  ),
+                                  style: FlutterFlowTheme.of(context)
+                                      .headlineMedium,
+                                ),
+                              );
+                            } else {
+                              return CircularProgressIndicator();
+                            }
+                          },
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              24.0, 8.0, 24.0, 4.0),
+                          child: Text(
+                            'Detalles del problema',
+                            style: FlutterFlowTheme.of(context)
+                                .bodySmall
+                                .override(
+                                  fontFamily: 'Lexend Deca',
+                                  color: FlutterFlowTheme.of(context).gray600,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                        ),
+                        Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               24.0, 0.0, 24.0, 0.0),
                           child: Text(
-                            snapshotDependencia.data!.nombre
-                                .maybeHandleOverflow(
+                            widget.caso.descripcion.maybeHandleOverflow(
                               maxChars: 90,
                               replacement: '…',
                             ),
                             style: FlutterFlowTheme.of(context).headlineMedium,
                           ),
-                        );
-                      } else {
-                        return CircularProgressIndicator();
-                      }
-                    },
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(24.0, 8.0, 24.0, 4.0),
-                    child: Text(
-                      'Detalles del problema',
-                      style: FlutterFlowTheme.of(context).bodySmall.override(
-                            fontFamily: 'Lexend Deca',
-                            color: FlutterFlowTheme.of(context).gray600,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w500,
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              24.0, 8.0, 24.0, 4.0),
+                          child: Text(
+                            'Imagen adjunta',
+                            style: FlutterFlowTheme.of(context)
+                                .bodySmall
+                                .override(
+                                  fontFamily: 'Lexend Deca',
+                                  color: FlutterFlowTheme.of(context).gray600,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
                           ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
-                    child: Text(
-                      widget.caso.descripcion.maybeHandleOverflow(
-                        maxChars: 90,
-                        replacement: '…',
-                      ),
-                      style: FlutterFlowTheme.of(context).headlineMedium,
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(24.0, 8.0, 24.0, 4.0),
-                    child: Text(
-                      'Imagen adjunta',
-                      style: FlutterFlowTheme.of(context).bodySmall.override(
-                            fontFamily: 'Lexend Deca',
-                            color: FlutterFlowTheme.of(context).gray600,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
-                  ),
-                  if (widget.caso.urlAdjunto.isNotEmpty)
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            height: 340.0,
-                            decoration: BoxDecoration(
-                              color: Color(0xFFDBE2E7),
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),
-                            child: Align(
-                              alignment: AlignmentDirectional(0.0, 0.0),
-                              child: InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  await Navigator.push(
-                                    context,
-                                    PageTransition(
-                                      type: PageTransitionType.fade,
-                                      child: FlutterFlowExpandedImageView(
-                                        image: CachedNetworkImage(
-                                          imageUrl: valueOrDefault<String>(
-                                            widget.caso.urlAdjunto,
-                                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/st1jx3t60926/r-architecture-TRCJ-87Yoh0-unsplash.jpg',
+                        ),
+                        if (widget.caso.urlAdjunto.isNotEmpty)
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 16.0, 0.0, 0.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  height: 340.0,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFFDBE2E7),
+                                    borderRadius: BorderRadius.circular(16.0),
+                                  ),
+                                  child: Align(
+                                    alignment: AlignmentDirectional(0.0, 0.0),
+                                    child: InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        await Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            type: PageTransitionType.fade,
+                                            child: FlutterFlowExpandedImageView(
+                                              image: CachedNetworkImage(
+                                                imageUrl:
+                                                    valueOrDefault<String>(
+                                                  widget.caso.urlAdjunto,
+                                                  'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/st1jx3t60926/r-architecture-TRCJ-87Yoh0-unsplash.jpg',
+                                                ),
+                                                fit: BoxFit.contain,
+                                              ),
+                                              allowRotation: false,
+                                              tag: valueOrDefault<String>(
+                                                widget.caso.urlAdjunto,
+                                                'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/st1jx3t60926/r-architecture-TRCJ-87Yoh0-unsplash.jpg',
+                                              ),
+                                              useHeroAnimation: true,
+                                            ),
                                           ),
-                                          fit: BoxFit.contain,
-                                        ),
-                                        allowRotation: false,
+                                        );
+                                      },
+                                      child: Hero(
                                         tag: valueOrDefault<String>(
                                           widget.caso.urlAdjunto,
                                           'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/st1jx3t60926/r-architecture-TRCJ-87Yoh0-unsplash.jpg',
                                         ),
-                                        useHeroAnimation: true,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Hero(
-                                  tag: valueOrDefault<String>(
-                                    widget.caso.urlAdjunto,
-                                    'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/st1jx3t60926/r-architecture-TRCJ-87Yoh0-unsplash.jpg',
-                                  ),
-                                  transitionOnUserGestures: true,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(16.0),
-                                    child: CachedNetworkImage(
-                                      imageUrl: valueOrDefault<String>(
-                                        widget.caso.urlAdjunto,
-                                        'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/st1jx3t60926/r-architecture-TRCJ-87Yoh0-unsplash.jpg',
-                                      ),
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  FutureBuilder<Activo?>(
-                    future: ActivoController().cargarActivoUID(
-                        widget.caso.uidDependencia, widget.caso.uidActivo),
-                    builder: (BuildContext context, snapshotActivo) {
-                      if (snapshotActivo.hasData) {
-                        return InkWell(
-                          onTap: () async {
-                             Usuario usuario =
-                                                        await AuthHelper()
-                                                                .cargarUsuarioDeFirebase() ??
-                                                            Usuario();
-                                                    late bool esadmin;
-                                                    if (usuario.cargo != null) {
-                                                      if (usuario.cargo ==
-                                                          'admin') {
-                                                        esadmin = true;
-                                                      } else {
-                                                        esadmin = false;
-                                                      }
-                                                    }else{
-                                                      esadmin = false;
-                                                    }
-                            if (estaDepedencia != null) {
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ActivoPerfilPageWidget(
-                                    activo: snapshotActivo.data!,
-                                    dependencia: estaDepedencia,
-                                    esadmin: esadmin,
-                                  ),
-                                ),
-                              );
-                            }
-                          },
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    24.0, 20.0, 0.0, 0.0),
-                                child: Text(
-                                  'Activo afectado',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodySmall
-                                      .override(
-                                        fontFamily: 'Lexend Deca',
-                                        color: FlutterFlowTheme.of(context)
-                                            .gray600,
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    24.0, 4.0, 0.0, 0.0),
-                                child: Text(
-                                  '${snapshotActivo.data!.nombre} marca ${snapshotActivo.data!.marca}',
-                                  style: FlutterFlowTheme.of(context)
-                                      .headlineSmall,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    24.0, 4.0, 24.0, 0.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Toca aquí para obtener más información de este activo',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodySmall
-                                          .override(
-                                            fontFamily: 'Lexend Deca',
-                                            color: Color(0xFF8B97A2),
-                                            fontSize: 12.0,
-                                            fontWeight: FontWeight.normal,
+                                        transitionOnUserGestures: true,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0),
+                                          child: CachedNetworkImage(
+                                            imageUrl: valueOrDefault<String>(
+                                              widget.caso.urlAdjunto,
+                                              'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/sample-app-property-finder-834ebu/assets/st1jx3t60926/r-architecture-TRCJ-87Yoh0-unsplash.jpg',
+                                            ),
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            fit: BoxFit.cover,
                                           ),
-                                    ),
-                                    Icon(
-                                      Icons.chevron_right_rounded,
-                                      color:
-                                          FlutterFlowTheme.of(context).grayIcon,
-                                      size: 24.0,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      } else {
-                        return CircularProgressIndicator();
-                      }
-                    },
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [],
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            0.0, 12.0, 0.0, 24.0),
-                        child: FFButtonWidget(
-                          onPressed: () async {
-                            FirebaseAuth auth = FirebaseAuth.instance;
-                            CasosController().marcarCasoComoresuelto(
-                                widget.caso,
-                                auth.currentUser!.uid.toString().trim());
-                            types.User otheruser = types.User(
-                                id: widget.caso.uidSolicitante.trim());
-                            types.Room room = await FirebaseChatCore.instance
-                                .createRoom(otheruser);
-                            Activo activo = await ActivoController()
-                                .cargarActivoUID(widget.caso.uidDependencia,
-                                    widget.caso.uidActivo);
-
-                            ChatMensajes mensaje1 = ChatMensajes(
-                                authorId: auth.currentUser!.uid.trim(),
-                                updatedAt: DateTime.now(),
-                                mensaje:
-                                    'Se completo el caso de ${activo.nombre}',
-                                tipo: 'text',
-                                fechaHora: DateTime.now());
-                            await FirebaseFirestore.instance
-                                .collection('rooms')
-                                .doc(room.id)
-                                .collection('messages')
-                                .add(mensaje1.toMapText());
-
-                            int totalCasos = await CasosController()
-                                .getTotalCasosCountSolicitanteFuture(
-                                    widget.caso.uidSolicitante.trim());
-
-                            log('TotalCasos: $totalCasos');
-                            if (totalCasos == 0) {
-                              ChatMensajes mensaje1 = ChatMensajes(
-                                  authorId: auth.currentUser!.uid.trim(),
-                                  updatedAt: DateTime.now(),
-                                  mensaje:
-                                      'No se han encontrado más casos abiertos, el chat se cerrara a continuación',
-                                  tipo: 'text',
-                                  fechaHora: DateTime.now());
-                              await FirebaseFirestore.instance
-                                  .collection('rooms')
-                                  .doc(room.id)
-                                  .collection('messages')
-                                  .add(mensaje1.toMapText());
-                              await FirebaseFirestore.instance
-                                  .collection('rooms')
-                                  .doc(room.id)
-                                  .update({'finalizado': true});
-                              await ControladorChat().disminuirTurno();
-                              await FirebaseFirestore.instance
-                                  .collection('rooms')
-                                  .doc(room.id)
-                                  .update({
-                                'uid': room.id,
-                                'sinRespuesta': false,
-                                'finalizado': true,
-                              });
-                            }
-                            Navigator.pop(context);
-                          },
-                          text: 'Marcar como atendido',
-                          options: FFButtonOptions(
-                            width: 200.0,
-                            height: 50.0,
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            color: FlutterFlowTheme.of(context).turquoise,
-                            textStyle: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .override(
-                                  fontFamily: 'Lexend Deca',
-                                  color: Colors.white,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                            elevation: 3.0,
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          StreamBuilder<Usuario?>(
-            stream:
-                AuthHelper().getUsuarioStreamUID(widget.caso.uidSolicitante),
-            builder: (context, snapshot) {
-              // Customize what your widget looks like when it's loading.
-              if (!snapshot.hasData) {
-                return Center(
-                  child: SizedBox(
-                    width: 50.0,
-                    height: 50.0,
-                    child: CircularProgressIndicator(
-                      color: FlutterFlowTheme.of(context).primary,
-                    ),
-                  ),
-                );
-              }
-              final snapshotUser = snapshot.data!;
-              return Container(
-                width: MediaQuery.of(context).size.width * 1.0,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).primaryText,
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 4.0,
-                      color: Color(0x55000000),
-                      offset: Offset(0.0, 2.0),
-                    )
-                  ],
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(0.0),
-                    bottomRight: Radius.circular(0.0),
-                    topLeft: Radius.circular(16.0),
-                    topRight: Radius.circular(16.0),
-                  ),
-                ),
-                child: Padding(
-                  padding:
-                      EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 16.0, 40.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 4.0, 0.0, 0.0),
-                                child: Text(
-                                  'Información del solicitante',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodySmall
-                                      .override(
-                                        fontFamily: 'Lexend Deca',
-                                        color: Color(0xFF8B97A2),
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 4.0, 0.0, 0.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(40.0),
-                                      child: Image.network(
-                                        valueOrDefault<String>(
-                                          snapshotUser.urlImagen,
-                                          'https://images.unsplash.com/photo-1654537736400-bfae7cd99bac?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHx8&auto=format&fit=crop&w=900&q=60',
                                         ),
-                                        width: 40.0,
-                                        height: 40.0,
-                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        FutureBuilder<Activo?>(
+                          future: ActivoController().cargarActivoUID(
+                              widget.caso.uidDependencia,
+                              widget.caso.uidActivo),
+                          builder: (BuildContext context, snapshotActivo) {
+                            if (snapshotActivo.hasData) {
+                              return InkWell(
+                                onTap: () async {
+                                  Usuario usuario = await AuthHelper()
+                                          .cargarUsuarioDeFirebase() ??
+                                      Usuario();
+                                  late bool esadmin;
+                                  if (usuario.cargo != null) {
+                                    if (usuario.cargo == 'admin') {
+                                      esadmin = true;
+                                    } else {
+                                      esadmin = false;
+                                    }
+                                  } else {
+                                    esadmin = false;
+                                  }
+                                  if (estaDepedencia != null) {
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ActivoPerfilPageWidget(
+                                          activo: snapshotActivo.data!,
+                                          dependencia: estaDepedencia,
+                                          esadmin: esadmin,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          24.0, 20.0, 0.0, 0.0),
+                                      child: Text(
+                                        'Activo afectado',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodySmall
+                                            .override(
+                                              fontFamily: 'Lexend Deca',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .gray600,
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                       ),
                                     ),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          8.0, 0.0, 12.0, 0.0),
+                                          24.0, 4.0, 0.0, 0.0),
                                       child: Text(
-                                        snapshotUser.nombre!
-                                            .maybeHandleOverflow(
-                                          maxChars: 90,
-                                          replacement: '…',
-                                        ),
+                                        '${snapshotActivo.data!.nombre} marca ${snapshotActivo.data!.marca}',
                                         style: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .override(
-                                              fontFamily: 'Urbanist',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryBackground,
-                                            ),
+                                            .headlineSmall,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          24.0, 4.0, 24.0, 0.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Toca aquí para obtener más información de este activo',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodySmall
+                                                .override(
+                                                  fontFamily: 'Lexend Deca',
+                                                  color: Color(0xFF8B97A2),
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.normal,
+                                                ),
+                                          ),
+                                          Icon(
+                                            Icons.chevron_right_rounded,
+                                            color: FlutterFlowTheme.of(context)
+                                                .grayIcon,
+                                            size: 24.0,
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Stack(
-                        children: [
-                          Align(
-                            alignment: AlignmentDirectional(0.0, 0.0),
-                            child: FFButtonWidget(
-                              onPressed: () async {
-                                FirebaseAuth _auth = FirebaseAuth.instance;
-                                String? uidRoom = await ControladorChat()
-                                    .buscarChat(_auth.currentUser!.uid,
-                                        snapshotUser.uid!);
-                                if (uidRoom != null) {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ChatWidget(
-                                        nombre: snapshotUser.nombre.toString(),
-                                        otroUsuario: snapshotUser,
-                                        usuarios: [
-                                          _auth.currentUser!.uid,
-                                          snapshotUser.uid!
-                                        ],
-                                        uid: uidRoom.trim(),
-                                      ),
-                                    ),
-                                  );
-                                } else {
+                              );
+                            } else {
+                              return CircularProgressIndicator();
+                            }
+                          },
+                        ),
+                        Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [],
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 12.0, 0.0, 24.0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  FirebaseAuth auth = FirebaseAuth.instance;
+                                  CasosController().marcarCasoComoresuelto(
+                                      widget.caso,
+                                      auth.currentUser!.uid.toString().trim());
+                                  types.User otheruser = types.User(
+                                      id: widget.caso.uidSolicitante.trim());
                                   types.Room room = await FirebaseChatCore
                                       .instance
-                                      .createRoom(types.User(
-                                          id: snapshotUser.uid!,
-                                          firstName: snapshotUser.nombre!,
-                                          imageUrl: snapshotUser.urlImagen));
+                                      .createRoom(otheruser);
+                                  Activo activo = await ActivoController()
+                                      .cargarActivoUID(
+                                          widget.caso.uidDependencia,
+                                          widget.caso.uidActivo);
+
+                                  ChatMensajes mensaje1 = ChatMensajes(
+                                      authorId: auth.currentUser!.uid.trim(),
+                                      updatedAt: DateTime.now(),
+                                      mensaje:
+                                          'Se completo el caso de ${activo.nombre}',
+                                      tipo: 'text',
+                                      fechaHora: DateTime.now());
                                   await FirebaseFirestore.instance
                                       .collection('rooms')
                                       .doc(room.id)
-                                      .update({
-                                    'uid': room.id,
-                                    'sinRespuesta': false,
-                                    'finalizado': false,
-                                  });
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ChatWidget(
-                                        nombre: snapshotUser.nombre.toString(),
-                                        otroUsuario: snapshotUser,
-                                        usuarios: [
-                                          _auth.currentUser!.uid,
-                                          snapshotUser.uid!
-                                        ],
-                                        uid: room.id,
-                                        caso: widget.caso,
+                                      .collection('messages')
+                                      .add(mensaje1.toMapText());
+
+                                  int totalCasos = await CasosController()
+                                      .getTotalCasosCountSolicitanteFuture(
+                                          widget.caso.uidSolicitante.trim());
+
+                                  log('TotalCasos: $totalCasos');
+                                  if (totalCasos == 0) {
+                                    ChatMensajes mensaje1 = ChatMensajes(
+                                        authorId: auth.currentUser!.uid.trim(),
+                                        updatedAt: DateTime.now(),
+                                        mensaje:
+                                            'No se han encontrado más casos abiertos, el chat se cerrara a continuación',
+                                        tipo: 'text',
+                                        fechaHora: DateTime.now());
+                                    await FirebaseFirestore.instance
+                                        .collection('rooms')
+                                        .doc(room.id)
+                                        .collection('messages')
+                                        .add(mensaje1.toMapText());
+                                    await FirebaseFirestore.instance
+                                        .collection('rooms')
+                                        .doc(room.id)
+                                        .update({'finalizado': true});
+                                    await ControladorChat().disminuirTurno();
+                                    await FirebaseFirestore.instance
+                                        .collection('rooms')
+                                        .doc(room.id)
+                                        .update({
+                                      'uid': room.id,
+                                      'sinRespuesta': false,
+                                      'finalizado': true,
+                                    });
+                                  }
+                                  Navigator.pop(context);
+                                },
+                                text: 'Marcar como atendido',
+                                options: FFButtonOptions(
+                                  width: 200.0,
+                                  height: 50.0,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  color: FlutterFlowTheme.of(context).turquoise,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Lexend Deca',
+                                        color: Colors.white,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w500,
                                       ),
-                                    ),
-                                  );
-                                }
-                              },
-                              text: 'Chat',
-                              icon: Icon(
-                                Icons.forum_outlined,
-                                size: 15.0,
-                              ),
-                              options: FFButtonOptions(
-                                width: 110.0,
-                                height: 50.0,
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                color: FlutterFlowTheme.of(context).primary,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .override(
-                                      fontFamily: 'Lexend Deca',
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                elevation: 3.0,
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1.0,
+                                  elevation: 3.0,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(30.0),
                                 ),
-                                borderRadius: BorderRadius.circular(30.0),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 12.0, 0.0, 24.0),
+                              child: FFButtonWidget(
+                                onPressed: () async {},
+                                text: 'Reportar este caso',
+                                options: FFButtonOptions(
+                                  width: 200.0,
+                                  height: 50.0,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  color: FlutterFlowTheme.of(context).warning,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Lexend Deca',
+                                        color: Colors.white,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                  elevation: 3.0,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(30.0),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              );
-            },
+                StreamBuilder<Usuario?>(
+                  stream: AuthHelper()
+                      .getUsuarioStreamUID(widget.caso.uidSolicitante),
+                  builder: (context, snapshot) {
+                    // Customize what your widget looks like when it's loading.
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: SizedBox(
+                          width: 50.0,
+                          height: 50.0,
+                          child: CircularProgressIndicator(
+                            color: FlutterFlowTheme.of(context).primary,
+                          ),
+                        ),
+                      );
+                    }
+                    final snapshotUser = snapshot.data!;
+                    return Container(
+                      width: MediaQuery.of(context).size.width * 1.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 4.0,
+                            color: Color(0x55000000),
+                            offset: Offset(0.0, 2.0),
+                          )
+                        ],
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(0.0),
+                          bottomRight: Radius.circular(0.0),
+                          topLeft: Radius.circular(16.0),
+                          topRight: Radius.circular(16.0),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 16.0, 16.0, 40.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 4.0, 0.0, 0.0),
+                                      child: Text(
+                                        'Información del solicitante',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodySmall
+                                            .override(
+                                              fontFamily: 'Lexend Deca',
+                                              color: Color(0xFF8B97A2),
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 4.0, 0.0, 0.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(40.0),
+                                            child: Image.network(
+                                              valueOrDefault<String>(
+                                                snapshotUser.urlImagen,
+                                                'https://images.unsplash.com/photo-1654537736400-bfae7cd99bac?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNXx8fGVufDB8fHx8&auto=format&fit=crop&w=900&q=60',
+                                              ),
+                                              width: 40.0,
+                                              height: 40.0,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    8.0, 0.0, 12.0, 0.0),
+                                            child: Text(
+                                              snapshotUser.nombre!
+                                                  .maybeHandleOverflow(
+                                                maxChars: 90,
+                                                replacement: '…',
+                                              ),
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .override(
+                                                        fontFamily: 'Urbanist',
+                                                        color: FlutterFlowTheme
+                                                                .of(context)
+                                                            .secondaryBackground,
+                                                      ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Stack(
+                              children: [
+                                Align(
+                                  alignment: AlignmentDirectional(0.0, 0.0),
+                                  child: FFButtonWidget(
+                                    onPressed: () async {
+                                      FirebaseAuth _auth =
+                                          FirebaseAuth.instance;
+                                      String? uidRoom = await ControladorChat()
+                                          .buscarChat(_auth.currentUser!.uid,
+                                              snapshotUser.uid!);
+                                      if (uidRoom != null) {
+                                        await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ChatWidget(
+                                              nombre: snapshotUser.nombre
+                                                  .toString(),
+                                              otroUsuario: snapshotUser,
+                                              usuarios: [
+                                                _auth.currentUser!.uid,
+                                                snapshotUser.uid!
+                                              ],
+                                              uid: uidRoom.trim(),
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        types.Room room = await FirebaseChatCore
+                                            .instance
+                                            .createRoom(types.User(
+                                                id: snapshotUser.uid!,
+                                                firstName: snapshotUser.nombre!,
+                                                imageUrl:
+                                                    snapshotUser.urlImagen));
+                                        await FirebaseFirestore.instance
+                                            .collection('rooms')
+                                            .doc(room.id)
+                                            .update({
+                                          'uid': room.id,
+                                          'sinRespuesta': false,
+                                          'finalizado': false,
+                                        });
+                                        await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ChatWidget(
+                                              nombre: snapshotUser.nombre
+                                                  .toString(),
+                                              otroUsuario: snapshotUser,
+                                              usuarios: [
+                                                _auth.currentUser!.uid,
+                                                snapshotUser.uid!
+                                              ],
+                                              uid: room.id,
+                                              caso: widget.caso,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    text: 'Chat',
+                                    icon: Icon(
+                                      Icons.forum_outlined,
+                                      size: 15.0,
+                                    ),
+                                    options: FFButtonOptions(
+                                      width: 110.0,
+                                      height: 50.0,
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 0.0, 0.0, 0.0),
+                                      iconPadding:
+                                          EdgeInsetsDirectional.fromSTEB(
+                                              0.0, 0.0, 0.0, 0.0),
+                                      color:
+                                          FlutterFlowTheme.of(context).primary,
+                                      textStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .override(
+                                            fontFamily: 'Lexend Deca',
+                                            color: Colors.white,
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                      elevation: 3.0,
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
+          if (blur)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(0),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: 4,
+                  sigmaY: 4,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  // ignore: prefer_const_literals_to_create_immutables
+                  children: [
+                    Align(
+                      alignment: AlignmentDirectional(0, 0),
+
+                      child: _cajaAdvertencia(
+                        context,
+                        '¿Esta seguro que desea eliminar este activo?',
+                        widget.caso,
+                      ),
+                      //. animateOnActionTrigger(animationsMap['cajaAdvertenciaOnActionTriggerAnimation']!,hasBeenTriggered: true),
+                    ),
+                  ],
+                ),
+              ),
+            ),
         ],
+      ),
+    );
+  }
+
+  Widget _cajaAdvertencia(BuildContext context, mensaje, objetoaEliminar) {
+    return Align(
+      alignment: const AlignmentDirectional(0, 0),
+      child: Padding(
+        padding: const EdgeInsetsDirectional.fromSTEB(16, 24, 16, 5),
+        child: Container(
+          width: 450,
+          constraints: const BoxConstraints(
+            maxWidth: 500,
+            maxHeight: 300,
+          ),
+          decoration: BoxDecoration(
+            color: FlutterFlowTheme.of(context).secondaryBackground,
+            boxShadow: const [
+              BoxShadow(
+                blurRadius: 7,
+                color: Color(0x4D000000),
+                offset: Offset(0, 3),
+              )
+            ],
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                  child: Text(
+                    'Advertencia',
+                    style: FlutterFlowTheme.of(context).title2.override(
+                          fontFamily: 'Poppins',
+                          color: Color(0xBFDF2424),
+                          useGoogleFonts: GoogleFonts.asMap().containsKey(
+                              FlutterFlowTheme.of(context).title2Family),
+                        ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                  child: Text(
+                    mensaje,
+                    style: FlutterFlowTheme.of(context).bodyText1.override(
+                          fontFamily: 'Poppins',
+                          fontSize: 18,
+                          useGoogleFonts: GoogleFonts.asMap().containsKey(
+                              FlutterFlowTheme.of(context).bodyText1Family),
+                        ),
+                  ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(12.0, 8.0, 8.0, 8.0),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.47,
+                          child: TextFormField(
+                            onChanged: (value) async {},
+                            controller: _model.textControllerDescripcionReporte,
+                            autofocus: true,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              hintText: 'Escriba sus razones',
+                              hintStyle: FlutterFlowTheme.of(context)
+                                  .bodySmall
+                                  .override(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 16.0,
+                                  ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryText,
+                                  width: 1.5,
+                                ),
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  width: 1.5,
+                                ),
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context).error,
+                                  width: 1.5,
+                                ),
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context).error,
+                                  width: 1.5,
+                                ),
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                            ),
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 16.0,
+                                ),
+                            maxLines: 7,
+                            minLines: 4,
+                            validator: _model.textController10Validator
+                                .asValidator(context),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
+                  child: FFButtonWidget(
+                    onPressed: () async {},
+                    text:
+                        'Sí, deseo reportar este caso y al técnico que lo fina',
+                    options: FFButtonOptions(
+                      width: double.infinity,
+                      height: 50,
+                      color: Color(0xFFFC4253),
+                      textStyle: FlutterFlowTheme.of(context)
+                          .subtitle2
+                          .override(
+                            fontFamily: 'Poppins',
+                            color: FlutterFlowTheme.of(context).tertiary,
+                            useGoogleFonts: GoogleFonts.asMap().containsKey(
+                                FlutterFlowTheme.of(context).subtitle2Family),
+                          ),
+                      elevation: 2,
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    showLoadingIndicator: false,
+                  ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                      child: FFButtonWidget(
+                        onPressed: () {
+                          setState(() {
+                            blur = false;
+                          });
+                        },
+                        text: 'No, cancelar',
+                        options: FFButtonOptions(
+                          width: 170,
+                          height: 50,
+                          color: FlutterFlowTheme.of(context).primaryBackground,
+                          textStyle: FlutterFlowTheme.of(context)
+                              .subtitle2
+                              .override(
+                                fontFamily: 'Poppins',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                useGoogleFonts: GoogleFonts.asMap().containsKey(
+                                    FlutterFlowTheme.of(context)
+                                        .subtitle2Family),
+                              ),
+                          elevation: 0,
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        showLoadingIndicator: false,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

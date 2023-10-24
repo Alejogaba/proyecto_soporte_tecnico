@@ -118,7 +118,12 @@ class _ChatWidgetState extends State<ChatWidget> {
                       widget.otroUsuario.uid!.trim()),
                   builder: (context, snapshot) {
                     if (snapshot.hasData && snapshot.data != 0) {
-                      return InkWell(
+                      return PopupMenuButton(
+                        itemBuilder: (BuildContext context) =>
+                            <PopupMenuEntry<int>>[
+                          PopupMenuItem<int>(
+                            value: 0,
+                            child: InkWell(
                         onTap: () {
                           Navigator.push(
                             context,
@@ -191,7 +196,15 @@ class _ChatWidgetState extends State<ChatWidget> {
                             ],
                           ),
                         ),
+                      ),
+                          ),
+                          PopupMenuItem<int>(
+                            value: 1,
+                            child: Text('Option 2'),
+                          ),
+                        ],
                       );
+                      
                     } else if (snapshot.hasData &&
                         snapshot.data.toString() == '0') {
                       return Center(
@@ -230,17 +243,18 @@ class _ChatWidgetState extends State<ChatWidget> {
           elevation: 2.0,
         ),
         body: ChatPageFirebase(
-            nombre: widget.nombre,
-            currentUserToken: widget.currentUserToken,
-            otherUserToken: widget.otherUserToken,
-            chatUid: widget.uid,
-            room: types.Room(
-                id: widget.uid, type: types.RoomType.direct, users: users),
-            msjChatBot: widget.msjChatBot,
-            otroUsuario: widget.otroUsuario,
-            caso: widget.caso,
-            mensajeImagen: widget.mensajeImagen,
-            activo: widget.activo,
-            dependencia: widget.dependencia,));
+          nombre: widget.nombre,
+          currentUserToken: widget.currentUserToken,
+          otherUserToken: widget.otherUserToken,
+          chatUid: widget.uid,
+          room: types.Room(
+              id: widget.uid, type: types.RoomType.direct, users: users),
+          msjChatBot: widget.msjChatBot,
+          otroUsuario: widget.otroUsuario,
+          caso: widget.caso,
+          mensajeImagen: widget.mensajeImagen,
+          activo: widget.activo,
+          dependencia: widget.dependencia,
+        ));
   }
 }

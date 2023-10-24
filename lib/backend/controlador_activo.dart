@@ -62,7 +62,7 @@ class ActivoController {
       BuildContext context, Activo activoAguardar, String uidDpendencia) async {
     try {
       FirebaseFirestore _db = FirebaseFirestore.instance;
-      if (activoAguardar.uid.isEmpty) {
+      if (activoAguardar.uid.trim().isEmpty) {
         await _db
             .collection("dependencias")
             .doc(uidDpendencia)
@@ -82,9 +82,9 @@ class ActivoController {
       } else {
         await _db
             .collection("dependencias")
-            .doc(uidDpendencia)
+            .doc(uidDpendencia.trim())
             .collection('activos')
-            .doc(activoAguardar.uid)
+            .doc(activoAguardar.uid.trim())
             .update(activoAguardar.toMap());
         return 'ok';
       }

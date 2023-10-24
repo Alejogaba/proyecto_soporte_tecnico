@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:login2/backend/controlador_activo.dart';
 import 'package:login2/model/activo.dart';
 import 'package:login2/model/dependencias.dart';
@@ -25,7 +27,7 @@ class RegistrarEquipoWidget extends StatefulWidget {
   final Activo? activoEdit;
   final String? barcode;
   const RegistrarEquipoWidget(
-      {Key? key, required this.dependencia, this.activoEdit,this.barcode})
+      {Key? key, required this.dependencia, this.activoEdit, this.barcode})
       : super(key: key);
 
   @override
@@ -53,9 +55,9 @@ class _RegistrarEquipoWidgetState extends State<RegistrarEquipoWidget> {
       _model.marcaController.text = widget.activoEdit!.marca;
       _model.detallesController.text = widget.activoEdit!.detalles;
       _model.uploadedFileUrl = widget.activoEdit!.urlImagen!;
-      _model.barcodeController.text = widget.activoEdit!.barcode??'';
-    }else{
-      if(widget.barcode!=null){
+      _model.barcodeController.text = widget.activoEdit!.barcode ?? '';
+    } else {
+      if (widget.barcode != null) {
         _model.barcodeController.text = widget.barcode!;
       }
     }
@@ -464,73 +466,101 @@ class _RegistrarEquipoWidgetState extends State<RegistrarEquipoWidget> {
                           },
                         ),
                       ),
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
-                        child: TextFormField(
-                          controller: _model.barcodeController,
-                          obscureText: false,
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            hintText: 'Número de serial',
-                            hintStyle: FlutterFlowTheme.of(context)
-                                .headlineSmall
-                                .override(
-                                  fontFamily: 'Urbanist',
-                                  color: FlutterFlowTheme.of(context).grayIcon,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 1.0,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 1.0,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            errorBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 1.0,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            focusedErrorBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 1.0,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
-                              ),
-                            ),
-                            contentPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 24.0, 0.0, 24.0),
+                      Row(
+                        children: [
+                          
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 4.0, 0.0, 0.0),
+                            child: IconButton(
+                                onPressed: () async {
+                                 
+                                  await FlutterBarcodeScanner.scanBarcode(
+                                          '#C62828', // scanning line color
+                                          'Cancelar', // cancel button text
+                                          true, // whether to show the flash icon
+                                          ScanMode.BARCODE)
+                                      .then((value) async {
+                                    if (value.isNotEmpty && value.length > 4) {
+                                      setState(() {
+                                        _model.barcodeController.text =
+                                            value.removeAllWhitespace;
+                                      });
+                                    }
+                                  });
+                                },
+                                icon: Icon(LineIcons.barcode)),
                           ),
-                          style: FlutterFlowTheme.of(context).headlineSmall,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'No deje este campo vacio';
-                            }
-                            return null;
-                          },
-                        ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 4.0, 0.0, 0.0),
+                            child: TextFormField(
+                              controller: _model.barcodeController,
+                              obscureText: false,
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                hintText: 'Número de serial',
+                                hintStyle: FlutterFlowTheme.of(context)
+                                    .headlineSmall
+                                    .override(
+                                      fontFamily: 'Urbanist',
+                                      color:
+                                          FlutterFlowTheme.of(context).grayIcon,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4.0),
+                                    topRight: Radius.circular(4.0),
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4.0),
+                                    topRight: Radius.circular(4.0),
+                                  ),
+                                ),
+                                errorBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4.0),
+                                    topRight: Radius.circular(4.0),
+                                  ),
+                                ),
+                                focusedErrorBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(4.0),
+                                    topRight: Radius.circular(4.0),
+                                  ),
+                                ),
+                                contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 24.0, 0.0, 24.0),
+                              ),
+                              style: FlutterFlowTheme.of(context).headlineSmall,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'No deje este campo vacio';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding:
@@ -544,7 +574,8 @@ class _RegistrarEquipoWidgetState extends State<RegistrarEquipoWidget> {
                                   .bodySmall
                                   .override(
                                     fontFamily: 'Urbanist',
-                                    color: FlutterFlowTheme.of(context).primaryText,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
                                     fontWeight: FontWeight.w500,
                                   ),
                             ),
@@ -654,6 +685,21 @@ class _RegistrarEquipoWidgetState extends State<RegistrarEquipoWidget> {
                                         snackStyle: SnackStyle.FLOATING,
                                         backgroundColor:
                                             Color.fromARGB(211, 28, 138, 46),
+                                        icon: Icon(
+                                          Icons.check,
+                                          color: Colors.white,
+                                        ),
+                                        colorText:
+                                            Color.fromARGB(255, 228, 219, 218));
+                                    Navigator.of(context).pop(activo);
+                                  } else {
+                                    Get.snackbar('Error',
+                                        'Ha ocurrido un error al momento de registrar el activo',
+                                        duration: Duration(seconds: 5),
+                                        margin: EdgeInsets.fromLTRB(4, 8, 4, 0),
+                                        snackStyle: SnackStyle.FLOATING,
+                                        backgroundColor:
+                                            Color.fromARGB(220, 190, 28, 16),
                                         icon: Icon(
                                           Icons.check,
                                           color: Colors.white,

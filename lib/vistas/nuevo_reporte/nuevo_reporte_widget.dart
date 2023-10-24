@@ -36,7 +36,6 @@ import 'nuevo_reporte_model.dart';
 export 'nuevo_reporte_model.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:image/image.dart' as img;
-import 'dart:typed_data';
 
 class NuevoReporteWidget extends StatefulWidget {
   const NuevoReporteWidget({
@@ -716,12 +715,10 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                               .buscarChatFinalizado(
                                   "PaAQ6DjhL1Yl45h1bloNerwPFt82",
                                   auth.currentUser!.uid);
-                          if (tieneChatFinalizado != null) {
-                            await FirebaseChatCore.instance.deleteRoom(room.id);
-                            room = await FirebaseChatCore.instance
-                                .createRoom(otheruser);
-                          }
-                          if (usuariosObtenidos.length > 0) {
+                          await FirebaseChatCore.instance.deleteRoom(room.id);
+                          room = await FirebaseChatCore.instance
+                              .createRoom(otheruser);
+                                                  if (usuariosObtenidos.length > 0) {
                             final collectionRef = FirebaseFirestore.instance
                                 .collection('rooms')
                                 .doc(room.id);

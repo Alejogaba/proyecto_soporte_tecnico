@@ -6,13 +6,11 @@ import 'package:login2/vistas/lista_funcionarios/Lista/views/FuncioInfo.dart';
 
 import '../../auth/firebase_auth/auth_helper.dart';
 import '../../backend/controlador_dependencias.dart';
-import '../../backend/diseño_interfaz_app_theme.dart';
 import '../../flutter_flow/flutter_flow_animations.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../model/dependencias.dart';
 import '../../model/usuario.dart';
 import 'funcionarioForm.dart';
-import 'funcionario_information.dart';
 
 class ListaFuncionarioss extends StatefulWidget {
   const ListaFuncionarioss({

@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:logger/logger.dart';
 
-import '../model/activo.dart';
 import '../model/caso.dart';
 
 class CasosController {
@@ -55,26 +54,6 @@ class CasosController {
   return casos;
 }
 
-
-  Future<List<Caso>> obtenerCasosFuture({String uidSolicitante = ''}) async {
-    QuerySnapshot querySnapshot;
-
-    if (uidSolicitante.isEmpty) {
-      querySnapshot =
-          await FirebaseFirestore.instance.collection('casos').get();
-    } else {
-      querySnapshot = await FirebaseFirestore.instance
-          .collection('casos')
-          .where('uidSolicitante', isEqualTo: uidSolicitante)
-          .get();
-    }
-
-    List<Caso> casos = querySnapshot.docs
-        .map((doc) => Caso.fromMap(doc.data() as Map<String, dynamic>))
-        .toList();
-
-    return casos;
-  }
 
   Future<List<Caso>> obtenerCasoSolucionadosRangoFecha(
       DateTime fechaInicial, DateTime fechaFinal) async {

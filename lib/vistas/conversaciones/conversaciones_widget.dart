@@ -314,7 +314,7 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
 
                             Usuario? usuarioActual =
                                 await AuthHelper().cargarUsuarioDeFirebase();
-                            if (auth.currentUser != null && token != null) {
+                            if (auth.currentUser != null) {
                               var docRef = FirebaseFirestore.instance
                                   .collection("users")
                                   .doc(auth.currentUser!.uid);
@@ -468,7 +468,7 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
 
                             Usuario? usuarioActual =
                                 await AuthHelper().cargarUsuarioDeFirebase();
-                            if (auth.currentUser != null && token != null) {
+                            if (auth.currentUser != null) {
                               var docRef = FirebaseFirestore.instance
                                   .collection("users")
                                   .doc(auth.currentUser!.uid);
@@ -597,7 +597,7 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
 
                           Usuario? usuarioActual =
                               await AuthHelper().cargarUsuarioDeFirebase();
-                          if (auth.currentUser != null && token != null) {
+                          if (auth.currentUser != null) {
                             var docRef = FirebaseFirestore.instance
                                 .collection("users")
                                 .doc(auth.currentUser!.uid);

@@ -14,16 +14,12 @@ import 'package:login2/vistas/activo_perfil_page/activo_perfil_page_widget.dart'
 import 'package:login2/vistas/login/LoginMOD.dart';
 
 import '../../auth/firebase_auth/auth_helper.dart';
-import '../../auth/firebase_auth/auth_util.dart';
 import '../../backend/controlador_activo.dart';
-import '../../flutter_flow/flutter_flow_icon_button.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
-import '../../flutter_flow/flutter_flow_widgets.dart';
 import '../../model/activo.dart';
 import 'package:badges/badges.dart' as badges;
 
 import '../../model/usuario.dart';
-import '../perfil/PerfilMOD/home.dart';
 
 class ListaActivosFuncionariosPageWidget extends StatefulWidget {
   final Dependencia? dependencia;

@@ -27,7 +27,6 @@ import 'dart:async';
 import 'package:dotted_border/dotted_border.dart';
 
 import '../../model/activo.dart';
-import '../lista_activos_page/lista_activos_page_widget.dart';
 
 class ResgistrarActivoPageWidget extends StatefulWidget {
   final String? operacionaRealizar;

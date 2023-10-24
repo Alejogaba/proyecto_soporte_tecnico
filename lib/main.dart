@@ -25,7 +25,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'index.dart';
-import 'model/dependencias.dart';
 import 'model/usuario.dart';
 
 void main() async {

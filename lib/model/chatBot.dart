@@ -84,11 +84,9 @@ class ChatBot {
           room = await FirebaseChatCore.instance.createRoom(otheruser);
           String? tieneChatFinalizado = await ControladorChat()
               .buscarChatFinalizado(element.uid!, auth.currentUser!.uid);
-          if (tieneChatFinalizado != null) {
-            await FirebaseChatCore.instance.deleteRoom(room.id);
-            room = await FirebaseChatCore.instance.createRoom(otheruser);
-          }
-
+          await FirebaseChatCore.instance.deleteRoom(room.id);
+          room = await FirebaseChatCore.instance.createRoom(otheruser);
+        
           final collectionRef =
               FirebaseFirestore.instance.collection('rooms').doc(room.id);
           ChatMensajes mensaje1 = ChatMensajes(

@@ -13,7 +13,6 @@ import '../../auth/firebase_auth/auth_helper.dart';
 import '../../model/usuario.dart';
 import '../../theme.dart';
 import '../cambiar_password/cambiar_password_widget.dart';
-import '../perfil/PerfilMOD/home.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);

@@ -1,6 +1,7 @@
-import 'index.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+import '../flutter_flow_util.dart';
 
 class FFChatPreview extends StatelessWidget {
   const FFChatPreview({

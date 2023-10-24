@@ -18,7 +18,6 @@ import 'package:login2/model/usuario.dart';
 import 'package:login2/vistas/activo_perfil_page/activo_perfil_page_widget.dart';
 
 import '../../backend/controlador_activo.dart';
-import '../../flutter_flow/flutter_flow_icon_button.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../model/activo.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -368,24 +367,22 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                                     .data![
                                                                         index]!
                                                                     .uid);
-                                                    if (caso != null) {
-                                                      final Activo? result =
-                                                          await Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                DetalleReporteWidget(
-                                                                    caso)),
-                                                      );
-                                                      if (result != null) {
-                                                        // ignore: use_build_context_synchronously
-                                                        Navigator.pop(
-                                                            context, result);
-                                                      } else {
-                                                        setState(() {});
-                                                      }
+                                                    final Activo? result =
+                                                        await Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              DetalleReporteWidget(
+                                                                  caso!)),
+                                                    );
+                                                    if (result != null) {
+                                                      // ignore: use_build_context_synchronously
+                                                      Navigator.pop(
+                                                          context, result);
+                                                    } else {
+                                                      setState(() {});
                                                     }
-                                                  } else {
+                                                                                                    } else {
                                                     Usuario usuario =
                                                         await AuthHelper()
                                                                 .cargarUsuarioDeFirebase() ??

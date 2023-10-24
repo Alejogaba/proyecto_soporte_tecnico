@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login2/vistas/login/sign_in.dart';
 
-import 'sign_up.dart';
 import '../../flutter_flow/flutter_flow_model.dart';
-import '../login/theme.dart';
-import '../../utils/bubble_indicator_painter.dart';
 import 'login_model.dart';
 
 class LoginPage extends StatefulWidget {

@@ -10,7 +10,6 @@ import 'package:login2/vistas/lista_activos_page/lista_activos_page_widget.dart'
 import 'package:login2/vistas/login/LoginMOD.dart';
 import 'package:login2/vistas/perfil/PerfilMOD/home.dart';
 
-import '../../auth/firebase_auth/auth_util.dart';
 import '../../model/usuario.dart';
 
 import '../../model/dependencias.dart';

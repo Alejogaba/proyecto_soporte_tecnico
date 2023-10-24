@@ -2,13 +2,14 @@ import 'package:login2/flutter_flow/chat/chat_page_firebase.dart';
 import 'package:login2/model/chat_mensajes.dart';
 
 import '../../model/usuario.dart';
-import 'index.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+
+import '../flutter_flow_util.dart';
 
 enum TimeDisplaySetting {
   alwaysVisible,

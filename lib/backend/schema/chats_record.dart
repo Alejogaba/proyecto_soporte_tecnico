@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import '../../flutter_flow/chat/index.dart';
 import '/backend/schema/util/firestore_util.dart';
 import '/backend/schema/util/schema_util.dart';
 
-import 'index.dart';
 
 class ChatsRecord extends FirestoreRecord {
   ChatsRecord._(

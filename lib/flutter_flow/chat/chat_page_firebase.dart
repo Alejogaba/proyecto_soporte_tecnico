@@ -24,12 +24,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:login2/model/chat_mensajes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../auth/firebase_auth/auth_helper.dart';
 import '../../model/activo.dart';
 import '../../model/caso.dart';
 import '../../model/dependencias.dart';
 import '../../model/usuario.dart';
-import '../../utils/utilidades.dart';
 
 class ChatPageFirebase extends StatefulWidget {
   const ChatPageFirebase(
@@ -272,7 +270,7 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
         prefs.getString('codigoProceso-${widget.room.id}');
     log("Esperando respuesta: " + esperandoRespuesta.toString());
     log("codigoRespuesta: " + codigoRespuestaProceso.toString());
-    if (esperandoRespuesta && codigoRespuestaProceso != null) {
+    if (esperandoRespuesta) {
       if (message.toLowerCase().contains('si') ||
           message.toLowerCase().contains('no')) {
         if (message.toLowerCase().contains('no')) {
@@ -340,9 +338,39 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
               widget.caso!.finalizadoPor = 'PaAQ6DjhL1Yl45h1bloNerwPFt82';
               CasosController().marcarCasoComoresuelto(
                   widget.caso!, 'PaAQ6DjhL1Yl45h1bloNerwPFt82');
+              int totalCasos = await CasosController()
+                                .getTotalCasosCountSolicitanteFuture(
+                                    widget.caso!.uidSolicitante.trim());
+                            log('TotalCasos: $totalCasos');
+                            if (totalCasos == 0) {
+                              ChatMensajes mensaje1 = ChatMensajes(
+                                  authorId: auth.currentUser!.uid.trim(),
+                                  updatedAt: DateTime.now(),
+                                  mensaje:
+                                      'No se han encontrado más casos abiertos, el chat se cerrara a continuación',
+                                  tipo: 'text',
+                                  fechaHora: DateTime.now());
+                              await FirebaseFirestore.instance
+                                  .collection('rooms')
+                                  .doc(widget.room.id)
+                                  .collection('messages')
+                                  .add(mensaje1.toMapText());
+                              await FirebaseFirestore.instance
+                                  .collection('rooms')
+                                  .doc(widget.room.id)
+                                  .update({'finalizado': true});
+                              await FirebaseFirestore.instance
+                                  .collection('rooms')
+                                  .doc(widget.room.id)
+                                  .update({
+                                'sinRespuesta': false,
+                                'finalizado': true,
+                              });
+                            }
+                            Navigator.pop(context);
             }
           } else {
-            secuenciaConsultarTiempoEspera(auth, prefs, codigoRespuestaProceso);
+            secuenciaConsultarTiempoEspera(auth, prefs, codigoRespuestaProceso??'');
           }
 
           prefs.clear();

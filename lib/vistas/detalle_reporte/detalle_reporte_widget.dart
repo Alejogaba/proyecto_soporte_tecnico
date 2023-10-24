@@ -17,7 +17,6 @@ import '../../model/usuario.dart';
 import '../activo_perfil_page/activo_perfil_page_widget.dart';
 import '../chat/chat_widget.dart';
 import '/backend/backend.dart';
-import '../components/cancel_trip_h_o_s_t_widget.dart';
 import '/flutter_flow/flutter_flow_expanded_image_view.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';

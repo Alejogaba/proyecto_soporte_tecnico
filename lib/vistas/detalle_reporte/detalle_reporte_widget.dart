@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
@@ -939,9 +940,98 @@ class _DetalleReporteWidgetState extends State<DetalleReporteWidget> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                   child: FFButtonWidget(
-                    onPressed: () async {},
-                    text:
-                        'Sí, deseo reportar este caso y al técnico que lo fina',
+                    onPressed: () async {
+                      FirebaseAuth auth = FirebaseAuth.instance;
+                      if (auth.currentUser != null) {
+                        log('Current user: ' +
+                            auth.currentUser!.uid.toString());
+                        Caso casoAregistrar = widget.caso;
+
+                        final collectionRef = FirebaseFirestore.instance
+                            .collection('dependencias')
+                            .doc(widget.caso.uidDependencia)
+                            .collection('activos')
+                            .doc(widget.caso.uidActivo);
+
+                        List<Usuario> usuariosObtenidos = [Usuario()];
+
+                        types.User otheruser =
+                            types.User(id: "S4AhLGE5jlVQHF020eqwhJeu1R72");
+                        types.Room room = await FirebaseChatCore.instance
+                            .createRoom(otheruser);
+                        ChatMensajes mensaje1 = ChatMensajes(
+                            authorId: auth.currentUser!.uid.trim(),
+                            updatedAt: DateTime.now(),
+                            mensaje: 'Nuevo reporte',
+                            tipo: 'text',
+                            fechaHora: DateTime.now());
+                        await FirebaseFirestore.instance
+                            .collection('rooms')
+                            .doc(room.id)
+                            .collection('messages')
+                            .add(mensaje1.toMapText());
+                        
+
+                        Usuario tecnico = await AuthHelper()
+                            .getUsuarioFutureUID(casoAregistrar.finalizadoPor!)??Usuario();
+
+                        final collectionRefRoom = FirebaseFirestore.instance
+                            .collection('rooms')
+                            .doc(room.id);
+                        ChatMensajes mensaje2 = ChatMensajes(
+                            authorId: auth.currentUser!.uid.trim(),
+                            updatedAt: DateTime.now().add(Duration(seconds: 1)),
+                            mensaje:
+                                'Detalles del caso reportado: \n-Fecha:${DateFormat('dd MMM', 'es_CO').format(casoAregistrar.fecha)}\n-Hora:${DateFormat('hh:mm a', 'es_CO').format(casoAregistrar.fecha)}\n-Era urgente:${(casoAregistrar.prioridad ? 'Sí' : 'No')}\n-Técnico que cerro el caso:${tecnico.nombre}\n-Descripción del problema:${casoAregistrar.descripcion
+                                }',
+                            tipo: 'text',
+                            fechaHora:
+                                DateTime.now().add(Duration(seconds: 1)));
+                        await FirebaseFirestore.instance
+                            .collection('rooms')
+                            .doc(room.id)
+                            .collection('messages')
+                            .add(mensaje2.toMapText());
+
+                        ChatMensajes mensaje3 = ChatMensajes(
+                            authorId: auth.currentUser!.uid.trim(),
+                            updatedAt: DateTime.now(),
+                            mensaje: 'Razón: ${_model.textControllerDescripcionReporte}',
+                            tipo: 'text',
+                            fechaHora: DateTime.now());
+                        await FirebaseFirestore.instance
+                            .collection('rooms')
+                            .doc(room.id)
+                            .collection('messages')
+                            .add(mensaje3.toMapText());
+                        
+                            String? token =
+                              await FirebaseMessaging.instance.getToken();
+                          List<String> usuarios = [
+                            auth.currentUser!.uid,
+                            'S4AhLGE5jlVQHF020eqwhJeu1R72',
+                          ];
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatWidget(
+                                  currentUserToken: token,
+                                  otherUserToken: null,
+                                  nombre: 'Jefe de la Oficina de las TIC',
+                                  usuarios: usuarios,
+                                  uid: room.id.trim(),
+                                  otroUsuario: Usuario(
+                                      nombre: 'Jefe de la Oficina de las TIC',
+                                      uid: 'S4AhLGE5jlVQHF020eqwhJeu1R72',
+                                      urlImagen:
+                                          'https://firebasestorage.googleapis.com/v0/b/proyecto-soporte-tecnico.appspot.com/o/Funcionarios%2F1216973345.jpg?alt=media&token=39c258f1-feae-43fa-b89e-de16b9513ffc1216973345.jpg'),
+                                  caso: casoAregistrar,
+                                  ),
+                            ),
+                          );
+                      }
+                    },
+                    text: 'Reportar',
                     options: FFButtonOptions(
                       width: double.infinity,
                       height: 50,

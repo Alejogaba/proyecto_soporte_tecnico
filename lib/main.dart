@@ -167,8 +167,8 @@ class NavBarPage extends StatefulWidget {
 
 /// This is the private State class that goes with NavBarPage.
 class _NavBarPageState extends State<NavBarPage> {
-  String _currentPageName = 'interfazPrincipal';
   late Widget? _currentPage;
+  String _currentPageName = 'interfazPrincipal';
 
   @override
   void initState() {
@@ -249,12 +249,12 @@ class NuevaNavBar extends StatefulWidget {
 }
 
 class _NuevaNavBarState extends State<NuevaNavBar> {
-  int _selectedIndex = 0;
-
   static const List<Widget> _widgetOptions = <Widget>[
     ConversacionesWidget(),
     InterfazPrincipalWidget(),
   ];
+
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -325,19 +325,20 @@ class _NuevaNavBarState extends State<NuevaNavBar> {
 
 class NuevaNavBarFuncionario extends StatefulWidget {
   const NuevaNavBarFuncionario({Key? key}) : super(key: key);
+
   @override
   _NuevaNavBarStateFuncionario createState() => _NuevaNavBarStateFuncionario();
 }
 
 class _NuevaNavBarStateFuncionario extends State<NuevaNavBarFuncionario> {
-  int _selectedIndex = 0;
-
   _NuevaNavBarStateFuncionario();
 
   static const List<Widget> _widgetOptions = <Widget>[
     ConversacionesWidget(),
     ListaActivosFuncionariosPageWidget(dependencia: null),
   ];
+
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -408,13 +409,12 @@ class _NuevaNavBarStateFuncionario extends State<NuevaNavBarFuncionario> {
 
 class NuevaNavBarAdmin extends StatefulWidget {
   const NuevaNavBarAdmin({Key? key}) : super(key: key);
+
   @override
   _NuevaNavBarStateAdmin createState() => _NuevaNavBarStateAdmin();
 }
 
 class _NuevaNavBarStateAdmin extends State<NuevaNavBarAdmin> {
-  int _selectedIndex = 0;
-
   _NuevaNavBarStateAdmin();
 
   static const List<Widget> _widgetOptions = <Widget>[
@@ -422,6 +422,8 @@ class _NuevaNavBarStateAdmin extends State<NuevaNavBarAdmin> {
     InterfazPrincipalWidget(),
     InterfazEstadisticas()
   ];
+
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {

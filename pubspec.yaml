@@ -26,7 +26,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   auto_size_text: 3.0.0
-  cached_network_image: ^3.2.3
   cloud_firestore: 4.8.0
   file_picker: ^5.3.1
   firebase_auth: 4.6.2
@@ -99,8 +98,11 @@ dependencies:
   dotted_border: ^2.0.0+3
   fl_chart: ^0.64.0
   flutter_barcode_scanner: ^2.0.0
-  syncfusion_flutter_datepicker: ^23.1.41
+  syncfusion_flutter_datepicker: ^23.1.42
   colombia_holidays: ^2.0.2
+  categorized_dropdown: ^1.0.0
+  selectable_container: ^1.0.7
+  flutter_filter_dialog: ^1.2.0
   
 
 dev_dependencies:

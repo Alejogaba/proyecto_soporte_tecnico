@@ -42,7 +42,8 @@ class ChatPageFirebase extends StatefulWidget {
       this.caso,
       this.mensajeImagen,
       this.activo,
-      this.dependencia});
+      this.dependencia,
+      this.esAdmin = false});
   final String? nombre;
   final String? currentUserToken;
   final String? otherUserToken;
@@ -54,12 +55,15 @@ class ChatPageFirebase extends StatefulWidget {
   final ChatMensajes? mensajeImagen;
   final Activo? activo;
   final Dependencia? dependencia;
+  final bool esAdmin;
 
   @override
   State<ChatPageFirebase> createState() => _ChatPageFirebaseState();
 }
 
 class _ChatPageFirebaseState extends State<ChatPageFirebase> {
+  int countFallidos = 0;
+
   @override
   void initState() {
     super.initState();
@@ -68,7 +72,6 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
     }
   }
 
- 
   bool _isAttachmentUploading = false;
 
   void _handleAtachmentPressed() {
@@ -238,11 +241,14 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
   }
 
   void _handleSendPressed(types.PartialText message) async {
-    int countMensajes = await ControladorChat().primerMensaje(widget.room.id);
-    if (countMensajes == 0) {
-      ControladorChat().removerConversacionesRepetidas(
-          widget.room.id, widget.otroUsuario.uid!);
+    if (widget.esAdmin) {
+      int countMensajes = await ControladorChat().primerMensaje(widget.room.id);
+      if (countMensajes == 0) {
+        ControladorChat().removerConversacionesRepetidas(
+            widget.room.id, widget.otroUsuario.uid!);
+      }
     }
+
     FirebaseChatCore.instance.sendMessage(
       message,
       widget.room.id,
@@ -292,28 +298,30 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
               "Ok, entonces llamare a un técnico para que se haga cargo.") {
             //Respuesta de secuencia
             Future.delayed(Duration(seconds: 1), () async {
-              ChatBot chatBotRespuesta = await ChatBot().handleMessageChatBot(message,widget.activo);
+              ChatBot chatBotRespuesta = await ChatBot().handleMessageChatBot(
+                  message.trim().replaceAll("¿", "").replaceAll("?", ""),
+                  widget.activo);
               print("id respuesta: " + chatBotRespuesta.id.toString());
-              enviarMensajeChatBot(
-                  auth, prefs, codigoRespuestaProceso, respuesta, 1);
+              await enviarMensajeChatBot(
+                  auth, prefs, codigoRespuestaProceso, respuesta, 2);
               if (img != null) {
                 enviarImagenChatBot(auth, img, 1);
               }
-              enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
+              await enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
                   "¿Soluciono tu problema? (Responde ✅Si/❌No)", 3);
             });
           } else {
             //No solucionado - Finaliza solicitando técnico
             if (codigoRespuestaProceso != '6-2') {
               prefs.clear();
-              enviarMensajeChatBot(
+              await enviarMensajeChatBot(
                   auth, prefs, codigoRespuestaProceso, respuesta, 2);
               if (widget.mensajeImagen != null) {
-                await ChatBot().abrirConversacionesTecnicos(auth, widget.caso,
+                await ChatBot().abrirCasoAdmin(auth, widget.caso,
                     widget.activo!.nombre, widget.dependencia!.nombre,
                     imagen: widget.mensajeImagen);
               } else if (widget.activo != null) {
-                await ChatBot().abrirConversacionesTecnicos(auth, widget.caso,
+                await ChatBot().abrirCasoAdmin(auth, widget.caso,
                     widget.activo!.nombre, widget.dependencia!.nombre);
               }
 
@@ -324,7 +332,7 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
                 ),
               );
             } else {
-              enviarMensajeChatBot(
+              await enviarMensajeChatBot(
                   auth, prefs, codigoRespuestaProceso, 'Ok', 2);
             }
             prefs.clear();
@@ -332,45 +340,46 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
         } else {
           //Solucionado - Finaliza cerrando la conversacion y el caso
           if (codigoRespuestaProceso != '6-2') {
-            enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
+            await enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
                 "Ha sido un gusto poder ayudarte 😁", 1);
             if (widget.caso != null) {
               widget.caso!.finalizadoPor = 'PaAQ6DjhL1Yl45h1bloNerwPFt82';
-              CasosController().marcarCasoComoresuelto(
+              await CasosController().marcarCasoComoresuelto(
                   widget.caso!, 'PaAQ6DjhL1Yl45h1bloNerwPFt82');
               int totalCasos = await CasosController()
-                                .getTotalCasosCountSolicitanteFuture(
-                                    widget.caso!.uidSolicitante.trim());
-                            log('TotalCasos: $totalCasos');
-                            if (totalCasos == 0) {
-                              ChatMensajes mensaje1 = ChatMensajes(
-                                  authorId: auth.currentUser!.uid.trim(),
-                                  updatedAt: DateTime.now(),
-                                  mensaje:
-                                      'No se han encontrado más casos abiertos, el chat se cerrara a continuación',
-                                  tipo: 'text',
-                                  fechaHora: DateTime.now());
-                              await FirebaseFirestore.instance
-                                  .collection('rooms')
-                                  .doc(widget.room.id)
-                                  .collection('messages')
-                                  .add(mensaje1.toMapText());
-                              await FirebaseFirestore.instance
-                                  .collection('rooms')
-                                  .doc(widget.room.id)
-                                  .update({'finalizado': true});
-                              await FirebaseFirestore.instance
-                                  .collection('rooms')
-                                  .doc(widget.room.id)
-                                  .update({
-                                'sinRespuesta': false,
-                                'finalizado': true,
-                              });
-                            }
-                            Navigator.pop(context);
+                  .getTotalCasosCountSolicitanteFuture(
+                      widget.caso!.uidSolicitante.trim());
+              log('TotalCasos: $totalCasos');
+              if (totalCasos == 0) {
+                ChatMensajes mensaje1 = ChatMensajes(
+                    authorId: auth.currentUser!.uid.trim(),
+                    updatedAt: DateTime.now(),
+                    mensaje:
+                        'No se han encontrado más casos abiertos, el chat se cerrara a continuación',
+                    tipo: 'text',
+                    fechaHora: DateTime.now());
+                await FirebaseFirestore.instance
+                    .collection('rooms')
+                    .doc(widget.room.id)
+                    .collection('messages')
+                    .add(mensaje1.toMapText());
+                await FirebaseFirestore.instance
+                    .collection('rooms')
+                    .doc(widget.room.id)
+                    .update({'finalizado': true});
+                await FirebaseFirestore.instance
+                    .collection('rooms')
+                    .doc(widget.room.id)
+                    .update({
+                  'sinRespuesta': false,
+                  'finalizado': true,
+                });
+              }
+              Navigator.pop(context);
             }
           } else {
-            secuenciaConsultarTiempoEspera(auth, prefs, codigoRespuestaProceso??'');
+            await secuenciaConsultarTiempoEspera(
+                auth, prefs, codigoRespuestaProceso ?? '');
           }
 
           prefs.clear();
@@ -378,7 +387,7 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
       } else {
         //Respuesta de dos opciones
         Future.delayed(Duration(seconds: 2), () async {
-          enviarMensajeChatBot(
+          await enviarMensajeChatBot(
               auth, prefs, codigoRespuestaProceso, "Responde ✅Si o ❌No", 0);
           await prefs.setBool('esperandoRespuesta-${widget.room.id}', true);
           codigoRespuestaProceso =
@@ -392,11 +401,14 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
       }
     } else {
       //Primera respuesta chat bot
-      Future.delayed(Duration(seconds: 1), () async {
-        ChatBot chatBotRespuesta = await ChatBot().handleMessageChatBot(message,widget.activo);;
+      Future.delayed(Duration(seconds: 0), () async {
+        ChatBot chatBotRespuesta = await ChatBot().handleMessageChatBot(
+            message.trim().replaceAll("¿", "").replaceAll("?", ""),
+            widget.activo);
+
         log("id respuesta: " + chatBotRespuesta.id.toString());
-        enviarMensajeChatBot(
-            auth, prefs, codigoRespuestaProceso, chatBotRespuesta.respuesta, 0);
+        await enviarMensajeChatBot(
+            auth, prefs, codigoRespuestaProceso, chatBotRespuesta.respuesta, 2);
 
         if (chatBotRespuesta.id >= 1 && chatBotRespuesta.id <= 4) {
           //Valida en que rango entra la respuesta
@@ -407,7 +419,7 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
                 0);
 
             Future.delayed(Duration(seconds: 3), () async {
-              enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
+              await enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
                   "¿Soluciono tu problema? (Responde ✅Si/❌No)", 0);
 
               await prefs.setBool('esperandoRespuesta-${widget.room.id}', true);
@@ -421,11 +433,17 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
               }
             });
           });
-        } else if (chatBotRespuesta.id > 5) {
-          enviarMensajeChatBot(
+        } else if (chatBotRespuesta.id > 6 && chatBotRespuesta.id < 20) {
+          await enviarMensajeChatBot(
               auth, prefs, codigoRespuestaProceso, "Responde ✅Si/❌No", 2);
           await prefs.setBool('esperandoRespuesta-${widget.room.id}', true);
           await prefs.setString('codigoProceso-${widget.room.id}', "6-2");
+        } else if (chatBotRespuesta.id > 20) {
+          await await enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
+              "¿Soluciono tu problema? (Responde ✅Si/❌No)", 2);
+
+          await prefs.setBool('esperandoRespuesta-${widget.room.id}', true);
+          await prefs.setString('codigoProceso-${widget.room.id}', "1-3");
         }
       });
     }
@@ -454,16 +472,16 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
     });
   }
 
-  void enviarMensajeChatBot(FirebaseAuth auth, SharedPreferences prefs,
-      String? codigoRespuestaProceso, String mensaje, int tiempo) {
+  Future enviarMensajeChatBot(FirebaseAuth auth, SharedPreferences prefs,
+      String? codigoRespuestaProceso, String mensaje, int tiempo) async {
     Future.delayed(Duration(seconds: tiempo), () async {
       ChatMensajes mensaje1 = ChatMensajes(
           //Pregunta si soluciono su problema
           authorId: 'PaAQ6DjhL1Yl45h1bloNerwPFt82',
-          updatedAt: DateTime.now().add(Duration(seconds: 1)),
+          updatedAt: DateTime.now().add(Duration(seconds: 2)),
           mensaje: mensaje,
           tipo: 'text',
-          fechaHora: DateTime.now().add(Duration(seconds: 1)));
+          fechaHora: DateTime.now().add(Duration(seconds: 2)));
       await FirebaseFirestore.instance
           .collection('rooms')
           .doc(widget.room.id)
@@ -471,8 +489,6 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
           .add(mensaje1.toMapText());
     });
   }
-
-  
 
   void _setAttachmentUploading(bool uploading) {
     setState(() {
@@ -543,24 +559,24 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
     }
   }
 
-  secuenciaConsultarTiempoEspera(FirebaseAuth auth, SharedPreferences prefs,
-      String codigoRespuestaProceso) {
-    enviarMensajeChatBot(
+  Future secuenciaConsultarTiempoEspera(FirebaseAuth auth,
+      SharedPreferences prefs, String codigoRespuestaProceso) async {
+    await enviarMensajeChatBot(
         auth,
         prefs,
         codigoRespuestaProceso,
         "De acuerdo, voy a calcular el tiempo estimado de llegada del técnico.",
-        1);
+        2);
     Future.delayed(Duration(seconds: 1), () async {
-      enviarMensajeChatBot(
+      await enviarMensajeChatBot(
           auth,
           prefs,
           codigoRespuestaProceso,
           "Recuerda que esta es solo una estimación aproximada basada en lo que les ha tomado resolver otros casos a los técnicos y el tiempo real puede variar dependiendo de varios factores.",
-          1);
+          2);
       Future.delayed(Duration(seconds: 2), () async {
-        enviarMensajeChatBot(
-            auth, prefs, codigoRespuestaProceso, "Calculando...", 1);
+        await enviarMensajeChatBot(
+            auth, prefs, codigoRespuestaProceso, "Calculando...", 2);
 
         Future.delayed(Duration(seconds: 1), () async {
           ChatMensajes? chatMensajes = await ControladorChat()
@@ -570,7 +586,7 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
             await atenderCaso(
                 auth, prefs, codigoRespuestaProceso, chatMensajes.turno);
           } else {
-            enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
+            await enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
                 "Ha ocurrido un error en el proceso", 1);
           }
         });
@@ -582,14 +598,14 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
       String codigoRespuestaProceso, int? turno) async {
     Duration tiempoPromedio = await CasosController().calcularTiempoPromedio();
     if (tiempoPromedio.inHours > 1) {
-      enviarMensajeChatBot(
+      await enviarMensajeChatBot(
           auth,
           prefs,
           codigoRespuestaProceso,
           "El tiempo promedio de atención es: ${tiempoPromedio.inHours} horas",
           1);
     } else {
-      enviarMensajeChatBot(
+      await enviarMensajeChatBot(
           auth,
           prefs,
           codigoRespuestaProceso,
@@ -602,10 +618,10 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
         horaActual.day, 18); // Asumiendo que la hora de cierre es 6 PM.
 
     if (turno != null) {
-      enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
+      await enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
           "Usted es el número $turno en la cola", 2);
       if (turno == 1) {
-        enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
+        await enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
             "El técnico llegara en breve", 2);
       } else {
         DateTime horaEstimadaLlegada =
@@ -615,7 +631,7 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
             ? "a las ${DateFormat('hh:mm a').format(horaEstimadaLlegada)}"
             : "el ${DateFormat('EEEE').format(horaEstimadaLlegada)} a las ${DateFormat('hh:mm a').format(horaEstimadaLlegada)}";
 
-        enviarMensajeChatBot(
+        await enviarMensajeChatBot(
             auth,
             prefs,
             codigoRespuestaProceso,
@@ -632,7 +648,7 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
           String fechaFutura = DateFormat('EEEE – hh:mm a', 'es_CO')
               .format(DateTime.now().add(tiempoPromedio));
 
-          enviarMensajeChatBot(
+          await enviarMensajeChatBot(
               auth,
               prefs,
               codigoRespuestaProceso,
@@ -641,12 +657,9 @@ class _ChatPageFirebaseState extends State<ChatPageFirebase> {
         }*/
       }
     } else {
-      enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
+      await enviarMensajeChatBot(auth, prefs, codigoRespuestaProceso,
           "Error: Usted no está en la cola", 2);
     }
     prefs.clear();
   }
-
-  
-  
 }

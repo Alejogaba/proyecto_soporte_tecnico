@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:categorized_dropdown/categorized_dropdown.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
@@ -18,6 +19,7 @@ import 'package:login2/utils/utilidades.dart';
 import 'package:login2/vistas/lista_reportes/lista_reportes_widget.dart';
 
 import '../../backend/firebase_storage/storage.dart';
+import '../../flutter_flow/flutter_flow_drop_down2.dart';
 import '../../flutter_flow/upload_data.dart';
 import '../../main.dart';
 import '../../model/caso.dart';
@@ -53,6 +55,7 @@ class NuevoReporteWidget extends StatefulWidget {
 class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
     with TickerProviderStateMixin {
   String _prioridadSeleccionada = 'Urgencia Crítica';
+  late String categoriaController;
 
   Map<String, int> prioridadMap = {
     'Urgencias Críticas': 1,
@@ -66,6 +69,39 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
   late FFUploadedFile archivoSubido;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool _prioridad = false;
+  String _selectedCategory = 'Otros';
+  final List<CategorizedDropdownItem<String>>? items = [
+    CategorizedDropdownItem(text: 'Hardware', subItems: [
+      SubCategorizedDropdownItem(
+          text: 'Reparación de hardware', value: 'reparacion-hardware'),
+      SubCategorizedDropdownItem(
+          text: 'Actualización de componentes',
+          value: 'actualizacion-componentes'),
+    ]),
+    CategorizedDropdownItem(text: 'Software', subItems: [
+      SubCategorizedDropdownItem(
+          text: 'Instalación de software', value: 'instalacion-software'),
+      SubCategorizedDropdownItem(
+          text: 'Resolución de problemas', value: 'resolucion-problemas'),
+    ]),
+    CategorizedDropdownItem(text: 'Redes', subItems: [
+      SubCategorizedDropdownItem(
+          text: 'Configuración de redes', value: 'configuracion-redes'),
+      SubCategorizedDropdownItem(
+          text: 'Solución de problemas de red', value: 'problemas-red'),
+    ]),
+    CategorizedDropdownItem(
+        text: 'Mantenimiento preventivo', value: 'mantenimiento preventivo'),
+    CategorizedDropdownItem(text: 'Otros', value: 'otros'),
+  ];
+  String? value;
+
+  List<String> _categories = ['Categoria 1', 'Categoria 2', 'Categoria 3'];
+  Map<String, List<String>> _subcategories = {
+    'Categoria 1': ['Subcategoria 1A', 'Subcategoria 1B', 'Subcategoria 1C'],
+    'Categoria 2': ['Subcategoria 2A', 'Subcategoria 2B', 'Subcategoria 2C'],
+    'Categoria 3': ['Subcategoria 3A', 'Subcategoria 3B', 'Subcategoria 3C'],
+  };
 
   final animationsMap = {
     'rowOnPageLoadAnimation': AnimationInfo(
@@ -373,51 +409,59 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                           decoration: InputDecoration(
                             hintText: 'Detalles',
                             hintStyle: FlutterFlowTheme.of(context).bodyMedium,
-                            enabledBorder: UnderlineInputBorder(
+                            enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context).lineGray,
-                                width: 2.0,
+                                width: 1.5,
                               ),
                               borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
+                                topLeft: Radius.circular(12.0),
+                                topRight: Radius.circular(12.0),
+                                bottomLeft: Radius.circular(12.0),
+                                bottomRight: Radius.circular(12.0),
                               ),
                             ),
-                            focusedBorder: UnderlineInputBorder(
+                            focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 2.0,
+                                color: FlutterFlowTheme.of(context).primary,
+                                width: 1.5,
                               ),
                               borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
+                                topLeft: Radius.circular(12.0),
+                                topRight: Radius.circular(12.0),
+                                bottomLeft: Radius.circular(12.0),
+                                bottomRight: Radius.circular(12.0),
                               ),
                             ),
-                            errorBorder: UnderlineInputBorder(
+                            errorBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 2.0,
+                                color: Color.fromARGB(153, 209, 10, 10),
+                                width: 1.5,
                               ),
                               borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
+                                topLeft: Radius.circular(12.0),
+                                topRight: Radius.circular(12.0),
+                                bottomLeft: Radius.circular(12.0),
+                                bottomRight: Radius.circular(12.0),
                               ),
                             ),
-                            focusedErrorBorder: UnderlineInputBorder(
+                            focusedErrorBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Color(0x00000000),
-                                width: 2.0,
+                                color: Color.fromARGB(153, 209, 10, 10),
+                                width: 1.5,
                               ),
                               borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(4.0),
-                                topRight: Radius.circular(4.0),
+                                topLeft: Radius.circular(12.0),
+                                topRight: Radius.circular(12.0),
+                                bottomLeft: Radius.circular(12.0),
+                                bottomRight: Radius.circular(12.0),
                               ),
                             ),
                             contentPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 24.0, 0.0, 24.0),
+                                12.0, 12.0, 0.0, 12.0),
                           ),
-                          style: FlutterFlowTheme.of(context).titleMedium,
-                          maxLines: 6,
+                          style: FlutterFlowTheme.of(context).bodyLarge,
+                          maxLines: 7,
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Por favor, ingrese un valor';
@@ -426,8 +470,61 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                           },
                         ),
                       ),
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              'CLASE DE PROBLEMA',
+                              style: FlutterFlowTheme.of(context)
+                                  .titleMedium
+                                  .override(
+                                    fontFamily: 'Urbanist',
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CategorizedDropdown(
+                          items: items,
+                          value: value,
+                          isDense: true,
+                          focusColor: Color.fromARGB(255, 19, 103, 54),
+                          enableFeedback: true,
+                          iconEnabledColor:
+                              FlutterFlowTheme.of(context).primary,
+                          style: FlutterFlowTheme.of(context)
+                              .bodyLarge
+                              .override(
+                                fontFamily: 'Poppins',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
+                          hint: Text(
+                            'Selecione Categoria...',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyLarge
+                                .override(
+                                    fontFamily: 'Poppins',
+                                    color:
+                                        FlutterFlowTheme.of(context).accent2),
+                          ),
+                          onChanged: (v) {
+                            setState(() {
+                              log('Categoria: ${v.toString()}');
+                              value = value;
+                              _selectedCategory = v.toString().trim();
+                            });
+                          },
+                        ),
+                      ),
                       Text(
-                        'PRIORIDAD',
+                        'PRIORIDAD (OPCIONAL)',
                         style:
                             FlutterFlowTheme.of(context).titleMedium.override(
                                   fontFamily: 'Urbanist',
@@ -685,6 +782,7 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                         log('Current user: ' +
                             auth.currentUser!.uid.toString());
                         Caso casoAregistrar = Caso(
+                          
                             prioridad: _prioridad,
                             fecha: DateTime.now(),
                             uidDependencia: widget.dependencia!.uid,
@@ -692,156 +790,112 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                             uidActivo: widget.activo.uid,
                             descripcion: descripcionController.text,
                             urlAdjunto: _model.uploadedFileUrl);
-                        await CasosController().addModCaso(casoAregistrar);
+                        await CasosController()
+                            .addModCaso(casoAregistrar); //se registra el caso
+
                         final collectionRef = FirebaseFirestore.instance
                             .collection('dependencias')
                             .doc(widget.dependencia!.uid)
                             .collection('activos')
                             .doc(widget.activo.uid);
-                        await collectionRef.update({'casosPendientes': true});
+                        await collectionRef.update({
+                          'casosPendientes': true
+                        }); //se marca como caso activo el activo
 
-                        List<Usuario> usuariosObtenidos =
-                            await UserHelper().obtenerUsuarios();
-                        log('lista tecnicos: ' + usuariosObtenidos.toString());
                         ChatBot botRespuesta = await ChatBot()
                             .handleMessageChatBot(
-                                descripcionController.text, widget.activo);
+                                descripcionController.text
+                                    .trim()
+                                    .replaceAll("¿", "")
+                                    .replaceAll("?", ""),
+                                widget.activo);
+
                         if (botRespuesta.id != 0) {
+                          //El chatbot responde
                           types.User otheruser =
                               types.User(id: "PaAQ6DjhL1Yl45h1bloNerwPFt82");
+
                           types.Room room = await FirebaseChatCore.instance
                               .createRoom(otheruser);
+
                           String? tieneChatFinalizado = await ControladorChat()
                               .buscarChatFinalizado(
                                   "PaAQ6DjhL1Yl45h1bloNerwPFt82",
                                   auth.currentUser!.uid);
-                          await FirebaseChatCore.instance.deleteRoom(room.id);
-                          room = await FirebaseChatCore.instance
-                              .createRoom(otheruser);
-                                                  if (usuariosObtenidos.length > 0) {
-                            final collectionRef = FirebaseFirestore.instance
-                                .collection('rooms')
-                                .doc(room.id);
-                            ChatMensajes mensaje1 = ChatMensajes(
+                          if (tieneChatFinalizado != null) {
+                            await FirebaseChatCore.instance.deleteRoom(room.id);
+                            room = await FirebaseChatCore.instance
+                                .createRoom(otheruser);
+                          }
+
+                          final collectionRef = FirebaseFirestore.instance
+                              .collection('rooms')
+                              .doc(room.id);
+                          ChatMensajes mensaje1 = ChatMensajes(
+                              authorId: auth.currentUser!.uid.trim(),
+                              updatedAt: DateTime.now(),
+                              mensaje:
+                                  'Requiero servicio técnico para ${widget.activo.nombre}',
+                              tipo: 'text',
+                              fechaHora: DateTime.now());
+                          await FirebaseFirestore.instance
+                              .collection('rooms')
+                              .doc(room.id)
+                              .collection('messages')
+                              .add(mensaje1.toMapText());
+                          if (descripcionController.text.isNotEmpty) {
+                            ChatMensajes mensaje2 = ChatMensajes(
                                 authorId: auth.currentUser!.uid.trim(),
-                                updatedAt: DateTime.now(),
-                                mensaje:
-                                    'Requiero servicio técnico para ${widget.activo.nombre}',
+                                updatedAt:
+                                    DateTime.now().add(Duration(seconds: 1)),
+                                mensaje: '${descripcionController.text}',
                                 tipo: 'text',
-                                fechaHora: DateTime.now());
+                                fechaHora:
+                                    DateTime.now().add(Duration(seconds: 1)));
                             await FirebaseFirestore.instance
                                 .collection('rooms')
                                 .doc(room.id)
                                 .collection('messages')
-                                .add(mensaje1.toMapText());
-                            if (descripcionController.text.isNotEmpty) {
-                              ChatMensajes mensaje2 = ChatMensajes(
-                                  authorId: auth.currentUser!.uid.trim(),
-                                  updatedAt:
-                                      DateTime.now().add(Duration(seconds: 1)),
-                                  mensaje: '${descripcionController.text}',
-                                  tipo: 'text',
-                                  fechaHora:
-                                      DateTime.now().add(Duration(seconds: 1)));
-                              await FirebaseFirestore.instance
-                                  .collection('rooms')
-                                  .doc(room.id)
-                                  .collection('messages')
-                                  .add(mensaje2.toMapText());
-                            }
+                                .add(mensaje2.toMapText());
+                          } //Envia los mensajes de texto
 
-                            if (_model.uploadedFileUrl.isNotEmpty) {
-                              img.Image? image =
-                                  img.decodeImage(archivoSubido.bytes!);
-                              int width = image!.width;
-                              int height = image!.height;
-                              mensaje3 = ChatMensajes(
-                                  height: height,
-                                  width: width,
-                                  size: archivoSubido.bytes!.length,
-                                  uri: _model.uploadedFileUrl,
-                                  authorId: auth.currentUser!.uid.trim(),
-                                  updatedAt:
-                                      DateTime.now().add(Duration(seconds: 2)),
-                                  mensaje: (archivoSubido.name != null &&
-                                          archivoSubido.name!.isNotEmpty)
-                                      ? archivoSubido.name!
-                                      : 'Archivo_adjunto.jpg',
-                                  fechaHora:
-                                      DateTime.now().add(Duration(seconds: 2)));
-                              await FirebaseFirestore.instance
-                                  .collection('rooms')
-                                  .doc(room.id)
-                                  .collection('messages')
-                                  .add(mensaje3.toMapImage());
-                            }
+                          if (_model.uploadedFileUrl.isNotEmpty) {
+                            img.Image? image =
+                                img.decodeImage(archivoSubido.bytes!);
+                            int width = image!.width;
+                            int height = image!.height;
+                            mensaje3 = ChatMensajes(
+                                height: height,
+                                width: width,
+                                size: archivoSubido.bytes!.length,
+                                uri: _model.uploadedFileUrl,
+                                authorId: auth.currentUser!.uid.trim(),
+                                updatedAt:
+                                    DateTime.now().add(Duration(seconds: 2)),
+                                mensaje: (archivoSubido.name != null &&
+                                        archivoSubido.name!.isNotEmpty)
+                                    ? archivoSubido.name!
+                                    : 'Archivo_adjunto.jpg',
+                                fechaHora:
+                                    DateTime.now().add(Duration(seconds: 2)));
+                            await FirebaseFirestore.instance
+                                .collection('rooms')
+                                .doc(room.id)
+                                .collection('messages')
+                                .add(mensaje3.toMapImage());
+                          } //Envia la imagen si la hay
 
-                            if (otheruser.id !=
-                                "PaAQ6DjhL1Yl45h1bloNerwPFt82") {
-                              if (_prioridad) {
-                                ChatMensajes? chatTurno =
-                                    await ControladorChat()
-                                        .obtenerUltimoEnColaUrgente(room.id);
-                                await ControladorChat().aumentarTurno();
-                                List<ChatMensajes> listaRooms =
-                                    await ControladorChat()
-                                        .obetnerRoomsSinFinalizar();
-                                for (var element in listaRooms) {
-                                  await chatBotAdvertencia(element.uidRoom);
-                                }
+                          await collectionRef.update({
+                            'uid': room.id,
+                            'sinRespuesta': true,
+                            'finalizado': false,
+                          }); //Actualiza la room
 
-                                if (chatTurno == null) {
-                                  await collectionRef.update({
-                                    'uid': room.id,
-                                    'sinRespuesta': true,
-                                    'finalizado': false,
-                                    'turno': 1,
-                                    'prioridad': _prioridad
-                                  });
-                                } else {
-                                  await collectionRef.update({
-                                    'uid': room.id,
-                                    'sinRespuesta': true,
-                                    'finalizado': false,
-                                    'turno': chatTurno.turno! + 1,
-                                    'prioridad': _prioridad
-                                  });
-                                }
-                              } else {
-                                ChatMensajes? chatTurno =
-                                    await ControladorChat()
-                                        .obtenerUltimoEnCola(room.id);
-
-                                if (chatTurno == null) {
-                                  await collectionRef.update({
-                                    'uid': room.id,
-                                    'sinRespuesta': true,
-                                    'finalizado': false,
-                                    'turno': 1,
-                                    'prioridad': _prioridad
-                                  });
-                                } else {
-                                  await collectionRef.update({
-                                    'uid': room.id,
-                                    'sinRespuesta': true,
-                                    'finalizado': false,
-                                    'turno': chatTurno.turno! + 1,
-                                    'prioridad': _prioridadSeleccionada
-                                  });
-                                }
-                              }
-                            } else {
-                              await collectionRef.update({
-                                'uid': room.id,
-                                'sinRespuesta': true,
-                                'finalizado': false,
-                              });
-                            }
-                          }
                           List<String> usuarios = [
                             auth.currentUser!.uid,
                             'PaAQ6DjhL1Yl45h1bloNerwPFt82',
                           ];
+
                           String? token =
                               await FirebaseMessaging.instance.getToken();
 
@@ -867,6 +921,7 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                             ),
                           );
                         } else {
+                          //Sino abre conversacion tecnicos
                           if (_model.uploadedFileUrl.isNotEmpty) {
                             img.Image? image =
                                 img.decodeImage(archivoSubido.bytes!);
@@ -886,17 +941,33 @@ class _NuevoReporteWidgetState extends State<NuevoReporteWidget>
                                     : 'Archivo_adjunto.jpg',
                                 fechaHora:
                                     DateTime.now().add(Duration(seconds: 2)));
-                            ChatBot().abrirConversacionesTecnicos(
+                            await ChatBot().abrirCasoAdmin(
                                 auth,
                                 casoAregistrar,
-                                widget.activo.uid,
-                                widget.dependencia!.uid,imagen: mensaje3);
-                          }else{
-                            ChatBot().abrirConversacionesTecnicos(
+                                widget.activo.nombre,
+                                widget.dependencia!.nombre,
+                                imagen: mensaje3);
+                            await FirebaseFirestore.instance
+                                .collection('imagenes')
+                                .doc(casoAregistrar.uidActivo)
+                                .set(mensaje3.toMapImage());
+                            /*await ChatBot().abrirConversacionesTecnicos(
                                 auth,
                                 casoAregistrar,
-                                widget.activo.uid,
-                                widget.dependencia!.uid,imagen: mensaje3);
+                                widget.activo.nombre,
+                                widget.dependencia!.nombre,
+                                imagen: mensaje3);*/
+                          } else {
+                            await ChatBot().abrirCasoAdmin(
+                                auth,
+                                casoAregistrar,
+                                widget.activo.nombre,
+                                widget.dependencia!.nombre);
+                            /* await ChatBot().abrirConversacionesTecnicos(
+                                auth,
+                                casoAregistrar,
+                                widget.activo.nombre,
+                                widget.dependencia!.nombre);*/
                           }
                           Navigator.pushReplacement(
                             context,

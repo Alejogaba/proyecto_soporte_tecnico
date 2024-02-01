@@ -36,24 +36,97 @@ class CasosController {
   }
 
   Future<List<Caso>> obtenerCasosFuture({String uidSolicitante = ''}) async {
-  QuerySnapshot querySnapshot;
+    QuerySnapshot querySnapshot;
 
-  if (uidSolicitante.isEmpty) {
-    querySnapshot = await FirebaseFirestore.instance.collection('casos').get();
-  } else {
-    querySnapshot = await FirebaseFirestore.instance
-        .collection('casos')
-        .where('uidSolicitante', isEqualTo: uidSolicitante)
-        .get();
+    if (uidSolicitante.isEmpty) {
+      querySnapshot =
+          await FirebaseFirestore.instance.collection('casos').get();
+    } else {
+      querySnapshot = await FirebaseFirestore.instance
+          .collection('casos')
+          .where('uidSolicitante', isEqualTo: uidSolicitante)
+          .get();
+    }
+
+    List<Caso> casos = querySnapshot.docs
+        .map((doc) => Caso.fromMap(doc.data() as Map<String, dynamic>))
+        .toList();
+
+    return casos;
   }
 
-  List<Caso> casos = querySnapshot.docs
-      .map((doc) => Caso.fromMap(doc.data() as Map<String, dynamic>))
-      .toList();
+  Future<List<Caso>> obtenerCasosPendientesFuture(
+      {String uidTecnico = ''}) async {
+    QuerySnapshot querySnapshot;
 
-  return casos;
-}
+    if (uidTecnico.isEmpty) {
+      querySnapshot = await FirebaseFirestore.instance
+          .collection('casos')
+          .where('asignado', isEqualTo: false)
+          .get();
+    } else {
+      querySnapshot = await FirebaseFirestore.instance
+          .collection('casos')
+          .where('asignado', isEqualTo: false)
+          .where('uidTecnico', isEqualTo: uidTecnico)
+          .get();
+    }
 
+    List<Caso> casos = querySnapshot.docs
+        .map((doc) => Caso.fromMap(doc.data() as Map<String, dynamic>))
+        .toList();
+
+    return casos;
+  }
+
+  Stream<List<Caso>> obtenerCasosPendientesStream(
+    List<String> listaCategoria, {
+    String uidTecnico = '',
+  }) {
+    final controller = StreamController<List<Caso>>();
+
+    void obtenerCasos() async {
+      QuerySnapshot querySnapshot;
+
+      if (uidTecnico.isEmpty) {
+        querySnapshot = await FirebaseFirestore.instance
+            .collection('casos')
+            .where('asignado', isEqualTo: false)
+            .get();
+      } else {
+        querySnapshot = await FirebaseFirestore.instance
+            .collection('casos')
+            .where('asignado', isEqualTo: false)
+            .where('uidTecnico', isEqualTo: uidTecnico)
+            .get();
+      }
+
+      List<Caso> casos = querySnapshot.docs
+          .map((doc) => Caso.fromMap(doc.data() as Map<String, dynamic>))
+          .toList();
+      List<Caso> casosFinal = [];
+      if (listaCategoria.length > 0) {
+        for (var element in casos) {
+          for (var elementoAbuscar in listaCategoria) {
+            if (element.categoria
+                .toLowerCase().replaceAll(' ', '')
+                .contains(elementoAbuscar.toLowerCase().replaceAll(' ', ''))) {
+              casosFinal.add(element);
+            }
+          }
+        }
+      } else {
+        casosFinal = casos;
+      }
+
+      controller.add(casosFinal);
+      controller.close();
+    }
+
+    obtenerCasos();
+
+    return controller.stream;
+  }
 
   Future<List<Caso>> obtenerCasoSolucionadosRangoFecha(
       DateTime fechaInicial, DateTime fechaFinal) async {
@@ -174,6 +247,24 @@ class CasosController {
     return controller.stream;
   }
 
+  Stream<int> getTotalCasosCountTecnico(String uidTecnico) {
+    // ignore: close_sinks
+    StreamController<int> controller = StreamController<int>();
+
+    FirebaseFirestore.instance
+        .collection('casos')
+        .where('uidTecnico', isEqualTo: uidTecnico.trim())
+        .where('asignado', isEqualTo: true)
+        .where('solucionado', isNotEqualTo: true)
+        .snapshots()
+        .listen((QuerySnapshot querySnapshot) {
+      int count = querySnapshot.size;
+      controller.add(count);
+    });
+
+    return controller.stream;
+  }
+
   Future<int> contarCasosPorDependencia(String miUidDependencia) async {
     // Obtén una referencia a la colección 'casos' en Firestore
     final CollectionReference casosCollection =
@@ -234,11 +325,28 @@ class CasosController {
     }
   }
 
-  Future<Caso?> buscarCasoPorCodigoBarras(String uidActivo) async {
+  Future<int> getTotalCasosCountSinAsignarFuture() async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('casos')
+          .where('asignado', isEqualTo: false)
+          .get();
+
+      int count = querySnapshot.size;
+      return count;
+    } catch (e) {
+      // Manejar cualquier error que pueda ocurrir durante la lectura de Firestore.
+      print('Error al obtener el total de casos para el solicitante: $e');
+      return 0; // o cualquier valor predeterminado que desees devolver en caso de error.
+    }
+  }
+
+  Future<Caso?> buscarCasoPorUID(String uidActivo) async {
     try {
       final querySnapshot = await FirebaseFirestore.instance
           .collection('casos')
           .where('uidActivo', isEqualTo: uidActivo)
+          .orderBy('fecha', descending: true)
           .limit(1)
           .get();
 
@@ -271,6 +379,16 @@ class CasosController {
             .update(casoAguardar.toMap());
         return 'ok';
       }
+    } catch (e) {
+      return 'error';
+    }
+  }
+
+  removeCaso(String idCaso) async {
+    try {
+      FirebaseFirestore _db = FirebaseFirestore.instance;
+      await _db.collection("casos").doc(idCaso).delete();
+      return 'ok';
     } catch (e) {
       return 'error';
     }

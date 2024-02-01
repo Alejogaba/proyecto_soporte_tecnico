@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -15,10 +16,12 @@ import 'package:login2/vistas/login/LoginMOD.dart';
 
 import '../../auth/firebase_auth/auth_helper.dart';
 import '../../backend/controlador_activo.dart';
+import '../../backend/controlador_caso.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../model/activo.dart';
 import 'package:badges/badges.dart' as badges;
 
+import '../../model/caso.dart';
 import '../../model/usuario.dart';
 
 class ListaActivosFuncionariosPageWidget extends StatefulWidget {
@@ -87,16 +90,86 @@ class _ListaActivosFuncionariosPageWidgetState
         elevation: 0,
       ),
 
-      /* floatingActionButton: FloatingActionButton(
-        onPressed: () {
-         Get.toNamed('/perfilgen');
-        },
-        child: Icon(Icons.person, color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .tertiary,),
-        backgroundColor: Color.fromARGB(255, 39, 128, 42),
+       floatingActionButton: FloatingActionButton(
+            //speed dial child
+            child: Icon(FontAwesomeIcons.barcode),
+            backgroundColor: Color.fromARGB(255, 7, 133, 36),
+            foregroundColor: Colors.white,
+            onPressed: () async {
+              await FlutterBarcodeScanner.scanBarcode(
+                      '#C62828', // scanning line color
+                      'Cancelar', // cancel button text
+                      true, // whether to show the flash icon
+                      ScanMode.BARCODE)
+                  .then((value) async {
+                if (value != '-1') {
+                  ActivoController activoController = ActivoController();
+                  Activo? activo =
+                      await activoController.buscarActivoPorCodigoBarra(
+                          widget.dependencia!.uid, value);
+                  log('Codigo de barras leido: $value');
+                  if (activo != null) {
+                    if (activo
+                                                  .casosPendientes) {
+                                                Caso? caso =
+                                                    await CasosController()
+                                                        .buscarCasoPorUID(
+                                                            activo
+                                                                .uid);
+                                                final Activo? result =
+                                                    await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          DetalleReporteWidget(
+                                                              caso!,esAdmin:false)),
+                                                ).then((value){
+                                                  setState(() {});
+                                                  return null;
+                                                });
+                                                
+                                              } else {
+                                                
+                                                final Activo? result =
+                                                    await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ActivoPerfilPageWidget(
+                                                      activo: activo,
+                                                      dependencia: dependencia,
+                                                      esadmin: false,
+                                                    ),
+                                                  ),
+                                                );
+                                                if (result != null) {
+                                                  // ignore: use_build_context_synchronously
+                                                  Navigator.pop(
+                                                      context, result);
+                                                }
+                                              }
+
+                  } else {
+                    final e = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RegistrarEquipoWidget(
+                          dependencia: widget.dependencia!,
+                          barcode: value,
+                        ),
+                      ),
+                    ).then((value) {
+                      Future.delayed(Duration(milliseconds: 500), () {
+                        setState(() {});
+                      });
+                    });
+                  }
+                  setState(() {});
+                }
+              });
+            },
       ),
-      **/
+      
       /*floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (dependencia != null) {
@@ -140,19 +213,19 @@ class _ListaActivosFuncionariosPageWidgetState
                               )
                             ],
                           ),
-                          child: Column( mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                  
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     4.0, 4.0, 0.0, 0.0),
                                 child: Row(
-                                   mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                
                                     Padding(
                                       padding: const EdgeInsets.only(top: 2.0),
                                       child: Row(
@@ -217,34 +290,31 @@ class _ListaActivosFuncionariosPageWidgetState
                                               ],
                                             ),
                                           ),
-                                         
                                         ],
                                       ),
                                     ),
-                                    
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.only(right:12.0),
+                                          padding: const EdgeInsets.only(
+                                              right: 12.0),
                                           child: IconButton(
                                               onPressed: () {
+                                                
                                                 Get.toNamed('/perfilgen');
                                               },
                                               icon: Icon(
-                                                Icons.person,
+                                                Icons.settings,
                                                 color:
                                                     FlutterFlowTheme.of(context)
-                                                        .tertiary, size: 32,
+                                                        .tertiary,
+                                                size: 32,
                                               )),
                                         ),
-                                        
-                                            
-                                            
                                       ],
                                     )
-                                    
                                   ],
                                 ),
                               ),
@@ -431,31 +501,41 @@ class _ListaActivosFuncionariosPageWidgetState
                                           snapshot.data!.length, (index) {
                                         return GestureDetector(
                                             onTap: () async {
-                                              if (selectMode) {
+                                              Usuario usuario = await AuthHelper()
+                                                        .cargarUsuarioDeFirebase() ??
+                                                    Usuario();
+                                                late bool esadmin;
+                                                if (usuario.role != null) {
+                                                  if (usuario.role == 'admin') {
+                                                    esadmin = true;
+                                                  } else {
+                                                    esadmin = false;
+                                                  }
+                                                } else {
+                                                  esadmin = false;
+                                                }
+                                              if (snapshot.data![index]!
+                                                  .casosPendientes) {
+                                                Caso? caso =
+                                                    await CasosController()
+                                                        .buscarCasoPorUID(
+                                                            snapshot
+                                                                .data![index]!
+                                                                .uid);
                                                 final Activo? result =
                                                     await Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        InterfazPrincipalWidget(),
-                                                  ),
-                                                );
+                                                      builder: (context) =>
+                                                          DetalleReporteWidget(
+                                                              caso!,esAdmin:esadmin)),
+                                                ).then((value){
+                                                  setState(() {});
+                                                  return null;
+                                                });
+                                                
                                               } else {
-                                                 Usuario usuario =
-                                                        await AuthHelper()
-                                                                .cargarUsuarioDeFirebase() ??
-                                                            Usuario();
-                                                    late bool esadmin;
-                                                    if (usuario.cargo != null) {
-                                                      if (usuario.cargo ==
-                                                          'admin') {
-                                                        esadmin = true;
-                                                      } else {
-                                                        esadmin = false;
-                                                      }
-                                                    }else{
-                                                      esadmin = false;
-                                                    }
+                                                
                                                 final Activo? result =
                                                     await Navigator.push(
                                                   context,
@@ -536,7 +616,6 @@ Widget tarjetaActivo(context, Activo activo,
     bool estaAsignado = false}) {
   return Container(
     width: 185,
-
     decoration: BoxDecoration(
       color: FlutterFlowTheme.of(context).secondaryBackground,
       boxShadow: [

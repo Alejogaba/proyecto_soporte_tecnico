@@ -9,6 +9,7 @@ import 'package:login2/index.dart';
 
 import '../../auth/firebase_auth/auth_helper.dart';
 import '../../backend/controlador_activo.dart';
+import '../../backend/controlador_caso.dart';
 import '../../flutter_flow/flutter_flow_animations.dart';
 import '../../flutter_flow/flutter_flow_expanded_image_view.dart';
 import '../../flutter_flow/flutter_flow_icon_button.dart';
@@ -23,6 +24,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../model/activo.dart';
+import '../../model/caso.dart';
 import '../../model/dependencias.dart';
 import '../../model/usuario.dart';
 
@@ -40,7 +42,7 @@ class ActivoPerfilPageWidget extends StatefulWidget {
       this.esPrestamo = false,
       this.escogerComponente = false,
       this.dependencia,
-      this.esadmin=false})
+      this.esadmin = false})
       : super(key: key);
 
   @override
@@ -318,18 +320,21 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
       right: false,
       bottom: false,
       child: Scaffold(
-        floatingActionButton: (widget.esadmin)? Container() : FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => NuevoReporteWidget(
-                      activo: widget.activo, dependencia: widget.dependencia)),
-            );
-          },
-          child: Icon(Icons.add),
-          backgroundColor: Colors.green,
-        ),
+        floatingActionButton: (widget.esadmin)
+            ? Container()
+            : FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NuevoReporteWidget(
+                            activo: widget.activo,
+                            dependencia: widget.dependencia)),
+                  );
+                },
+                child: Icon(Icons.add),
+                backgroundColor: FlutterFlowTheme.of(context).primary,
+              ),
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         body: GestureDetector(
@@ -339,9 +344,13 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
               Stack(
                 children: [
                   GestureDetector(
-                    onTap: () => setState(() {
-                      blur = false;
-                    }),
+                    onTap: () {
+                      if (blur) {
+                        setState(() {
+                          blur = false;
+                        });
+                      }
+                    },
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -538,6 +547,92 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                             ),
                                                           ),
                                                         ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(0, 0,
+                                                                    24, 0),
+                                                        child: Container(
+                                                          width: 40,
+                                                          height: 40,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .primaryBackground,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8),
+                                                            border: Border.all(
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .secondaryText,
+                                                              width: 1,
+                                                            ),
+                                                          ),
+                                                          child:
+                                                              FlutterFlowIconButton(
+                                                            borderColor: Colors
+                                                                .transparent,
+                                                            borderRadius: 30,
+                                                            buttonSize: 46,
+                                                            fillColor: Color(
+                                                                0x00F1F4F8),
+                                                            icon: Icon(
+                                                              Icons
+                                                                  .history,
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .primaryText,
+                                                              size: 20,
+                                                            ),
+                                                            onPressed:
+                                                                () async {
+                                                                  try {
+                                                                    Caso? caso = await CasosController()
+                                                                  .buscarCasoPorUID(
+                                                                      widget
+                                                                          .activo
+                                                                          .uid);
+                                                              if (caso != null) {
+                                                                await Navigator
+                                                                      .push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (context) => DetalleReporteWidget(
+                                                                        caso,
+                                                                        esAdmin:
+                                                                            snapshot.data!.role ==
+                                                                                'admin')),
+                                                              );
+                                                              } else {
+                                                                 throw FormatException('Error: No se encontraron casos.');
+                                                              }
+                                                                  
+                                                                  
+                                                                  } catch (e) {
+                                                                    
+                                  final snackBar = SnackBar(
+                                    showCloseIcon: true,
+                                    closeIconColor:
+                                        FlutterFlowTheme.of(context).tertiary,
+                                    clipBehavior: Clip.antiAlias,
+                                    dismissDirection:
+                                        DismissDirection.endToStart,
+                                    content:
+                                        Text('Este activo no tiene ningún caso anterior registrado'),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+          
+                                                                    
+                                                                  }
+                                                              
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
                                                     ],
                                                   ),
                                               ],
@@ -791,7 +886,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                                         context)
                                                                     .bodyText2Family),
                                                       ),
-                                                  maxLines: 4,
+                                                  maxLines: 16,
                                                 ),
                                               ),
                                             ],

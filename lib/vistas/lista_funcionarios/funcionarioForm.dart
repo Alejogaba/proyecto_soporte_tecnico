@@ -48,6 +48,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
   Dependencia? areaController;
   late String roleController;
   late String telefonoController;
+  
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   int posicionArea = 0;
@@ -633,30 +634,63 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                       ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
-                        child: FlutterFlowDropDown2<String>(
-                          options: ['Jefe', 'Secretario'],
-                          onChanged: (value) {
-                            setState(() {
-                              cargoController = value;
-                            });
-                          },
-                          width: MediaQuery.of(context).size.width,
-                          height: 45,
-                          textStyle:
-                              FlutterFlowTheme.of(context).bodyText1.override(
-                                    fontFamily: 'Poppins',
-                                    color: Color.fromARGB(207, 0, 0, 0),
-                                  ),
-                          hintText: 'Seleccione el cargo...',
-                          fillColor: Color(0xFFF1F4F8),
-                          elevation: 2,
-                          borderColor: Colors.transparent,
-                          borderWidth: 0,
-                          borderRadius: 8,
-                          margin: EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
-                          hidesUnderline: true,
+                        child: TextFormField(
+                          validator: (true)
+                              ? (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'No deje este campo vacio';
+                                  }
+                                  return null;
+                                }
+                              : null,
+                          controller: _cargoController,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            labelText: 'Cargo',
+                            labelStyle: FlutterFlowTheme.of(context).bodyText2,
+                            hintText: 'Ingrese cargo del funcionario...',
+                            hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0x00000000),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            filled: true,
+                            fillColor: Color.fromARGB(255, 214, 219, 216),
+                            contentPadding:
+                                EdgeInsetsDirectional.fromSTEB(20, 24, 20, 24),
+                            prefixIcon: Icon(
+                              Icons.person,
+                              color: Color.fromARGB(255, 12, 88, 28),
+                            ),
+                          ),
+                          style: FlutterFlowTheme.of(context).bodyText1,
                         ),
                       ),
+                      
                       FutureBuilder<List<Dependencia>>(
                         future: ControladorDependencias().cargarDependencias(),
                         builder: (BuildContext context, snapshot) {
@@ -696,7 +730,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                                                             207, 0, 0, 0),
                                                       ),
                                                   hintText: 'Area...',
-                                                  fillColor: Color(0xFFF1F4F8),
+                                                  fillColor:Color.fromARGB(255, 214, 219, 216),
                                                   elevation: 2,
                                                   borderColor:
                                                       Colors.transparent,
@@ -753,7 +787,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
                         child: FlutterFlowDropDown2<String>(
-                          options: ['funcionario'],
+                          options: ['Funcionario','Técnico'],
                           onChanged: (value) {
                             setState(() {
                               roleController = value;
@@ -767,7 +801,7 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
                                     color: Color.fromARGB(207, 0, 0, 0),
                                   ),
                           hintText: 'Rol y permiso...',
-                          fillColor: Color(0xFFF1F4F8),
+                          fillColor:Color.fromARGB(255, 214, 219, 216),
                           elevation: 2,
                           borderColor: Colors.transparent,
                           borderWidth: 0,
@@ -903,14 +937,14 @@ class _FuncionarioFormState extends State<FuncionarioFormWidget> {
           identificacion: _identificacionController.text,
           email: _emailController.text.toLowerCase(),
           password: _passwordController.text,
-          cargo: cargoController,
+          cargo: _cargoController.text,
           area: areaController!.uid,
-          role: 'funcionario',
+          role: roleController=='Técnico'?"admin":"funcionario",
           telefono: _telefonoController.text);
       await AuthHelper.signupWithEmail(user).then((_) async {
         image = null;
         await AuthHelper.signInWithEmail(
-            email: 'superadmin@gmail.com', password: '1216973345');
+            email: 'superadmin@gmail.com', password: '921025Admon');
         await Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(

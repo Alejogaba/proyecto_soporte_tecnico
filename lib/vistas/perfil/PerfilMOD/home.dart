@@ -9,16 +9,20 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:login2/flutter_flow/flutter_flow_theme.dart';
 import 'package:login2/vistas/login/LoginMOD.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Widgets/top_bar.dart';
 import '../../../app_state.dart';
 import '../../../auth/firebase_auth/auth_helper.dart';
 import '../../../auth/firebase_auth/auth_util.dart';
+import '../../../backend/backend.dart';
 import '../../../backend/schema/util/custom_clipper.dart';
 import '../../../flutter_flow/flutter_flow_animations.dart';
 import '../../../flutter_flow/flutter_flow_model.dart';
 import '../../../flutter_flow/flutter_flow_widgets.dart';
+import '../../../main.dart';
 import '../../../model/usuario.dart';
+import '../../chatbot_lista_respuestas/chatbot_lista.dart';
 import '../../olvido_password/olvido_password_widget.dart';
 import '../perfil_model.dart';
 import 'ProfileMenuWidget.dart';
@@ -406,7 +410,6 @@ class _PerfilAdminState extends State<PerfilGeneral>
                                                                   )
                                                                 : Image.asset(
                                                                     'assets/diseño_interfaz/User.jpg',
-              
                                                                     fit: BoxFit
                                                                         .fitHeight,
                                                                   ),
@@ -463,7 +466,7 @@ class _PerfilAdminState extends State<PerfilGeneral>
                                                       'textOnPageLoadAnimation1']!),
 
                                             ProfileMenuWidget(
-                                                    title: "Gestión de reportes",
+                                                    title: "Ver reportes",
                                                     icon: LineAwesomeIcons.wallet,
                                                     onPress: () {
                                                       Get.toNamed(
@@ -485,6 +488,22 @@ class _PerfilAdminState extends State<PerfilGeneral>
                                                   .animateOnPageLoad(animationsMap[
                                                       'textOnPageLoadAnimation1']!),
                                             const Divider(),
+                                            const SizedBox(height: 10),
+                                            ProfileMenuWidget(
+                                                    title: "ChatBot",
+                                                    icon: LineAwesomeIcons.cog,
+                                                    onPress: () {
+                                                      FirebaseAuth auth =
+                                                          FirebaseAuth.instance;
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  ChatBotRespuestaLista(
+                                                                  )));
+                                                    })
+                                                .animateOnPageLoad(animationsMap[
+                                                    'textOnPageLoadAnimation1']!),
                                             const SizedBox(height: 10),
                                             ProfileMenuWidget(
                                                     title: "Restablecer Contraseña",
@@ -569,6 +588,11 @@ class _PerfilAdminState extends State<PerfilGeneral>
     );
   }
 
+  Future clearLocalData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear(); // Esto borra todos los datos guardados localmente
+  }
+
   Widget _cajaAdvertencia(BuildContext context, mensaje) {
     return Align(
       alignment: const AlignmentDirectional(0, 0),
@@ -627,6 +651,7 @@ class _PerfilAdminState extends State<PerfilGeneral>
                   child: FFButtonWidget(
                     onPressed: () async {
                       await authManager.signOut();
+                      RestartWidget.restartApp(context);
                       await Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(

@@ -4,7 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:colombia_holidays/colombia_holidays.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:login2/auth/firebase_auth/auth_helper.dart';
 import 'package:login2/backend/controlador_caso.dart';
@@ -574,7 +574,10 @@ class _InterfazEstadisticasState extends State<InterfazEstadisticas> {
                         Padding(
                           padding: const EdgeInsets.all(2),
                           child: AutoSizeText(
-                            snapshot.data![value.toInt()].dependencia,
+                            snapshot.data![value.toInt()].dependencia.maybeHandleOverflow(
+                                            maxChars: 10,
+                                            replacement: '…',
+                                          ),
                             minFontSize: 10,
                             overflow: TextOverflow.ellipsis,
                             style: styleVerde,
@@ -896,7 +899,7 @@ class _InterfazEstadisticasState extends State<InterfazEstadisticas> {
           child: SfDateRangePicker(
             onSelectionChanged:
                 (DateRangePickerSelectionChangedArgs args) async {
-              final PickerDateRange dateRanges = (args.value);
+             
 
               if (_controller.selectedRange != null) {
                 log('rango fecha seleccionado');
@@ -918,9 +921,10 @@ class _InterfazEstadisticasState extends State<InterfazEstadisticas> {
                 prefs.setString('fecha_fin', rangeEndDate.toString());*/
               }
             },
-            initialDisplayDate: DateTime.now().subtract(Duration(days: 7)),
+            initialDisplayDate: now,
             controller: _controller,
-            minDate: now,
+            minDate: now.subtract(Duration(days: 1)),
+            
             showActionButtons: true,
             cancelText: 'CANCELAR',
             onCancel: () {

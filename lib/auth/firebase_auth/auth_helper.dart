@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,13 +7,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-import 'package:login2/auth/firebase_auth/firebase_user_provider.dart';
+
 import 'package:login2/model/dependencias.dart';
 import 'package:translator/translator.dart';
+import 'package:login2/utils/utilidades.dart';
 
 import '../../model/usuario.dart';
 
 class AuthHelper {
+  Utilidades util = Utilidades();
   static FirebaseAuth _auth = FirebaseAuth.instance;
 
   String? getCurrentUserUid() {
@@ -29,43 +32,44 @@ class AuthHelper {
   }
 
   Stream<Usuario>? getUsuarioStreamUID(String uidusuario) {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(uidusuario)
-        .snapshots()
-        .map((snapshot) {
-      final result = Usuario.mapeo(snapshot.data()!);
-      log('ultimo mensaje getUsuarioStream: $result');
-      return result;
-    });
+    try {
+      return FirebaseFirestore.instance
+          .collection('users')
+          .doc(uidusuario.trim())
+          .snapshots()
+          .map((snapshot) {
+        final result = Usuario.mapeo(snapshot.data()!);
+        log('ultimo mensaje getUsuarioStream: ${result.nombre}');
+        return result;
+      });
+    } catch (e) {
+      log('Error getUsuarioStream: ${e}');
+      return null;
+    }
   }
 
   Future<Usuario?> getUsuarioFutureUID(String uidusuario) async {
-  try {
-    var snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uidusuario)
-        .get();
-    if (snapshot.exists) {
-      final result = Usuario.mapeo(snapshot.data()!);
-      print('último mensaje getUsuarioFuture: $result');
-      return result;
-    } else {
+    try {
+      var snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uidusuario)
+          .get();
+      if (snapshot.exists) {
+        final result = Usuario.mapeo(snapshot.data()!);
+        print('último mensaje getUsuarioFuture: $result');
+        return result;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      // Manejar cualquier excepción potencial aquí
+      print('Error: $e');
       return null;
     }
-  } catch (e) {
-    // Manejar cualquier excepción potencial aquí
-    print('Error: $e');
-    return null;
   }
-}
-
-
-
 
   Future<Usuario?> cargarUsuarioDeFirebase() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    Logger().i('Usuario actual funcion firebase: ${auth.currentUser!.email}');
     if (auth.currentUser != null) {
       final querySnapshot = await FirebaseFirestore.instance
           .collection('users')
@@ -482,10 +486,69 @@ class AuthHelper {
 }
 
 class UserHelper {
+  Utilidades util = Utilidades();
   Future<List<Usuario>> obtenerUsuarios() async {
     List<Usuario> UsuarioList = [];
     QuerySnapshot querySnapshot =
         await FirebaseFirestore.instance.collection('users').get();
+
+    querySnapshot.docs.forEach((doc) {
+      Usuario user = Usuario.mapeo(doc.data() as Map<String, dynamic>);
+      UsuarioList.add(user);
+    });
+
+    return UsuarioList;
+  }
+
+  Stream<List<Usuario>> obtenerTecnicoStreams(String nombre) {
+    StreamController<List<Usuario>> controller = StreamController();
+
+    if (nombre.isEmpty) {
+      FirebaseFirestore.instance
+        .collection('users').where('role',isEqualTo: 'admin')
+        .where('especial',isEqualTo: false)
+        .snapshots()
+        .listen((querySnapshot) {
+      List<Usuario> UsuarioList = [];
+      querySnapshot.docs.forEach((doc) {
+        Usuario user = Usuario.mapeo(doc.data() as Map<String, dynamic>);
+        UsuarioList.add(user);
+      });
+      
+
+      controller.add(UsuarioList);
+    });
+    } else {
+      FirebaseFirestore.instance
+        .collection('users').where('role',isEqualTo: 'admin')
+        .where('especial',isEqualTo: false)
+        .where('nombre',
+              isGreaterThanOrEqualTo: util.capitalizarPalabras(nombre))
+        .where('nombre',
+              isLessThanOrEqualTo:
+                  util.capitalizarPalabras(nombre) + '\uf8ff')
+        .snapshots()
+        .listen((querySnapshot) {
+      List<Usuario> UsuarioList = [];
+      querySnapshot.docs.forEach((doc) {
+        Usuario user = Usuario.mapeo(doc.data() as Map<String, dynamic>);
+        UsuarioList.add(user);
+      });
+      
+
+      controller.add(UsuarioList);
+    });
+    }
+
+    return controller.stream;
+  }
+
+  Future<List<Usuario>> obtenerUsuariosadmin() async {
+    List<Usuario> UsuarioList = [];
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('role', isEqualTo: 'admin')
+        .get();
 
     querySnapshot.docs.forEach((doc) {
       Usuario user = Usuario.mapeo(doc.data() as Map<String, dynamic>);

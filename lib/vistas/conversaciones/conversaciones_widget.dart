@@ -11,6 +11,7 @@ import 'package:login2/backend/controlador_dependencias.dart';
 import 'package:login2/model/chat_mensajes.dart';
 import 'package:login2/model/dependencias.dart';
 import 'package:login2/model/usuario.dart';
+import 'package:login2/vistas/nuevo_reporte/lista_panel_reportes_admin.dart';
 
 import '../../backend/controlador_caso.dart';
 import '../chat/chat_widget.dart';
@@ -41,6 +42,7 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
   @override
   void initState() {
     super.initState();
+
     esAdmin();
     _model = createModel(context, () => ConversacionesModel());
   }
@@ -56,6 +58,8 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
     FirebaseAuth auth = FirebaseAuth.instance;
+    log("Usuario actualll1: ${currentUser!.uid.trim()}");
+    log("Usuario actualll2: ${auth.currentUser!.uid.trim()}");
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -76,77 +80,97 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
       ),
       body: Stack(
         children: [
-          if(!_esAdmin)
-          StreamBuilder<ChatMensajes?>(
-              stream: ControladorChat()
-                  .obtenerPuestoEnColaById(auth.currentUser!.uid),
-              builder: (BuildContext context, snapshot) {
-                if (snapshot.hasData && snapshot.data != null) {
-                  log(auth.currentUser!.uid);
-                  return Expanded(
-                      child: Container(
-                    color: FlutterFlowTheme.of(context).primary.withAlpha(70),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(5, 3, 2, 5),
-                          child: SizedBox(
-                            width: 10,
-                            height: 10,
-                            child: CircularProgressIndicator(
-                              color: (snapshot.data!.turno != null &&
-                                      snapshot.data!.turno == 1)
-                                  ? FlutterFlowTheme.of(context).primary
-                                  : Color.fromARGB(255, 43, 96, 112),
+          if (!_esAdmin)
+            StreamBuilder<ChatMensajes?>(
+                stream: ControladorChat()
+                    .obtenerPuestoEnColaById(auth.currentUser!.uid.trim()),
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.hasData &&
+                      snapshot.data != null &&
+                      snapshot.data!.turno != null &&
+                      snapshot.data!.turno! > 0) {
+                    log(auth.currentUser!.uid);
+                    return Container(
+                      color: FlutterFlowTheme.of(context).primary.withAlpha(70),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(5, 3, 2, 5),
+                            child: SizedBox(
+                              width: 10,
+                              height: 10,
+                              child: CircularProgressIndicator(
+                                color: (snapshot.data!.turno != null &&
+                                        snapshot.data!.turno == 1)
+                                    ? FlutterFlowTheme.of(context).primary
+                                    : Color.fromARGB(255, 43, 96, 112),
+                              ),
                             ),
                           ),
-                        ),
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                            child: retornarTexto(snapshot.data!.turno),
+                          Container(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                              child: retornarTexto(snapshot.data!.turno),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ));
-                } else {
-                  return Container();
-                }
-              }),
-          SafeArea(
-            top: true,
-            child: Padding(
-              padding: _esAdmin
-                  ? EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0)
-                  : EdgeInsetsDirectional.fromSTEB(0.0, 25.0, 0.0, 0.0),
-              child: StreamBuilder<List<ChatsRecord>>(
-                stream: queryChatsRecord(
-                  queryBuilder: (chatsRecord) => chatsRecord
-                      .where('userIds', arrayContains: currentUser!.uid.trim())
-                      .orderBy('createdAt', descending: true),
-                ),
-                builder: (context, snapshot1) {
-                  log('currentUser: ' + currentUser!.uid.trim());
-                  
-                  // Customize what your widget looks like when it's loading.
-                  if (!(snapshot1.hasData)) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: SizedBox(
-                          width: 20.0,
-                          height: 20.0,
-                          child: CircularProgressIndicator(
-                            color: FlutterFlowTheme.of(context).primary,
-                          ),
-                        ),
+                        ],
                       ),
                     );
-                  }else{
-                    List<ChatsRecord> listViewChatsRecordList = snapshot1.data!;
-                    log('currentUser: ' + snapshot1.data!.length.toString());
+                  } else {
+                    return Container(
+                      color: FlutterFlowTheme.of(context).primary.withAlpha(70),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                              child: AutoSizeText(
+                                'No hay ningún caso abierto',
+                                style: TextStyle(
+                                    fontSize: 14.5,
+                                    color:
+                                        const Color.fromARGB(255, 36, 105, 38),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                }),
+          Padding(
+            padding: _esAdmin
+                ? EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0)
+                : EdgeInsetsDirectional.fromSTEB(0.0, 25.0, 0.0, 0.0),
+            child: StreamBuilder<List<ChatsRecord>>(
+              stream: queryChatsRecord(
+                queryBuilder: (chatsRecord) => chatsRecord
+                    .where('userIds', arrayContains: auth.currentUser!.uid.trim())
+                    .orderBy('createdAt', descending: false),
+              ),
+              builder: (context, snapshotListaConversaciones) {
+                // Customize what your widget looks like when it's loading.
+                if ((snapshotListaConversaciones.data == null)) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: SizedBox(
+                        width: 20.0,
+                        height: 20.0,
+                        child: CircularProgressIndicator(
+                          color: FlutterFlowTheme.of(context).primary,
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  List<ChatsRecord> listViewChatsRecordList =
+                      snapshotListaConversaciones.data!;
+                  log('currentUser: ' +
+                      snapshotListaConversaciones.data!.length.toString());
                   if (listViewChatsRecordList.isEmpty) {
                     return Center(
                       child: Image.asset(
@@ -160,10 +184,9 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                     scrollDirection: Axis.vertical,
                     itemCount: listViewChatsRecordList.length,
                     itemBuilder: (context, listViewIndex) {
-                      
                       final listViewChatsRecord =
                           listViewChatsRecordList[listViewIndex];
-                    
+
                       log('listviewChatRecord: ${listViewChatsRecord.roomUid}');
                       return StreamBuilder<Usuario>(
                         stream: Usuario()
@@ -239,10 +262,8 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                       );
                     },
                   );
-                  }
-                  
-                },
-              ),
+                }
+              },
             ),
           ),
         ],
@@ -257,7 +278,11 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
       ChatMensajes? lastMessage,
       Usuario chatInfo,
       {ChatMensajes? room}) {
-    if (room != null && room.turno != null && room.prioridad) {
+    if (room != null &&
+        room.turno != null &&
+        room.prioridad &&
+        room.turno! > 0 &&
+        room.finalizado == false) {
       return StreamBuilder<int>(
           stream: CasosController().getTotalCasosCountSolicitante(
               snapshot.data!.uid.toString().trim()),
@@ -275,7 +300,8 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                       showBadge: true,
                       ignorePointer: false,
                       onTap: () {},
-                      badgeContent: Text(_esAdmin ? '#${room.turno} ¡Urgente!':'¡Urgente!',
+                      badgeContent: Text(
+                          _esAdmin ? '#${room.turno} ¡Urgente!' : '¡Urgente!',
                           style: TextStyle(
                               fontSize: 12,
                               color: Colors.white,
@@ -325,7 +351,17 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                             Logger()
                                 .i('Id Room: ' + listViewChatsRecord.roomUid);
                             if (snapshot.data != null) {
-                              Navigator.push(
+                              log('push chat');
+                              if (listViewChatsRecord.roomUid.trim() ==
+                                  'reportes') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ListaPanelReportesAdmin(),
+                                  ),
+                                );
+                              }else{
+                                var res = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ChatWidget(
@@ -333,15 +369,22 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                                       currentUserToken: token,
                                       otherUserToken: snapshot.data!.fcmToken,
                                       nombre: (snapshot.data != null &&
-                                              snapshot.data!.nombre ==
-                                                  'Asistente Virtual')
+                                              snapshot.data!.especial)
                                           ? '${snapshot.data!.nombre}'
                                           : '${snapshot.data!.nombre} - ${snapshot.data!.cargo} de ${snapshotDependencia.data!.nombre}',
                                       usuarios: listViewChatsRecord.users,
                                       esAdmin: usuarioActual!.role == 'admin',
                                       uid: listViewChatsRecord.roomUid.trim()),
                                 ),
-                              );
+                              ).then((value) async {
+                                log('Value 1: $value');
+                                if (value.toString().contains('2')) {
+                                  await ControladorChat().removeRoom(
+                                      listViewChatsRecord.roomUid.trim());
+                                }
+                              });
+                              }
+                              
                             }
                           }
                         },
@@ -352,7 +395,7 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                         lastChatTime: listViewChatsRecord.lastMessageTime,
                         seen: room.finalizado,
                         title: (snapshot.data != null &&
-                                snapshot.data!.nombre == 'Asistente Virtual')
+                                snapshot.data!.especial)
                             ? '${snapshot.data!.nombre}'
                             : '${snapshot.data!.nombre} - ${snapshot.data!.cargo} de ${snapshotDependencia.data!.nombre}',
                         userProfilePic: chatInfo.urlImagen,
@@ -410,7 +453,11 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
               return Text('');
             }
           });
-    } else if (_esAdmin && room != null && room.turno != null) {
+    } else if (_esAdmin &&
+        room != null &&
+        room.turno != null &&
+        room.turno! > 0 &&
+        room.finalizado == false) {
       return StreamBuilder<int>(
           stream: CasosController().getTotalCasosCountSolicitante(
               snapshot.data!.uid.toString().trim()),
@@ -479,7 +526,16 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                             Logger()
                                 .i('Id Room: ' + listViewChatsRecord.roomUid);
                             if (snapshot.data != null) {
-                              Navigator.push(
+                              if (listViewChatsRecord.roomUid.trim() ==
+                                  'reportes') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ListaPanelReportesAdmin(),
+                                  ),
+                                );
+                              }else{
+                                var res = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => ChatWidget(
@@ -487,15 +543,22 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                                       currentUserToken: token,
                                       otherUserToken: snapshot.data!.fcmToken,
                                       nombre: (snapshot.data != null &&
-                                              snapshot.data!.nombre ==
-                                                  'Asistente Virtual')
+                                              snapshot.data!.especial)
                                           ? '${snapshot.data!.nombre}'
                                           : '${snapshot.data!.nombre} - ${snapshot.data!.cargo} de ${snapshotDependencia.data!.nombre}',
                                       usuarios: listViewChatsRecord.users,
                                       esAdmin: usuarioActual!.role == 'admin',
                                       uid: listViewChatsRecord.roomUid.trim()),
                                 ),
-                              );
+                              ).then((value) async {
+                                log('Value 2: $value');
+                                if (value.toString().contains('2')) {
+                                  await ControladorChat().removeRoom(
+                                      listViewChatsRecord.roomUid.trim());
+                                }
+                              });
+                              }
+                              
                             }
                           }
                         },
@@ -506,7 +569,7 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                         lastChatTime: listViewChatsRecord.lastMessageTime,
                         seen: (!room.finalizado) ? false : true,
                         title: (snapshot.data != null &&
-                                snapshot.data!.nombre == 'Asistente Virtual')
+                                snapshot.data!.especial)
                             ? '${snapshot.data!.nombre}'
                             : '${snapshot.data!.nombre} - ${snapshot.data!.cargo} de ${snapshotDependencia.data!.nombre}',
                         userProfilePic: chatInfo.urlImagen,
@@ -607,7 +670,16 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                           }
                           Logger().i('Id Room: ' + listViewChatsRecord.roomUid);
                           if (snapshot.data != null) {
-                            Navigator.push(
+                            if (listViewChatsRecord.roomUid.trim() ==
+                                  'reportes') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ListaPanelReportesAdmin(),
+                                  ),
+                                );
+                              }else{
+                                Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ChatWidget(
@@ -615,15 +687,22 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                                     currentUserToken: token,
                                     otherUserToken: snapshot.data!.fcmToken,
                                     nombre: (snapshot.data != null &&
-                                            snapshot.data!.nombre ==
-                                                'Asistente Virtual')
+                                            snapshot.data!.especial)
                                         ? '${snapshot.data!.nombre}'
                                         : '${snapshot.data!.nombre} - ${snapshot.data!.cargo} de ${snapshotDependencia.data!.nombre}',
                                     usuarios: listViewChatsRecord.users,
                                     esAdmin: usuarioActual!.role == 'admin',
                                     uid: listViewChatsRecord.roomUid.trim()),
                               ),
-                            );
+                            ).then((value) async {
+                              log('Value 3: $value');
+                              if (value.toString().contains('2')) {
+                                await ControladorChat().removeRoom(
+                                    listViewChatsRecord.roomUid.trim());
+                              }
+                            });
+                              }
+                            
                           }
                         }
                       },
@@ -632,33 +711,43 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
                               lastMessage.mensaje, lastMessage.tipo)
                           : " ",
                       lastChatTime: listViewChatsRecord.lastMessageTime,
-                      seen: (snapshotCountCasos.data! < 0) ? false : true,
+                      seen: (room != null && !room.finalizado) ? false : true,
                       title: (snapshot.data != null &&
-                              snapshot.data!.nombre == 'Asistente Virtual')
+                              snapshot.data!.especial)
                           ? '${snapshot.data!.nombre}'
                           : '${snapshot.data!.nombre} - ${snapshot.data!.cargo} de ${snapshotDependencia.data!.nombre}',
                       userProfilePic: chatInfo.urlImagen,
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                      color: (room != null && !room.finalizado)
+                          ? FlutterFlowTheme.of(context).secondaryBackground
+                          : FlutterFlowTheme.of(context).accent3,
                       unreadColor: Colors.green,
                       titleTextStyle: GoogleFonts.getFont(
                         'Urbanist',
-                        color: FlutterFlowTheme.of(context).primaryText,
+                        color: (room != null && !room.finalizado)
+                            ? FlutterFlowTheme.of(context).primaryText
+                            : FlutterFlowTheme.of(context)
+                                .primaryText
+                                .withAlpha(150),
                         fontWeight: FontWeight.bold,
                         fontSize: 18.0,
                       ),
                       dateTextStyle: GoogleFonts.getFont(
                         'Urbanist',
-                        color: FlutterFlowTheme.of(context)
-                            .primaryText
-                            .withAlpha(200),
+                        color: (room != null && !room.finalizado)
+                            ? FlutterFlowTheme.of(context)
+                                .primaryText
+                                .withAlpha(200)
+                            : FlutterFlowTheme.of(context).secondaryText,
                         fontWeight: FontWeight.normal,
                         fontSize: 14.0,
                       ),
                       previewTextStyle: GoogleFonts.getFont(
                         'Urbanist',
-                        color: FlutterFlowTheme.of(context)
-                            .primaryText
-                            .withAlpha(180),
+                        color: (room != null && !room.finalizado)
+                            ? FlutterFlowTheme.of(context)
+                                .primaryText
+                                .withAlpha(180)
+                            : FlutterFlowTheme.of(context).grayIcon,
                         fontWeight: FontWeight.w500,
                         fontSize: 14.0,
                       ),
@@ -689,7 +778,7 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
       switch (result) {
         case 1:
           return AutoSizeText(
-            'Eres el primero en la fila, en un instante te atenderán.',
+            'Eres primero en la fila, en un instante te atenderán.',
             style: TextStyle(
                 fontSize: 14.5,
                 color: const Color.fromARGB(255, 36, 105, 38),
@@ -698,7 +787,7 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
 
         case 2:
           return AutoSizeText(
-            'Eres el segundo en la fila, por favor, espera un momento...',
+            'Eres segundo en la fila, por favor, espera un momento...',
             style: TextStyle(
                 fontSize: 14.5,
                 color: Color.fromARGB(255, 35, 96, 107),
@@ -707,7 +796,7 @@ class _ConversacionesWidgetState extends State<ConversacionesWidget> {
 
         case 3:
           return AutoSizeText(
-            'Eres el tercero en la fila, por favor, aguarde su turno...',
+            'Eres tercero en la fila, por favor, aguarde su turno...',
             style: TextStyle(
                 fontSize: 14.5,
                 color: Color.fromARGB(255, 43, 96, 112),

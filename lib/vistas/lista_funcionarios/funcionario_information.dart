@@ -1,14 +1,13 @@
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
 
 import '../../flutter_flow/flutter_flow_theme.dart';
 import '../../model/usuario.dart';
 
 class FuncionarioInformation extends StatefulWidget {
-  const FuncionarioInformation({Key? key, required this.usuario}) : super(key: key);
-
+  const FuncionarioInformation({this.asignar=false,Key? key, required this.usuario})
+      : super(key: key);
+  final bool asignar;
   final Usuario usuario;
   @override
   _FuncionarioInformationState createState() => _FuncionarioInformationState();
@@ -43,7 +42,7 @@ class _FuncionarioInformationState extends State<FuncionarioInformation> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+      backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         iconTheme: IconThemeData(color: Colors.black),
@@ -299,6 +298,22 @@ class _FuncionarioInformationState extends State<FuncionarioInformation> {
                       ],
                     ),
                   ),
+                  MaterialButton(
+                    highlightColor: Colors.transparent,
+                    splashColor: Color.fromARGB(255, 9, 85, 32),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 42.0),
+                      child: Text(
+                        'Asignar este caso',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25.0,
+                            fontFamily: 'WorkSansBold'),
+                      ),
+                    ),
+                    onPressed: () async {
+                    }),
                 ],
               ),
             ),

@@ -59,6 +59,24 @@ class ChatMensajes {
     };
   }
 
+   static ChatMensajes fromMapImage(Map<String, dynamic> map) {
+    return ChatMensajes(
+      authorId: map['authorId'] ?? '',
+      updatedAt: (map['updatedAt'] as Timestamp).toDate(),
+      mensaje: map['mensaje'] ?? '',
+      tipo: map['type'] ?? 'image',
+      fechaHora: (map['createAt'] as Timestamp).toDate(),
+      turno: map['turno']??0,
+      prioridad: map['prioridad'] ?? false,
+      uidRoom: map['uid'] ?? '',
+      finalizado: map['finalizado'] ?? false,
+      height: map['height'],
+      width: map['width'],
+      size: map['size'],
+      uri: map['uri'],
+    );
+  }
+
   static ChatMensajes fromMap(Map<String, dynamic> map) {
     return ChatMensajes(
       authorId: map['authorId'] ?? '',

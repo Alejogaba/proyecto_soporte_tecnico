@@ -1,3 +1,5 @@
+import 'package:login2/utils/utilidades.dart';
+
 class Activo {
   String uid = '';
   final String nombre;
@@ -33,8 +35,8 @@ class Activo {
   factory Activo.fromMap(Map<String, dynamic> map) {
     return Activo(
       uid: map['uid'] ?? '',
-      nombre: map['nombre'] ?? '',
-      marca: map['marca'] ?? 'Generico',
+      nombre: Utilidades().capitalizarPalabras(map['nombre'] ?? ''),
+      marca: Utilidades().capitalizarPalabras(map['marca'] ?? 'Generico'),
       detalles: map['detalles'] ?? '',
       urlImagen: map['urlImagen'] ??
           'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Imagen_no_disponible.svg/2048px-Imagen_no_disponible.svg.png',

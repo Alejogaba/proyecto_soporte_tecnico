@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:login2/auth/firebase_auth/firebase_user_provider.dart';
 import 'package:login2/backend/backend.dart';
+import 'package:login2/utils/utilidades.dart';
 
 class Usuario {
   String? fechaNacimiento;
@@ -15,6 +16,9 @@ class Usuario {
   String? email;
   String? role;
   String? uid;
+  bool especial = false;
+  bool ocupado=false;
+  bool seleccionado=false;
   String urlImagen =
       "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Empty_set_symbol.svg/640px-Empty_set_symbol.svg.png";
   String? fcmToken;
@@ -29,6 +33,9 @@ class Usuario {
       this.email = "",
       this.role = "",
       this.uid = "",
+      this.ocupado = false,
+      this.seleccionado = false,
+      this.especial = false,
       this.urlImagen =
           "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Empty_set_symbol.svg/640px-Empty_set_symbol.svg.png"});
 
@@ -36,14 +43,17 @@ class Usuario {
     fechaNacimiento = map['fechanacimiento'] ?? "";
     area = map['area'] ?? "";
     telefono = map['telefono'] ?? "";
-    cargo = map['cargo'] ?? "";
+    cargo = Utilidades().capitalizarPalabras(map['cargo'] ?? "");
     password = map['password'] ?? "";
     identificacion = map['identificacion'] ?? "";
-    nombre = map['nombre'] ?? "";
-    email = map['email'] ?? "";
+    nombre = Utilidades().capitalizarPalabras(map['nombre'] ?? "");
+    email = Utilidades().capitalizarPalabras(map['email'] ?? "");
     role = map['role'] ?? "";
     uid = map['uid'] ?? "";
     fcmToken = map['fcmToken'] ?? "";
+    ocupado = map['ocupado'] ?? false;
+    seleccionado = map['seleccionado'] ?? false; 
+    especial = map['especial'] ?? false;
     urlImagen = map['imageUrl'] ??
         "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Empty_set_symbol.svg/640px-Empty_set_symbol.svg.png";
   }
@@ -60,12 +70,14 @@ class Usuario {
       'email': email,
       'role': role,
       'uid': uid,
-      'imageUrl': urlImagen
+      'ocupado': ocupado,
+      'imageUrl': urlImagen,
+      'seleccionado': seleccionado,
+      'especial': especial,
     };
   }
 
   Stream<Usuario>? getUsuarioStreamchatRecords(ChatsRecord? chatsrecords) {
-    
     if (chatsrecords != null) {
       FirebaseAuth auth = FirebaseAuth.instance;
       log('GetUsuarioStream: chatsrecord encontrado');

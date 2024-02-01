@@ -15,6 +15,8 @@ import '../vistas/login/sign_in.dart';
 routes() => [
       GetPage(name: "/home", page: () => PrincipalPagina()),
       GetPage(name: "/principal", page: () => InterfazPrincipalWidget()),
+      GetPage(name: "/principalFuncionario", page: () => NuevaNavBarFuncionario()),
+      GetPage(name: "/principalAdmin", page: () => NuevaNavBarAdmin()),
       GetPage(name: "/listafuncio", page: () => ListaFuncionarioss()),
       GetPage(name: "/listareportes", page: () => ListaReportesWidget()),
 

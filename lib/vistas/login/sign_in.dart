@@ -8,6 +8,7 @@ import 'package:login2/Widgets/snackbar.dart';
 import 'package:login2/main.dart';
 import 'package:login2/vistas/olvido_password/olvido_password_widget.dart';
 import 'package:translator/translator.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import '../../auth/firebase_auth/auth_helper.dart';
 import '../../model/usuario.dart';
@@ -185,11 +186,8 @@ class _SignInState extends State<SignIn> {
                                               builder: (context) =>
                                                   NuevaNavBar()));
                                     } else {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  NuevaNavBarFuncionario()));
+                                      Get.toNamed('/principalFuncionario');
+                                      
                                     }
                                   }
                                 }
@@ -244,10 +242,13 @@ class _SignInState extends State<SignIn> {
                     ),
                     onPressed: () async {
                       try {
+                        await DefaultCacheManager().emptyCache();
+                        await AuthHelper.handleSignOut();
                         Usuario? user = await AuthHelper.signInWithEmail(
                             email: _emailController.text.trim().toLowerCase(),
                             password: _passwordController.text);
                         if (user != null) {
+                          RestartWidget.restartApp(context);
                           print("Ingreso Exitoso");
                           bool esNuevoUsuario = await AuthHelper()
                               .checkPasswordMatch(
@@ -265,11 +266,7 @@ class _SignInState extends State<SignIn> {
                                   MaterialPageRoute(
                                       builder: (context) => NuevaNavBar()));
                             } else {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          NuevaNavBarFuncionario()));
+                              Get.toNamed('/principalFuncionario');
                             }
                           }
                         }

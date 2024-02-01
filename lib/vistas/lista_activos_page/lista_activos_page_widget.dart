@@ -114,27 +114,51 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                   .then((value) async {
                 if (value != null && value != '-1') {
                   ActivoController activoController = ActivoController();
-                  Activo? res =
+                  Activo? activo =
                       await activoController.buscarActivoPorCodigoBarra(
                           widget.dependencia.uid, value);
                   log('Codigo de barras leido: $value');
-                  if (res != null &&
-                      res.barcode != null &&
-                      res.barcode!.length < 4) {
-                    // ignore: use_build_context_synchronously
-                    final e = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ResgistrarActivoPageWidget(
-                          barcdode: res.barcode!,
-                          idDependencia: widget.dependencia.uid,
-                        ),
-                      ),
-                    ).then((value) {
-                      Future.delayed(Duration(milliseconds: 500), () {
-                        setState(() {});
-                      });
-                    });
+                  if (activo != null) {
+                    if (activo
+                                                  .casosPendientes) {
+                                                Caso? caso =
+                                                    await CasosController()
+                                                        .buscarCasoPorUID(
+                                                            activo
+                                                                .uid);
+                                                final Activo? result =
+                                                    await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          DetalleReporteWidget(
+                                                              caso!,esAdmin:true)),
+                                                ).then((value){
+                                                  setState(() {});
+                                                  return null;
+                                                });
+                                                
+                                              } else {
+                                                
+                                                final Activo? result =
+                                                    await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ActivoPerfilPageWidget(
+                                                      activo: activo,
+                                                      dependencia: dependencia,
+                                                      esadmin: true,
+                                                    ),
+                                                  ),
+                                                );
+                                                if (result != null) {
+                                                  // ignore: use_build_context_synchronously
+                                                  Navigator.pop(
+                                                      context, result);
+                                                }
+                                              }
+
                   } else {
                     final e = await Navigator.push(
                       context,
@@ -187,7 +211,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                 size: 30,
               ),
             ),
-            backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+            backgroundColor: FlutterFlowTheme.of(context).primary,
             iconTheme:
                 IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
             automaticallyImplyLeading: false,
@@ -358,11 +382,27 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                               snapshot.data!.length, (index) {
                                             return GestureDetector(
                                                 onTap: () async {
+                                                  Usuario usuario =
+                                                        await AuthHelper()
+                                                                .cargarUsuarioDeFirebase() ??
+                                                            Usuario();
+                                                    log("Lista activos Usuario: ${usuario.role}");
+                                                    late bool esadmin;
+                                                    if (usuario.role != null) {
+                                                      if (usuario.role ==
+                                                          'admin') {
+                                                        esadmin = true;
+                                                      } else {
+                                                        esadmin = false;
+                                                      }
+                                                    } else {
+                                                      esadmin = false;
+                                                    }
                                                   if (snapshot.data![index]!
                                                       .casosPendientes) {
                                                     Caso? caso =
                                                         await CasosController()
-                                                            .buscarCasoPorCodigoBarras(
+                                                            .buscarCasoPorUID(
                                                                 snapshot
                                                                     .data![
                                                                         index]!
@@ -373,7 +413,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                       MaterialPageRoute(
                                                           builder: (context) =>
                                                               DetalleReporteWidget(
-                                                                  caso!)),
+                                                                  caso!,esAdmin: esadmin,)),
                                                     );
                                                     if (result != null) {
                                                       // ignore: use_build_context_synchronously
@@ -382,22 +422,8 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                     } else {
                                                       setState(() {});
                                                     }
-                                                                                                    } else {
-                                                    Usuario usuario =
-                                                        await AuthHelper()
-                                                                .cargarUsuarioDeFirebase() ??
-                                                            Usuario();
-                                                    late bool esadmin;
-                                                    if (usuario.cargo != null) {
-                                                      if (usuario.cargo ==
-                                                          'admin') {
-                                                        esadmin = true;
-                                                      } else {
-                                                        esadmin = false;
-                                                      }
-                                                    }else{
-                                                      esadmin = false;
-                                                    }
+                                                  } else {
+                                                    
                                                     final Activo? result =
                                                         await Navigator.push(
                                                       context,
@@ -408,7 +434,8 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                               .data![index]!,
                                                           dependencia:
                                                               dependencia,
-                                                              esadmin: esadmin,
+                                                          esadmin:
+                                                              esadmin, //venaqui
                                                         ),
                                                       ),
                                                     );

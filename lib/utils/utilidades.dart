@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 class Utilidades {
   String capitalizarPalabras(String texto) {
@@ -11,6 +12,8 @@ class Utilidades {
   }
   return palabras.join(' ');
 }
+
+
 Future<void> sendNotification(String token, String title, String body) async {
     final url = Uri.parse('https://fcm.googleapis.com/fcm/send');
     final headers = {
@@ -32,6 +35,7 @@ Future<void> sendNotification(String token, String title, String body) async {
       headers: headers,
       body: json.encode(message),
     );
+    
 
     if (response.statusCode == 200) {
       print('Notificación enviada correctamente');
@@ -39,4 +43,5 @@ Future<void> sendNotification(String token, String title, String body) async {
       print('Error al enviar la notificación');
     }
   } 
+  
 }
